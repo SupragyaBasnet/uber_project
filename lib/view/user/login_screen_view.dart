@@ -47,7 +47,7 @@ class _LoginScreenViewState extends State<LoginScreenView> {
                   labelText: 'What’s your Phone Number',
                   border: OutlineInputBorder(),
                 ),
-                keyboardType: TextInputType.phone,
+                keyboardType: TextInputType.phone, // Numeric keyboard for phone number
               ),
               const SizedBox(height: 16),
 
@@ -69,6 +69,7 @@ class _LoginScreenViewState extends State<LoginScreenView> {
                   ),
                 ),
                 obscureText: _isPasswordHidden,
+                keyboardType: TextInputType.text, // Alphabet keyboard for password
               ),
               const SizedBox(height: 16),
 
