@@ -15,7 +15,6 @@ class CaptainSignupScreenView extends StatelessWidget {
     TextEditingController nameController = TextEditingController();
     TextEditingController phoneController = TextEditingController();
     TextEditingController passwordController = TextEditingController();
-    TextEditingController confirmPasswordController = TextEditingController();
 
     return Scaffold(
       appBar: AppBar(
@@ -70,21 +69,11 @@ class CaptainSignupScreenView extends StatelessWidget {
                 onPressed: () {
                   if (nameController.text.isEmpty ||
                       phoneController.text.isEmpty ||
-                      passwordController.text.isEmpty ||
-                      confirmPasswordController.text.isEmpty) {
+                      passwordController.text.isEmpty) {
                     // Show error message if any field is empty
                     ScaffoldMessenger.of(context).showSnackBar(
                       SnackBar(
                         content: const Text('Please fill in all fields'),
-                        duration: const Duration(seconds: 2),
-                        backgroundColor: Colors.red,
-                      ),
-                    );
-                  } else if (passwordController.text != confirmPasswordController.text) {
-                    // Show error message if passwords do not match
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      SnackBar(
-                        content: const Text('Passwords do not match'),
                         duration: const Duration(seconds: 2),
                         backgroundColor: Colors.red,
                       ),
