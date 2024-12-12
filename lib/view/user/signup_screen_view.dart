@@ -48,6 +48,8 @@ class _SignupScreenViewState extends State<SignupScreenView> {
                   labelText: 'What’s your Name',
                   border: OutlineInputBorder(),
                 ),
+                keyboardType: TextInputType.text, // Alphabet keyboard for name
+                textInputAction: TextInputAction.next, // Move to next field on enter
               ),
               const SizedBox(height: 16),
 
@@ -58,6 +60,8 @@ class _SignupScreenViewState extends State<SignupScreenView> {
                   labelText: 'What’s your Phone Number',
                   border: OutlineInputBorder(),
                 ),
+                keyboardType: TextInputType.phone, // Numeric keyboard for phone number
+                textInputAction: TextInputAction.next, // Move to next field on enter
               ),
               const SizedBox(height: 16),
 
@@ -79,6 +83,8 @@ class _SignupScreenViewState extends State<SignupScreenView> {
                   ),
                 ),
                 obscureText: _isPasswordHidden,
+                keyboardType: TextInputType.text, // Alphabet keyboard for password
+                textInputAction: TextInputAction.done, // Done action on enter
               ),
               const SizedBox(height: 16),
 
