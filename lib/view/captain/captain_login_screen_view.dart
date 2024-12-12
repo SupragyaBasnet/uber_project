@@ -44,14 +44,15 @@ class _CaptainLoginScreenViewState extends State<CaptainLoginScreenView> {
             children: [
               // Captain's phone number input
               TextField(
-                controller: phoneController,
-                decoration: InputDecoration(
-                  labelText: 'Captain’s Phone Number',
-                  border: OutlineInputBorder(),
-                ),
-                keyboardType: TextInputType.phone, // Numeric keyboard for phone number
-                textInputAction: TextInputAction.next, // Move to next field on enter
-              ),
+  controller: phoneController,
+  decoration: const InputDecoration(
+    prefixText: '+977 ',
+    labelText: 'What’s your Phone Number',
+    border: OutlineInputBorder(),
+  ),
+  keyboardType: TextInputType.phone,
+  textInputAction: TextInputAction.next,
+),
               const SizedBox(height: 16),
 
               // Password input field with toggle for visibility

@@ -55,15 +55,16 @@ class _CaptainSignupScreenViewState extends State<CaptainSignupScreenView> {
               const SizedBox(height: 16),
 
               // Phone number input field
-              TextField(
-                controller: phoneController,
-                decoration: InputDecoration(
-                  labelText: 'Phone Number',
-                  border: OutlineInputBorder(),
-                ),
-                keyboardType: TextInputType.phone, // Numeric keyboard
-                textInputAction: TextInputAction.next, // Move to next field on enter
-              ),
+             TextField(
+  controller: phoneController,
+  decoration: const InputDecoration(
+    prefixText: '+977 ',
+    labelText: 'What’s your Phone Number',
+    border: OutlineInputBorder(),
+  ),
+  keyboardType: TextInputType.phone,
+  textInputAction: TextInputAction.next,
+),
               const SizedBox(height: 16),
 
               // Password input field with toggle for visibility

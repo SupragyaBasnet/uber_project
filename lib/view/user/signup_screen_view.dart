@@ -55,14 +55,15 @@ class _SignupScreenViewState extends State<SignupScreenView> {
 
               // Phone number input field
               TextField(
-                controller: phoneController,
-                decoration: const InputDecoration(
-                  labelText: 'What’s your Phone Number',
-                  border: OutlineInputBorder(),
-                ),
-                keyboardType: TextInputType.phone, // Numeric keyboard for phone number
-                textInputAction: TextInputAction.next, // Move to next field on enter
-              ),
+  controller: phoneController,
+  decoration: const InputDecoration(
+    prefixText: '+977 ',
+    labelText: 'What’s your Phone Number',
+    border: OutlineInputBorder(),
+  ),
+  keyboardType: TextInputType.phone,
+  textInputAction: TextInputAction.next,
+),
               const SizedBox(height: 16),
 
               // Password input field with hide/unhide functionality
