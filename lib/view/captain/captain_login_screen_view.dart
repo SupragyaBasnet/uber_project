@@ -3,9 +3,21 @@ import 'package:uber_project/view/captain/captain_dashboard_screen_view.dart';
 import '../user/login_screen_view.dart';
 import 'captain_signup_screen_view.dart'; // Import captain signup page
 
-
-class CaptainLoginScreenView extends StatelessWidget {
+class CaptainLoginScreenView extends StatefulWidget {
   const CaptainLoginScreenView({super.key});
+
+  @override
+  _CaptainLoginScreenViewState createState() =>
+      _CaptainLoginScreenViewState();
+}
+
+class _CaptainLoginScreenViewState extends State<CaptainLoginScreenView> {
+  // Controllers for text fields
+  TextEditingController phoneController = TextEditingController();
+  TextEditingController passwordController = TextEditingController();
+
+  // Flag to toggle password visibility
+  bool _isPasswordVisible = false;
 
   @override
   Widget build(BuildContext context) {
@@ -17,7 +29,7 @@ class CaptainLoginScreenView extends StatelessWidget {
       appBar: AppBar(
         leading: IconButton(
           icon: const Icon(Icons.arrow_back),
-          onPressed: () => Navigator.pop(context),
+          onPressed: () => Navigator.pop(context), // Go back to the previous screen
         ),
         title: const Text('Uber'),
         backgroundColor: Colors.black,
@@ -26,29 +38,47 @@ class CaptainLoginScreenView extends StatelessWidget {
       backgroundColor: Colors.white,
       body: SafeArea(
         child: SingleChildScrollView(
-          padding: EdgeInsets.all(screenWidth * 0.05), // Dynamic padding based on screen width
+          padding: EdgeInsets.all(screenWidth * 0.05), // Dynamic padding based on screen size
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
               // Captain's phone number input
               TextField(
+                controller: phoneController,
                 decoration: InputDecoration(
                   labelText: 'Captain’s Phone Number',
                   border: OutlineInputBorder(),
                 ),
+                keyboardType: TextInputType.phone, // Numeric keyboard for phone number
+                textInputAction: TextInputAction.next, // Move to next field on enter
               ),
               const SizedBox(height: 16),
-              
-              // Password input field
+
+              // Password input field with toggle for visibility
               TextField(
+                controller: passwordController,
+                obscureText: !_isPasswordVisible, // Toggle visibility
                 decoration: InputDecoration(
                   labelText: 'Password',
                   border: OutlineInputBorder(),
+                  suffixIcon: IconButton(
+                    icon: Icon(
+                      _isPasswordVisible
+                          ? Icons.visibility
+                          : Icons.visibility_off,
+                    ),
+                    onPressed: () {
+                      setState(() {
+                        _isPasswordVisible = !_isPasswordVisible;
+                      });
+                    },
+                  ),
                 ),
-                obscureText: true,
+                keyboardType: TextInputType.text, // Alphabet keyboard for password
+                textInputAction: TextInputAction.done, // Submit form on enter
               ),
               const SizedBox(height: 16),
-              
+
               // Login button
               ElevatedButton(
                 onPressed: () {
@@ -73,7 +103,7 @@ class CaptainLoginScreenView extends StatelessWidget {
                 ),
               ),
               const SizedBox(height: 16),
-              
+
               // Navigate to captain signup screen
               TextButton(
                 onPressed: () {
@@ -93,7 +123,7 @@ class CaptainLoginScreenView extends StatelessWidget {
                 ),
               ),
               const SizedBox(height: 16),
-              
+
               // Navigate to user login screen (for passenger)
               ElevatedButton(
                 onPressed: () {
