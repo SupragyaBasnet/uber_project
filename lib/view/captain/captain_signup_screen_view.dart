@@ -46,7 +46,6 @@ class CaptainSignupScreenView extends StatelessWidget {
                 obscureText: true,
               ),
               const SizedBox(height: 16),
-              
               // Confirm Password input field
               TextField(
                 decoration: InputDecoration(
@@ -56,7 +55,6 @@ class CaptainSignupScreenView extends StatelessWidget {
                 obscureText: true,
               ),
               const SizedBox(height: 16),
-              
               // Sign-up button
               ElevatedButton(
                 onPressed: () {
