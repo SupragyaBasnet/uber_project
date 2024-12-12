@@ -2,19 +2,28 @@ import 'package:flutter/material.dart';
 import '../user/signup_screen_view.dart'; // Import user signup screen
 import 'captain_login_screen_view.dart'; // Import captain login screen
 
-class CaptainSignupScreenView extends StatelessWidget {
+class CaptainSignupScreenView extends StatefulWidget {
   const CaptainSignupScreenView({super.key});
+
+  @override
+  _CaptainSignupScreenViewState createState() =>
+      _CaptainSignupScreenViewState();
+}
+
+class _CaptainSignupScreenViewState extends State<CaptainSignupScreenView> {
+  // Controllers for text fields
+  TextEditingController nameController = TextEditingController();
+  TextEditingController phoneController = TextEditingController();
+  TextEditingController passwordController = TextEditingController();
+
+  // Flag to toggle password visibility
+  bool _isPasswordVisible = false;
 
   @override
   Widget build(BuildContext context) {
     // MediaQuery to get screen width and height
     double screenWidth = MediaQuery.of(context).size.width;
     double screenHeight = MediaQuery.of(context).size.height;
-
-    // TextEditingControllers to manage text inputs
-    TextEditingController nameController = TextEditingController();
-    TextEditingController phoneController = TextEditingController();
-    TextEditingController passwordController = TextEditingController();
 
     return Scaffold(
       appBar: AppBar(
@@ -40,6 +49,8 @@ class CaptainSignupScreenView extends StatelessWidget {
                   labelText: 'Captain’s Full Name',
                   border: OutlineInputBorder(),
                 ),
+                keyboardType: TextInputType.text, // Alphabet keyboard
+                textInputAction: TextInputAction.next, // Move to next field on enter
               ),
               const SizedBox(height: 16),
 
@@ -50,17 +61,33 @@ class CaptainSignupScreenView extends StatelessWidget {
                   labelText: 'Phone Number',
                   border: OutlineInputBorder(),
                 ),
+                keyboardType: TextInputType.phone, // Numeric keyboard
+                textInputAction: TextInputAction.next, // Move to next field on enter
               ),
               const SizedBox(height: 16),
 
-              // Password input field
+              // Password input field with toggle for visibility
               TextField(
                 controller: passwordController,
+                obscureText: !_isPasswordVisible, // Toggle visibility
                 decoration: InputDecoration(
                   labelText: 'Password',
                   border: OutlineInputBorder(),
+                  suffixIcon: IconButton(
+                    icon: Icon(
+                      _isPasswordVisible
+                          ? Icons.visibility
+                          : Icons.visibility_off,
+                    ),
+                    onPressed: () {
+                      setState(() {
+                        _isPasswordVisible = !_isPasswordVisible;
+                      });
+                    },
+                  ),
                 ),
-                obscureText: true,
+                keyboardType: TextInputType.text, // Alphabet keyboard
+                textInputAction: TextInputAction.done, // Submit form on enter
               ),
               const SizedBox(height: 16),
 
