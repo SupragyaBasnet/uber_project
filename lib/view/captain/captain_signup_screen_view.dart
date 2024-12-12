@@ -46,7 +46,7 @@ class _CaptainSignupScreenViewState extends State<CaptainSignupScreenView> {
               TextField(
                 controller: nameController,
                 decoration: InputDecoration(
-                  labelText: 'Captain’s Full Name',
+                  labelText: 'Captain’s Name',
                   border: OutlineInputBorder(),
                 ),
                 keyboardType: TextInputType.text, // Alphabet keyboard
