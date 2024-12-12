@@ -14,6 +14,9 @@ class _LoginScreenViewState extends State<LoginScreenView> {
   final TextEditingController _phoneController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
 
+  // To toggle password visibility
+  bool _isPasswordHidden = true;
+
   @override
   Widget build(BuildContext context) {
     // MediaQuery to get screen width and height
@@ -40,7 +43,7 @@ class _LoginScreenViewState extends State<LoginScreenView> {
               // Phone number input field
               TextField(
                 controller: _phoneController,
-                decoration: InputDecoration(
+                decoration: const InputDecoration(
                   labelText: 'What’s your Phone Number',
                   border: OutlineInputBorder(),
                 ),
@@ -48,14 +51,24 @@ class _LoginScreenViewState extends State<LoginScreenView> {
               ),
               const SizedBox(height: 16),
 
-              // Password input field
+              // Password input field with hide/unhide functionality
               TextField(
                 controller: _passwordController,
                 decoration: InputDecoration(
                   labelText: 'Enter Password',
-                  border: OutlineInputBorder(),
+                  border: const OutlineInputBorder(),
+                  suffixIcon: IconButton(
+                    icon: Icon(
+                      _isPasswordHidden ? Icons.visibility_off : Icons.visibility,
+                    ),
+                    onPressed: () {
+                      setState(() {
+                        _isPasswordHidden = !_isPasswordHidden;
+                      });
+                    },
+                  ),
                 ),
-                obscureText: true,
+                obscureText: _isPasswordHidden,
               ),
               const SizedBox(height: 16),
 
@@ -66,17 +79,20 @@ class _LoginScreenViewState extends State<LoginScreenView> {
                   if (_phoneController.text.isEmpty || _passwordController.text.isEmpty) {
                     // Show error message if phone number or password is empty
                     ScaffoldMessenger.of(context).showSnackBar(
-                      const SnackBar(content: Text('Please fill in all fields'),
-                      duration: const Duration(seconds: 2),
-                      backgroundColor: Colors.red,
+                      const SnackBar(
+                        content: Text('Please fill in all fields'),
+                        duration: Duration(seconds: 2),
+                        backgroundColor: Colors.red,
                       ),
                     );
                   } else {
                     // Show success message if both fields are filled
                     ScaffoldMessenger.of(context).showSnackBar(
-                      const SnackBar(content: Text('Login Successful'),
-                      duration: const Duration(seconds: 2),
-                      backgroundColor: Colors.green,),
+                      const SnackBar(
+                        content: Text('Login Successful'),
+                        duration: Duration(seconds: 2),
+                        backgroundColor: Colors.green,
+                      ),
                     );
 
                     // After showing the message, navigate to DashboardPage
