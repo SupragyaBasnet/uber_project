@@ -25,10 +25,6 @@ class _LoginScreenViewState extends State<LoginScreenView> {
 
     return Scaffold(
       appBar: AppBar(
-        leading: IconButton(
-          icon: const Icon(Icons.arrow_back),
-          onPressed: () => Navigator.pop(context),
-        ),
         title: const Text('Uber'),
         backgroundColor: Colors.black,
         foregroundColor: Colors.white,
