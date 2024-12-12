@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import '../user/signup_screen_view.dart';
-import 'captain_login_screen_view.dart'; // Import captain login page
+import '../user/signup_screen_view.dart'; // Import user signup screen
+import 'captain_login_screen_view.dart'; // Import captain login screen
 
 class CaptainSignupScreenView extends StatelessWidget {
   const CaptainSignupScreenView({super.key});
@@ -11,11 +11,17 @@ class CaptainSignupScreenView extends StatelessWidget {
     double screenWidth = MediaQuery.of(context).size.width;
     double screenHeight = MediaQuery.of(context).size.height;
 
+    // TextEditingControllers to manage text inputs
+    TextEditingController nameController = TextEditingController();
+    TextEditingController phoneController = TextEditingController();
+    TextEditingController passwordController = TextEditingController();
+    TextEditingController confirmPasswordController = TextEditingController();
+
     return Scaffold(
       appBar: AppBar(
         leading: IconButton(
           icon: const Icon(Icons.arrow_back),
-          onPressed: () => Navigator.pop(context), // Go back to the login screen
+          onPressed: () => Navigator.pop(context), // Go back to the previous screen
         ),
         title: const Text('Uber'),
         backgroundColor: Colors.black,
@@ -28,26 +34,29 @@ class CaptainSignupScreenView extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
-              // Captain's phone number input
+              // Captain's full name input field
               TextField(
+                controller: nameController,
                 decoration: InputDecoration(
-                  labelText: 'Captain’s Full-Name',
+                  labelText: 'Captain’s Full Name',
                   border: OutlineInputBorder(),
                 ),
               ),
               const SizedBox(height: 16),
-              
-              // Password input field
+
+              // Phone number input field
               TextField(
+                controller: phoneController,
                 decoration: InputDecoration(
                   labelText: 'Phone Number',
                   border: OutlineInputBorder(),
                 ),
-                obscureText: true,
               ),
               const SizedBox(height: 16),
-              // Confirm Password input field
+
+              // Password input field
               TextField(
+                controller: passwordController,
                 decoration: InputDecoration(
                   labelText: 'Password',
                   border: OutlineInputBorder(),
@@ -55,10 +64,51 @@ class CaptainSignupScreenView extends StatelessWidget {
                 obscureText: true,
               ),
               const SizedBox(height: 16),
-              // Sign-up button
+
+              // Create account button
               ElevatedButton(
                 onPressed: () {
-                  // Add captain signup logic here
+                  if (nameController.text.isEmpty ||
+                      phoneController.text.isEmpty ||
+                      passwordController.text.isEmpty ||
+                      confirmPasswordController.text.isEmpty) {
+                    // Show error message if any field is empty
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      SnackBar(
+                        content: const Text('Please fill in all fields'),
+                        duration: const Duration(seconds: 2),
+                        backgroundColor: Colors.red,
+                      ),
+                    );
+                  } else if (passwordController.text != confirmPasswordController.text) {
+                    // Show error message if passwords do not match
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      SnackBar(
+                        content: const Text('Passwords do not match'),
+                        duration: const Duration(seconds: 2),
+                        backgroundColor: Colors.red,
+                      ),
+                    );
+                  } else {
+                    // Show success message
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      SnackBar(
+                        content: const Text('Account Created Successfully'),
+                        duration: const Duration(seconds: 2),
+                        backgroundColor: Colors.green,
+                      ),
+                    );
+
+                    // Navigate to captain login screen after success
+                    Future.delayed(const Duration(seconds: 2), () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => const CaptainLoginScreenView(),
+                        ),
+                      );
+                    });
+                  }
                 },
                 style: ElevatedButton.styleFrom(
                   backgroundColor: Colors.black,
@@ -73,7 +123,7 @@ class CaptainSignupScreenView extends StatelessWidget {
                 ),
               ),
               const SizedBox(height: 16),
-              
+
               // Navigate to captain login screen
               TextButton(
                 onPressed: () {
@@ -93,15 +143,14 @@ class CaptainSignupScreenView extends StatelessWidget {
                 ),
               ),
               const SizedBox(height: 16),
-              
+
               // Sign up as passenger button
               ElevatedButton(
                 onPressed: () {
-                  // Navigate to the user signup screen (for passenger)
                   Navigator.push(
                     context,
                     MaterialPageRoute(
-                      builder: (context) => const SignupScreenView(), // Navigate to the user signup page
+                      builder: (context) => const SignupScreenView(), // Navigate to user signup page
                     ),
                   );
                 },

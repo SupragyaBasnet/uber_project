@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:uber_project/view/captain/captain_dashboard_screen_view.dart';
 import '../user/login_screen_view.dart';
 import 'captain_signup_screen_view.dart'; // Import captain signup page
+
 
 class CaptainLoginScreenView extends StatelessWidget {
   const CaptainLoginScreenView({super.key});
@@ -50,7 +52,13 @@ class CaptainLoginScreenView extends StatelessWidget {
               // Login button
               ElevatedButton(
                 onPressed: () {
-                  // Add captain login logic here
+                  // Navigate to the dashboard page
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => const CaptainDashboardScreenView(), // Navigate to the DashboardPage
+                    ),
+                  );
                 },
                 style: ElevatedButton.styleFrom(
                   backgroundColor: Colors.black,
