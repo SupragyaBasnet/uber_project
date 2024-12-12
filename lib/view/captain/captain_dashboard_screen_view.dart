@@ -2,19 +2,16 @@ import 'package:flutter/material.dart';
 
 class CaptainDashboardScreenView extends StatelessWidget {
   const CaptainDashboardScreenView ({super.key});
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Dashboard'),
+        title: const Text('Uber'),
         backgroundColor: Colors.black,
+        foregroundColor: Colors.white,
       ),
       body: Center(
-        child: const Text(
-          'Welcome to the Dashboard!',
-          style: TextStyle(fontSize: 20),
-        ),
+        child: Text('Welcome to the Dashboard!', style: TextStyle(fontSize: 24)),
       ),
     );
   }
