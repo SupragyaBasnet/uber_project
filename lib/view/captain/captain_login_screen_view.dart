@@ -13,7 +13,7 @@ class CaptainLoginScreenView extends StatefulWidget {
 
 class _CaptainLoginScreenViewState extends State<CaptainLoginScreenView> {
   // Controllers for text fields
-  TextEditingController phoneController = TextEditingController();
+  TextEditingController phonenumberController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
 
   // Flag to toggle password visibility
@@ -44,10 +44,10 @@ class _CaptainLoginScreenViewState extends State<CaptainLoginScreenView> {
             children: [
               // Captain's phone number input
               TextField(
-  controller: phoneController,
+  controller: phonenumberController,
   decoration: const InputDecoration(
     prefixText: '+977 ',
-    labelText: 'What’s your Phone Number',
+    labelText: 'What’s our Captain’s Phone Number',
     border: OutlineInputBorder(),
   ),
   keyboardType: TextInputType.phone,
@@ -90,6 +90,14 @@ class _CaptainLoginScreenViewState extends State<CaptainLoginScreenView> {
                       builder: (context) => const CaptainDashboardScreenView(), // Navigate to the DashboardPage
                     ),
                   );
+                  // Show success message in green color
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(
+                      content: Text('Login Successful'),
+                      duration: const Duration(seconds: 2),
+                      backgroundColor: Colors.green, // Green color for success
+                    ),
+                  );
                 },
                 style: ElevatedButton.styleFrom(
                   backgroundColor: Colors.black,
@@ -99,7 +107,7 @@ class _CaptainLoginScreenViewState extends State<CaptainLoginScreenView> {
                 child: Text(
                   'Login',
                   style: TextStyle(
-                    fontSize: screenWidth * 0.05, // Font size based on screen width
+                    // fontSize: screenWidth * 0.05, // Font size based on screen width
                   ),
                 ),
               ),
@@ -126,27 +134,27 @@ class _CaptainLoginScreenViewState extends State<CaptainLoginScreenView> {
               const SizedBox(height: 16),
 
               // Navigate to user login screen (for passenger)
-              ElevatedButton(
-                onPressed: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => const LoginScreenView(), // Navigate to the user login page
-                    ),
-                  );
-                },
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: Colors.green,
-                  foregroundColor: Colors.white,
-                  minimumSize: Size(double.infinity, screenHeight * 0.07), // Dynamic button height
-                ),
-                child: Text(
-                  'Sign in as Passenger',
-                  style: TextStyle(
-                    fontSize: screenWidth * 0.05, // Font size based on screen width
-                  ),
-                ),
-              ),
+              // ElevatedButton(
+              //   onPressed: () {
+              //     Navigator.push(
+              //       context,
+              //       MaterialPageRoute(
+              //         builder: (context) => const LoginScreenView(), // Navigate to the user login page
+              //       ),
+              //     );
+              //   },
+              //   style: ElevatedButton.styleFrom(
+              //     backgroundColor: Colors.green,
+              //     foregroundColor: Colors.white,
+              //     minimumSize: Size(double.infinity, screenHeight * 0.07), // Dynamic button height
+              //   ),
+              //   child: Text(
+              //     'Sign in as Passenger',
+              //     style: TextStyle(
+              //       fontSize: screenWidth * 0.05, // Font size based on screen width
+              //     ),
+              //   ),
+              // ),
             ],
           ),
         ),

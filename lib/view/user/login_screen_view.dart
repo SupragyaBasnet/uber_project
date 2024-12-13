@@ -186,8 +186,8 @@ class LoginScreenView extends StatefulWidget {
 }
 
 class _LoginScreenViewState extends State<LoginScreenView> {
-  final TextEditingController _phoneController = TextEditingController();
-  final TextEditingController _passwordController = TextEditingController();
+  final TextEditingController phonenumberController = TextEditingController();
+  final TextEditingController passwordController = TextEditingController();
 
   // To toggle password visibility
   bool _isPasswordHidden = true;
@@ -213,7 +213,7 @@ class _LoginScreenViewState extends State<LoginScreenView> {
             children: [
               // Phone number input field
               TextField(
-                controller: _phoneController,
+                controller: phonenumberController,
                 decoration: const InputDecoration(
                   prefixText: '+977 ',
                   labelText: 'What’s your Phone Number',
@@ -226,7 +226,7 @@ class _LoginScreenViewState extends State<LoginScreenView> {
 
               // Password input field with hide/unhide functionality
               TextField(
-                controller: _passwordController,
+                controller: passwordController,
                 decoration: InputDecoration(
                   labelText: 'Enter Password',
                   border: const OutlineInputBorder(),
@@ -250,7 +250,7 @@ class _LoginScreenViewState extends State<LoginScreenView> {
               ElevatedButton(
                 onPressed: () {
                   // Check if phone number or password is empty
-                  if (_phoneController.text.isEmpty || _passwordController.text.isEmpty) {
+                  if (phonenumberController.text.isEmpty || passwordController.text.isEmpty) {
                     // Show error message if phone number or password is empty
                     ScaffoldMessenger.of(context).showSnackBar(
                       const SnackBar(
@@ -332,9 +332,7 @@ class _LoginScreenViewState extends State<LoginScreenView> {
                 ),
                 child: Text(
                   'Sign in as Captain',
-                  style: TextStyle(
-                    fontSize: screenWidth * 0.05, // Font size based on screen width
-                  ),
+                  
                 ),
               ),
               const SizedBox(height: 16),
@@ -356,9 +354,7 @@ class _LoginScreenViewState extends State<LoginScreenView> {
                 ),
                 child: Text(
                   'Admin Login',
-                  style: TextStyle(
-                    fontSize: screenWidth * 0.05, // Font size based on screen width
-                  ),
+                  
                 ),
               ),
             ],

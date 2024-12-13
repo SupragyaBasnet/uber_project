@@ -12,7 +12,7 @@ class SignupScreenView extends StatefulWidget {
 class _SignupScreenViewState extends State<SignupScreenView> {
   // Controllers for input fields
   final TextEditingController nameController = TextEditingController();
-  final TextEditingController phoneController = TextEditingController();
+  final TextEditingController phonenumberController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
 
   // To toggle password visibility
@@ -55,7 +55,7 @@ class _SignupScreenViewState extends State<SignupScreenView> {
 
               // Phone number input field
               TextField(
-  controller: phoneController,
+  controller: phonenumberController,
   decoration: const InputDecoration(
     prefixText: '+977 ',
     labelText: 'What’s your Phone Number',
@@ -93,7 +93,7 @@ class _SignupScreenViewState extends State<SignupScreenView> {
               ElevatedButton(
                 onPressed: () {
                   if (nameController.text.isEmpty ||
-                      phoneController.text.isEmpty ||
+                      phonenumberController.text.isEmpty ||
                       passwordController.text.isEmpty) {
                     ScaffoldMessenger.of(context).showSnackBar(
                       const SnackBar(
@@ -127,9 +127,6 @@ class _SignupScreenViewState extends State<SignupScreenView> {
                 ),
                 child: Text(
                   'Create account',
-                  style: TextStyle(
-                    fontSize: screenWidth * 0.05,
-                  ),
                 ),
               ),
               const SizedBox(height: 16),
@@ -171,9 +168,7 @@ class _SignupScreenViewState extends State<SignupScreenView> {
                 ),
                 child: Text(
                   'Sign up as Captain',
-                  style: TextStyle(
-                    fontSize: screenWidth * 0.05,
-                  ),
+                 
                 ),
               ),
             ],
