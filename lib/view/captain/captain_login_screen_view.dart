@@ -134,27 +134,27 @@ class _CaptainLoginScreenViewState extends State<CaptainLoginScreenView> {
               const SizedBox(height: 16),
 
               // Navigate to user login screen (for passenger)
-              // ElevatedButton(
-              //   onPressed: () {
-              //     Navigator.push(
-              //       context,
-              //       MaterialPageRoute(
-              //         builder: (context) => const LoginScreenView(), // Navigate to the user login page
-              //       ),
-              //     );
-              //   },
-              //   style: ElevatedButton.styleFrom(
-              //     backgroundColor: Colors.green,
-              //     foregroundColor: Colors.white,
-              //     minimumSize: Size(double.infinity, screenHeight * 0.07), // Dynamic button height
-              //   ),
-              //   child: Text(
-              //     'Sign in as Passenger',
-              //     style: TextStyle(
-              //       fontSize: screenWidth * 0.05, // Font size based on screen width
-              //     ),
-              //   ),
-              // ),
+              ElevatedButton(
+                onPressed: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => const LoginScreenView(), // Navigate to the user login page
+                    ),
+                  );
+                },
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: Colors.green,
+                  foregroundColor: Colors.white,
+                  minimumSize: Size(double.infinity, screenHeight * 0.07), // Dynamic button height
+                ),
+                child: Text(
+                  'Sign in as Passenger',
+                  // style: TextStyle(
+                  //   fontSize: screenWidth * 0.05, // Font size based on screen width
+                  // ),
+                ),
+              ),
             ],
           ),
         ),
