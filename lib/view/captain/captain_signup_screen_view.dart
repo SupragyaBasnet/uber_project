@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
-import '../user/login_screen_view.dart';
-import '../user/signup_screen_view.dart'; // Import user signup screen
+import '../user/signup_screen_view.dart';
 import 'captain_login_screen_view.dart'; // Import captain login screen
 
 class CaptainSignupScreenView extends StatefulWidget {
@@ -242,7 +241,7 @@ class _CaptainSignupScreenViewState extends State<CaptainSignupScreenView> {
                   Navigator.push(
                     context,
                     MaterialPageRoute(
-                      builder: (context) => const LoginScreenView(),
+                      builder: (context) => const SignupScreenView(),
                     ),
                   );
                 },
