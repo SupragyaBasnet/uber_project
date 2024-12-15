@@ -6,7 +6,7 @@ class CaptainDashboardScreenView extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Uber'),
+        title: const Text('EasyGo'),
         backgroundColor: Colors.black,
         foregroundColor: Colors.white,
       ),

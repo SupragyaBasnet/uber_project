@@ -12,255 +12,306 @@ class CaptainSignupScreenView extends StatefulWidget {
 
 class _CaptainSignupScreenViewState extends State<CaptainSignupScreenView> {
   // Controllers for text fields
-  TextEditingController nameController = TextEditingController();
-  TextEditingController phonenumberController = TextEditingController();
-  TextEditingController passwordController = TextEditingController();
-  TextEditingController vehicleColorController = TextEditingController();
-  TextEditingController vehiclePlateController = TextEditingController();
-  TextEditingController vehicleCapacityController = TextEditingController();
+  final TextEditingController _nameController = TextEditingController();
+  final TextEditingController _phoneNumberController = TextEditingController();
+  final TextEditingController _passwordController = TextEditingController();
+  final TextEditingController _vehicleColorController = TextEditingController();
+  final TextEditingController _vehiclePlateController = TextEditingController();
+  final TextEditingController _vehicleCapacityController = TextEditingController();
 
   // Dropdown value for vehicle type
-  String? selectedVehicle;
+  String? _selectedVehicle;
 
   // Flag to toggle password visibility
   bool _isPasswordVisible = false;
 
   @override
   Widget build(BuildContext context) {
-    // MediaQuery to get screen width and height
-    double screenWidth = MediaQuery.of(context).size.width;
-    double screenHeight = MediaQuery.of(context).size.height;
-
     return Scaffold(
-      appBar: AppBar(
-        leading: IconButton(
-          icon: const Icon(Icons.arrow_back),
-          onPressed: () => Navigator.pop(context), // Go back to the previous screen
-        ),
-        title: const Text('Uber'),
-        backgroundColor: Colors.black,
-        foregroundColor: Colors.white,
-      ),
-      backgroundColor: Colors.white,
-      body: SafeArea(
-        child: SingleChildScrollView(
-          padding: EdgeInsets.all(screenWidth * 0.05), // Dynamic padding based on screen size
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: [
-              // Captain's name input field
-              TextField(
-                controller: nameController,
-                decoration: InputDecoration(
-                  labelText: "What’s our Captain’s name",
-                  border: OutlineInputBorder(),
-                ),
-                keyboardType: TextInputType.name, // Alphabet keyboard for name input
-                textInputAction: TextInputAction.next,
+      resizeToAvoidBottomInset: false,
+      body: LayoutBuilder(
+        builder: (context, constraints) {
+          double screenWidth = constraints.maxWidth;
+          double screenHeight = constraints.maxHeight;
+
+          return Container(
+            decoration: BoxDecoration(
+              gradient: LinearGradient(
+                colors: [Colors.grey.shade700, Colors.white30],
+                begin: Alignment.topCenter,
+                end: Alignment.bottomCenter,
               ),
-              const SizedBox(height: 16),
-
-              // Captain's phone number input field
-              TextField(
-                controller: phonenumberController,
-                decoration: InputDecoration(
-                  labelText: "What’s our Captain’s Phone Number",
-                  prefixText: '+977 ',
-                  border: OutlineInputBorder(),
-                ),
-                keyboardType: TextInputType.phone, // Numeric keyboard for phone number input
-                textInputAction: TextInputAction.next,
-              ),
-              const SizedBox(height: 16),
-
-              // Password input field with toggle for visibility
-              TextField(
-                controller: passwordController,
-                obscureText: !_isPasswordVisible, // Toggle visibility
-                decoration: InputDecoration(
-                  labelText: "Enter Password",
-                  border: OutlineInputBorder(),
-                  suffixIcon: IconButton(
-                    icon: Icon(
-                      _isPasswordVisible
-                          ? Icons.visibility
-                          : Icons.visibility_off,
-                    ),
-                    onPressed: () {
-                      setState(() {
-                        _isPasswordVisible = !_isPasswordVisible;
-                      });
-                    },
-                  ),
-                ),
-                keyboardType: TextInputType.text, // Alphabet keyboard for password
-                textInputAction: TextInputAction.next,
-              ),
-              const SizedBox(height: 16),
-
-              // Vehicle Information Header
-              const Text(
-                "Vehicle Information",
-                style: TextStyle(
-                  fontSize: 16,
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-              const SizedBox(height: 16),
-
-              // Vehicle color input field
-              TextField(
-                controller: vehicleColorController,
-                decoration: InputDecoration(
-                  labelText: "Vehicle Color",
-                  border: OutlineInputBorder(),
-                ),
-                keyboardType: TextInputType.text, // Alphabet keyboard for vehicle color
-                textInputAction: TextInputAction.next,
-              ),
-              const SizedBox(height: 16),
-
-              // Vehicle plate input field
-              TextField(
-                controller: vehiclePlateController,
-                decoration: InputDecoration(
-                  labelText: "Vehicle Plate",
-                  border: OutlineInputBorder(),
-                ),
-                keyboardType: TextInputType.text, // Alphabet keyboard for vehicle plate
-                textInputAction: TextInputAction.next,
-              ),
-              const SizedBox(height: 16),
-
-              // Vehicle capacity input field
-              TextField(
-                controller: vehicleCapacityController,
-                decoration: InputDecoration(
-                  labelText: "Vehicle Capacity",
-                  border: OutlineInputBorder(),
-                ),
-                keyboardType: TextInputType.number, // Numeric keyboard for vehicle capacity
-                textInputAction: TextInputAction.next,
-              ),
-              const SizedBox(height: 16),
-
-              // Vehicle type dropdown
-              DropdownButtonFormField<String>(
-                value: selectedVehicle,
-                decoration: InputDecoration(
-                  labelText: "Select Vehicle",
-                  border: OutlineInputBorder(),
-                ),
-                items: [
-                  "Car",
-                  "Bike",
-                ].map((String value) {
-                  return DropdownMenuItem<String>(
-                    value: value,
-                    child: Text(value),
-                  );
-                }).toList(),
-                onChanged: (String? newValue) {
-                  setState(() {
-                    selectedVehicle = newValue;
-                  });
-                },
-              ),
-              const SizedBox(height: 16),
-
-              // Create account button
-              ElevatedButton(
-                onPressed: () {
-                  if (nameController.text.isEmpty ||
-                      phonenumberController.text.isEmpty ||
-                      passwordController.text.isEmpty ||
-                      vehicleColorController.text.isEmpty ||
-                      vehiclePlateController.text.isEmpty ||
-                      vehicleCapacityController.text.isEmpty ||
-                      selectedVehicle == null) {
-                    // Show error message if any field is empty
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      SnackBar(
-                        content: const Text('Please fill in all fields'),
-                        duration: const Duration(seconds: 2),
-                        backgroundColor: Colors.red,
-                      ),
-                    );
-                  } else {
-                    // Show success message
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      SnackBar(
-                        content: const Text('Account Created Successfully'),
-                        duration: const Duration(seconds: 2),
-                        backgroundColor: Colors.green,
-                      ),
-                    );
-
-                    // Navigate to captain login screen after success
-                    Future.delayed(const Duration(seconds: 2), () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => const CaptainLoginScreenView(),
+            ),
+            child: SafeArea(
+              child: SingleChildScrollView(
+                padding: EdgeInsets.all(screenWidth * 0.05),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  children: [
+                    // Logo Section
+                    Center(
+                      child: Container(
+                        width: screenHeight * 0.2,
+                        height: screenHeight * 0.2,
+                        decoration: BoxDecoration(
+                          shape: BoxShape.circle,
+                          gradient: LinearGradient(
+                            colors: [Colors.blue, Colors.green],
+                            begin: Alignment.topLeft,
+                            end: Alignment.bottomRight,
+                          ),
+                          boxShadow: [
+                            BoxShadow(
+                              color: Colors.grey.withOpacity(0.5),
+                              spreadRadius: 5,
+                              blurRadius: 7,
+                              offset: Offset(0, 3),
+                            ),
+                          ],
+                          image: DecorationImage(
+                            image: AssetImage('assets/images/logo.png'),
+                            fit: BoxFit.cover,
+                          ),
                         ),
-                      );
-                    });
-                  }
-                },
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: Colors.black,
-                  foregroundColor: Colors.white,
-                  minimumSize: Size(double.infinity, screenHeight * 0.07), // Dynamic button height
-                ),
-                child: Text(
-                  "Create Captain’s account",
-
-                ),
-              ),
-              const SizedBox(height: 16),
-
-              // Navigate to captain login screen
-              TextButton(
-                onPressed: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => const CaptainLoginScreenView(),
+                      ),
                     ),
-                  );
-                },
-                child: const Text(
-                  "Already have an account ? Login here",
-                  style: TextStyle(color: Colors.blue),
-                ),
-              ),
+                    SizedBox(height: screenHeight * 0.04),
 
-              const SizedBox(height: 16),
-              ElevatedButton(
-                onPressed: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => const SignupScreenView(),
+                    // Name Input
+                    _buildTextField(
+                      controller: _nameController,
+                      labelText: "What’s our Captain’s name",
+                      keyboardType: TextInputType.name,
                     ),
-                  );
-                },
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: Colors.green,
-                  foregroundColor: Colors.white,
-                  minimumSize: Size(double.infinity, screenHeight * 0.07), // Dynamic button height
-                ),
-                child: Text(
-                  'Sign up as Passenger',
-                  // style: TextStyle(
-                  //   fontSize: screenWidth * 0.05, // Font size based on screen width
-                  // ),
+                    SizedBox(height: screenHeight * 0.03),
+
+                    // Phone Number Input
+                    _buildTextField(
+                      controller: _phoneNumberController,
+                      labelText: "What’s our Captain’s Phone Number",
+                      prefixText: '+977 ',
+                      keyboardType: TextInputType.phone,
+                    ),
+                    SizedBox(height: screenHeight * 0.03),
+
+                    // Password Input
+                    _buildTextField(
+                      controller: _passwordController,
+                      labelText: "Enter Password",
+                      obscureText: !_isPasswordVisible,
+                      suffixIcon: IconButton(
+                        icon: Icon(
+                          _isPasswordVisible ? Icons.visibility : Icons.visibility_off,
+                        ),
+                        onPressed: () {
+                          setState(() {
+                            _isPasswordVisible = !_isPasswordVisible;
+                          });
+                        },
+                      ),
+                    ),
+                    SizedBox(height: screenHeight * 0.03),
+
+                    // Vehicle Information Section
+                    const Text(
+                      "Vehicle Information",
+                      style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                    ),
+                    SizedBox(height: screenHeight * 0.03),
+
+                    // Vehicle Color Input
+                    _buildTextField(
+                      controller: _vehicleColorController,
+                      labelText: "Vehicle Color",
+                    ),
+                    SizedBox(height: screenHeight * 0.03),
+
+                    // Vehicle Plate Input
+                    _buildTextField(
+                      controller: _vehiclePlateController,
+                      labelText: "Vehicle Plate",
+                    ),
+                    SizedBox(height: screenHeight * 0.03),
+
+                    // Vehicle Capacity Input
+                    _buildTextField(
+                      controller: _vehicleCapacityController,
+                      labelText: "Vehicle Capacity",
+                      keyboardType: TextInputType.number,
+                    ),
+                    SizedBox(height: screenHeight * 0.03),
+
+                    // Vehicle Type Dropdown
+                    _buildDropdownField(
+                      labelText: "Select Vehicle",
+                      value: _selectedVehicle,
+                      items: ["Car", "Bike"],
+                      onChanged: (String? value) {
+                        setState(() {
+                          _selectedVehicle = value;
+                        });
+                      },
+                    ),
+                    SizedBox(height: screenHeight * 0.03),
+
+                    // Create Account Button
+                    _buildElevatedButton(
+                      text: "Create Captain’s account",
+                      backgroundColor: Colors.black,
+                      onPressed: () {
+                        if (_nameController.text.isEmpty ||
+                            _phoneNumberController.text.isEmpty ||
+                            _passwordController.text.isEmpty ||
+                            _vehicleColorController.text.isEmpty ||
+                            _vehiclePlateController.text.isEmpty ||
+                            _vehicleCapacityController.text.isEmpty ||
+                            _selectedVehicle == null) {
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            const SnackBar(
+                              content: Text('Please fill in all fields'),
+                              backgroundColor: Colors.red,
+                              duration: Duration(seconds: 2),
+                            ),
+                          );
+                        } else {
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            const SnackBar(
+                              content: Text('Account Created Successfully'),
+                              backgroundColor: Colors.green,
+                              duration: Duration(seconds: 2),
+                            ),
+                          );
+                          Future.delayed(const Duration(seconds: 2), () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => const CaptainLoginScreenView(),
+                              ),
+                            );
+                          });
+                        }
+                      },
+                    ),
+                    SizedBox(height: screenHeight * 0.03),
+
+                    // Already Have an Account Button
+                    Center(
+                      child: TextButton(
+                        onPressed: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => const CaptainLoginScreenView(),
+                            ),
+                          );
+                        },
+                        child: const Text(
+                          "Already have an account? Login here",
+                          style: TextStyle(color: Colors.blue),
+                        ),
+                      ),
+                    ),
+                    SizedBox(height: screenHeight * 0.03),
+
+                    // Sign Up as Passenger Button
+                    _buildElevatedButton(
+                      text: "Sign up as Passenger",
+                      backgroundColor: Colors.green,
+                      onPressed: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => const SignupScreenView(),
+                          ),
+                        );
+                      },
+                    ),
+                  ],
                 ),
               ),
-            ],
+            ),
+          );
+        },
+      ),
+    );
+  }
+
+  /// Helper method to build TextField
+  Widget _buildTextField({
+    required TextEditingController controller,
+    required String labelText,
+    String? prefixText,
+    TextInputType keyboardType = TextInputType.text,
+    bool obscureText = false,
+    Widget? suffixIcon,
+  }) {
+    return Container(
+      decoration: BoxDecoration(
+        color: Colors.grey[100],
+        borderRadius: BorderRadius.circular(15),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.grey.withOpacity(0.3),
+            blurRadius: 10,
+            offset: Offset(0, 4),
           ),
+        ],
+      ),
+      child: TextField(
+        controller: controller,
+        decoration: InputDecoration(
+          labelText: labelText,
+          prefixText: prefixText,
+          border: InputBorder.none,
+          contentPadding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+          suffixIcon: suffixIcon,
+        ),
+        keyboardType: keyboardType,
+        obscureText: obscureText,
+      ),
+    );
+  }
+
+  /// Helper method to build DropdownField
+  Widget _buildDropdownField({
+    required String labelText,
+    required List<String> items,
+    required String? value,
+    required ValueChanged<String?> onChanged,
+  }) {
+    return DropdownButtonFormField<String>(
+      value: value,
+      decoration: InputDecoration(
+        labelText: labelText,
+        border: const OutlineInputBorder(),
+      ),
+      items: items.map((String item) {
+        return DropdownMenuItem<String>(
+          value: item,
+          child: Text(item),
+        );
+      }).toList(),
+      onChanged: onChanged,
+    );
+  }
+
+  /// Helper method to build ElevatedButton
+  Widget _buildElevatedButton({
+    required String text,
+    required Color backgroundColor,
+    required VoidCallback onPressed,
+  }) {
+    return ElevatedButton(
+      onPressed: onPressed,
+      style: ElevatedButton.styleFrom(
+        backgroundColor: backgroundColor,
+        foregroundColor: Colors.white,
+        fixedSize: const Size(double.infinity, 50), // Fixed button size
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(8),
         ),
       ),
+      child: Text(text),
     );
   }
 }

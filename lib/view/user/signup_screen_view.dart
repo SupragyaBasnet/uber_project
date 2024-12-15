@@ -11,170 +11,237 @@ class SignupScreenView extends StatefulWidget {
 
 class _SignupScreenViewState extends State<SignupScreenView> {
   // Controllers for input fields
-  final TextEditingController nameController = TextEditingController();
-  final TextEditingController phonenumberController = TextEditingController();
-  final TextEditingController passwordController = TextEditingController();
+  final TextEditingController _nameController = TextEditingController();
+  final TextEditingController _phoneNumberController = TextEditingController();
+  final TextEditingController _passwordController = TextEditingController();
 
   // To toggle password visibility
   bool _isPasswordHidden = true;
 
   @override
   Widget build(BuildContext context) {
-    // MediaQuery for dynamic sizing
-    double screenWidth = MediaQuery.of(context).size.width;
-    double screenHeight = MediaQuery.of(context).size.height;
-
     return Scaffold(
-      appBar: AppBar(
-        leading: IconButton(
-          icon: const Icon(Icons.arrow_back),
-          onPressed: () => Navigator.pop(context),
-        ),
-        title: const Text('Uber'),
-        backgroundColor: Colors.black,
-        foregroundColor: Colors.white,
-      ),
-      backgroundColor: Colors.white,
-      body: SafeArea(
-        child: SingleChildScrollView(
-          padding: EdgeInsets.all(screenWidth * 0.05),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: [
-              // Name input field
-              TextField(
-                controller: nameController,
-                decoration: const InputDecoration(
-                  labelText: 'What’s your Name',
-                  border: OutlineInputBorder(),
-                ),
-                keyboardType: TextInputType.text, // Alphabet keyboard for name
-                textInputAction: TextInputAction.next, // Move to next field on enter
+      resizeToAvoidBottomInset: false,
+      body: LayoutBuilder(
+        builder: (context, constraints) {
+          double screenWidth = constraints.maxWidth;
+          double screenHeight = constraints.maxHeight;
+
+          return Container(
+            decoration: BoxDecoration(
+              gradient: LinearGradient(
+                colors: [Colors.grey.shade700, Colors.white30],
+                begin: Alignment.topCenter,
+                end: Alignment.bottomCenter,
               ),
-              const SizedBox(height: 16),
-
-              // Phone number input field
-              TextField(
-  controller: phonenumberController,
-  decoration: const InputDecoration(
-    prefixText: '+977 ',
-    labelText: 'What’s your Phone Number',
-    border: OutlineInputBorder(),
-  ),
-  keyboardType: TextInputType.phone,
-  textInputAction: TextInputAction.next,
-),
-              const SizedBox(height: 16),
-
-              // Password input field with hide/unhide functionality
-              TextField(
-                controller: passwordController,
-                decoration: InputDecoration(
-                  labelText: 'What’s your Password',
-                  border: const OutlineInputBorder(),
-                  suffixIcon: IconButton(
-                    icon: Icon(
-                      _isPasswordHidden ? Icons.visibility_off : Icons.visibility,
-                    ),
-                    onPressed: () {
-                      setState(() {
-                        _isPasswordHidden = !_isPasswordHidden;
-                      });
-                    },
-                  ),
-                ),
-                obscureText: _isPasswordHidden,
-                keyboardType: TextInputType.text, // Alphabet keyboard for password
-                textInputAction: TextInputAction.done, // Done action on enter
-              ),
-              const SizedBox(height: 16),
-
-              // Create account button
-              ElevatedButton(
-                onPressed: () {
-                  if (nameController.text.isEmpty ||
-                      phonenumberController.text.isEmpty ||
-                      passwordController.text.isEmpty) {
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      const SnackBar(
-                        content: Text('Please fill in all fields'),
-                        backgroundColor: Colors.red,
-                        duration: Duration(seconds: 2),
-                      ),
-                    );
-                  } else {
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      const SnackBar(
-                        content: Text('Account Created Successfully'),
-                        backgroundColor: Colors.green,
-                        duration: Duration(seconds: 2),
-                      ),
-                    );
-                    Future.delayed(const Duration(seconds: 2), () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => const LoginScreenView(),
+            ),
+            child: SafeArea(
+              child: SingleChildScrollView(
+                padding: EdgeInsets.all(screenWidth * 0.05),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  children: [
+                    // Logo Section
+                    Center(
+                      child: Container(
+                        width: screenHeight * 0.2,
+                        height: screenHeight * 0.2,
+                        decoration: BoxDecoration(
+                          shape: BoxShape.circle,
+                          gradient: LinearGradient(
+                            colors: [Colors.blue, Colors.green],
+                            begin: Alignment.topLeft,
+                            end: Alignment.bottomRight,
+                          ),
+                          boxShadow: [
+                            BoxShadow(
+                              color: Colors.grey.withOpacity(0.5),
+                              spreadRadius: 5,
+                              blurRadius: 7,
+                              offset: Offset(0, 3),
+                            ),
+                          ],
+                          image: DecorationImage(
+                            image: AssetImage('assets/images/logo.png'),
+                            fit: BoxFit.cover,
+                          ),
                         ),
-                      );
-                    });
-                  }
-                },
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: Colors.black,
-                  foregroundColor: Colors.white,
-                  minimumSize: Size(double.infinity, screenHeight * 0.07),
-                ),
-                child: Text(
-                  'Create account',
-                ),
-              ),
-              const SizedBox(height: 16),
-
-              // Navigate to login screen
-              TextButton(
-                onPressed: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => const LoginScreenView(),
+                      ),
                     ),
-                  );
-                },
-                child: Text(
-                  'Already have an account? Login here',
-                  style: TextStyle(
-                    color: Colors.blue,
-                    fontSize: screenWidth * 0.04,
-                  ),
-                ),
-              ),
-              const SizedBox(height: 16),
+                    SizedBox(height: screenHeight * 0.04),
 
-              // Sign up as captain button
-              ElevatedButton(
-                onPressed: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => const CaptainSignupScreenView(),
+                    // Name Input Field
+                    _buildTextField(
+                      controller: _nameController,
+                      labelText: "What’s your Name",
+                      keyboardType: TextInputType.text,
+                      textInputAction: TextInputAction.next,
                     ),
-                  );
-                },
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: Colors.green,
-                  foregroundColor: Colors.white,
-                  minimumSize: Size(double.infinity, screenHeight * 0.07),
-                ),
-                child: Text(
-                  'Sign up as Captain',
-                 
+                    SizedBox(height: screenHeight * 0.03),
+
+                    // Phone Number Input Field
+                    _buildTextField(
+                      controller: _phoneNumberController,
+                      labelText: "What’s your Phone Number",
+                      prefixText: '+977 ',
+                      keyboardType: TextInputType.phone,
+                      textInputAction: TextInputAction.next,
+                    ),
+                    SizedBox(height: screenHeight * 0.03),
+
+                    // Password Input Field
+                    _buildTextField(
+                      controller: _passwordController,
+                      labelText: "What’s your Password",
+                      obscureText: _isPasswordHidden,
+                      suffixIcon: IconButton(
+                        icon: Icon(
+                          _isPasswordHidden ? Icons.visibility_off : Icons.visibility,
+                        ),
+                        onPressed: () {
+                          setState(() {
+                            _isPasswordHidden = !_isPasswordHidden;
+                          });
+                        },
+                      ),
+                      textInputAction: TextInputAction.done,
+                    ),
+                    SizedBox(height: screenHeight * 0.03),
+
+                    // Create Account Button
+                    _buildElevatedButton(
+                      text: "Create Account",
+                      backgroundColor: Colors.black,
+                      onPressed: () {
+                        if (_nameController.text.isEmpty ||
+                            _phoneNumberController.text.isEmpty ||
+                            _passwordController.text.isEmpty) {
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            const SnackBar(
+                              content: Text('Please fill in all fields'),
+                              backgroundColor: Colors.red,
+                              duration: Duration(seconds: 2),
+                            ),
+                          );
+                        } else {
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            const SnackBar(
+                              content: Text('Account Created Successfully'),
+                              backgroundColor: Colors.green,
+                              duration: Duration(seconds: 2),
+                            ),
+                          );
+                          Future.delayed(const Duration(seconds: 2), () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => const LoginScreenView(),
+                              ),
+                            );
+                          });
+                        }
+                      },
+                    ),
+                    SizedBox(height: screenHeight * 0.03),
+
+                    // Navigate to Login Screen
+                    Center(
+                      child: TextButton(
+                        onPressed: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => const LoginScreenView(),
+                            ),
+                          );
+                        },
+                        child: const Text(
+                          "Already have an account? Login here",
+                          style: TextStyle(color: Colors.blue, fontWeight: FontWeight.w600),
+                        ),
+                      ),
+                    ),
+                    SizedBox(height: screenHeight * 0.03),
+
+                    // Sign Up as Captain Button
+                    _buildElevatedButton(
+                      text: "Sign up as Captain",
+                      backgroundColor: Colors.green,
+                      onPressed: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => const CaptainSignupScreenView(),
+                          ),
+                        );
+                      },
+                    ),
+                  ],
                 ),
               ),
-            ],
-          ),
-        ),
+            ),
+          );
+        },
       ),
+    );
+  }
+
+  /// Helper method to build TextField
+  Widget _buildTextField({
+    required TextEditingController controller,
+    required String labelText,
+    String? prefixText,
+    TextInputType keyboardType = TextInputType.text,
+    TextInputAction textInputAction = TextInputAction.done,
+    bool obscureText = false,
+    Widget? suffixIcon,
+  }) {
+    return Container(
+      decoration: BoxDecoration(
+        color: Colors.grey[100],
+        borderRadius: BorderRadius.circular(15),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.grey.withOpacity(0.3),
+            blurRadius: 10,
+            offset: Offset(0, 4),
+          ),
+        ],
+      ),
+      child: TextField(
+        controller: controller,
+        decoration: InputDecoration(
+          labelText: labelText,
+          prefixText: prefixText,
+          border: InputBorder.none,
+          contentPadding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+          suffixIcon: suffixIcon,
+        ),
+        keyboardType: keyboardType,
+        textInputAction: textInputAction,
+        obscureText: obscureText,
+      ),
+    );
+  }
+
+  /// Helper method to build ElevatedButton
+  Widget _buildElevatedButton({
+    required String text,
+    required Color backgroundColor,
+    required VoidCallback onPressed,
+  }) {
+    return ElevatedButton(
+      onPressed: onPressed,
+      style: ElevatedButton.styleFrom(
+        backgroundColor: backgroundColor,
+        foregroundColor: Colors.white,
+        fixedSize: const Size(double.infinity, 50),
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(8),
+        ),
+        textStyle: const TextStyle(fontWeight: FontWeight.bold),
+      ),
+      child: Text(text),
     );
   }
 }

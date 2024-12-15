@@ -175,6 +175,8 @@
 //     );
 //   }
 // }
+
+
 import 'package:flutter/material.dart';
 import 'login_screen_view.dart'; // Import your Login Screen
 
@@ -208,7 +210,7 @@ class _OnboardingScreenViewState extends State<OnboardingScreenView> {
     return Scaffold(
       backgroundColor: Colors.black,
       appBar: AppBar(
-        title: const Text('Uber'),
+        title: const Text('EasyGo'),
         backgroundColor: Colors.black,
         foregroundColor: Colors.white,
       ),
@@ -220,7 +222,7 @@ class _OnboardingScreenViewState extends State<OnboardingScreenView> {
               onPageChanged: _onPageChanged,
               children: [
                 OnboardingPage(
-                  imagePath: 'assets/images/image1.jpg', // Correct path to the first image
+                  imagePath: 'assets/images/image1.webp', // Correct path to the first image
                   title: 'Your Ride, Your Comfort',
                   description:
                       'Get where you need to be with style and ease. Our premium vehicles and personalized service '
@@ -236,18 +238,17 @@ class _OnboardingScreenViewState extends State<OnboardingScreenView> {
                       'your timeline, every time.',
                 ),
                 OnboardingPage(
-                  imagePath: 'assets/images/image3.png', // Correct path to the third image
+                  imagePath: 'assets/images/image3.jpg', // Correct path to the third image
                   title: 'Reliable Drivers, Safe Journey',
                   description:
                       'Safety is more than a promise; it’s a guarantee. Our drivers undergo rigorous background checks '
                       'and continuous training to ensure every trip is secure. Whether it’s a short ride or a long journey, '
                       'we deliver peace of mind, one mile at a time.',
-                  isLastPage: true, // To identify the last page
+                  isLastPage: true,
                 ),
               ],
             ),
           ),
-          // Page navigation arrows
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
@@ -268,7 +269,7 @@ class _OnboardingScreenViewState extends State<OnboardingScreenView> {
                 child: Center(
                   child: Text(
                     '${_currentPage + 1} of 3',
-                    style: TextStyle(color: Colors.black, fontSize: 16),
+                    style: TextStyle(color: Colors.white, fontSize: 16),
                   ),
                 ),
               ),
@@ -295,7 +296,6 @@ class _OnboardingScreenViewState extends State<OnboardingScreenView> {
     );
   }
 }
-
 class OnboardingPage extends StatelessWidget {
   final String imagePath;
   final String title;
@@ -312,43 +312,55 @@ class OnboardingPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: [
-        Expanded(
-          child: Image.asset(
-            imagePath,
-            fit: BoxFit.cover,
-            width: double.infinity,
-          ),
-        ),
-        Container(
-          color: Colors.black,
-          padding: const EdgeInsets.all(16),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              Text(
-                title,
-                textAlign: TextAlign.center,
-                style: TextStyle(
-                  fontSize: 24,
-                  fontWeight: FontWeight.bold,
-                  color: Colors.grey[500],
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        return Column(
+          children: [
+            // Image Section
+            Container(
+              height: constraints.maxHeight * 0.5, // Use 60% of the available height
+              width: double.infinity,
+              decoration: BoxDecoration(
+                image: DecorationImage(
+                  image: AssetImage(imagePath),
+                  fit: BoxFit.cover, // Ensures the image scales to fill the container
+                  alignment: Alignment.center, // Aligns the image properly
                 ),
               ),
-              const SizedBox(height: 10),
-              Text(
-                description,
-                textAlign: TextAlign.center,
-                style: TextStyle(
-                  fontSize: 16,
-                  color: Colors.grey[500],
-                ),
+            ),
+            // Text Section
+            Container(
+              height: constraints.maxHeight * 0.5, // Use 40% of the available height
+              color: Colors.black,
+              padding: const EdgeInsets.all(14),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Text(
+                    title,
+                    textAlign: TextAlign.center,
+                    style: TextStyle(
+                      fontSize: 24,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.white,
+                    ),
+                  ),
+                  const SizedBox(height: 10),
+                  Text(
+                    description,
+                    textAlign: TextAlign.center,
+                    style: TextStyle(
+                      fontSize: 16,
+                      color: Colors.grey[500],
+                    ),
+                  ),
+                ],
               ),
-            ],
-          ),
-        ),
-      ],
+            ),
+          ],
+        );
+      },
     );
   }
 }
