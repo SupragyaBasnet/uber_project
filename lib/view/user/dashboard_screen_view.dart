@@ -62,10 +62,13 @@ class HomeScreen extends StatelessWidget {
       body: Column(
         children: [
           Expanded(
-            child: Image.network(
-              'https://via.placeholder.com/600x400',
-              fit: BoxFit.cover,
-              width: double.infinity,
+            child: Container(
+              decoration: const BoxDecoration(
+                image: DecorationImage(
+                  image: AssetImage('assets/images/map.png'),
+                  fit: BoxFit.cover,
+                ),
+              ),
             ),
           ),
           Padding(
