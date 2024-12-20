@@ -25,38 +25,41 @@ class _ForgotPasswordViewState extends State<ForgotPasswordView> {
 
   void _validateAndSendOtp() {
     String phone = _phoneController.text.trim();
-    if (phone.isEmpty) {
+    if (phone.isEmpty || phone.length != 10 || !RegExp(r'^[0-9]+$').hasMatch(phone)) {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(
-          content: Text("Please enter your phone number."),
+          content: Text("Please enter a valid 10-digit phone number."),
           backgroundColor: Colors.red,
         ),
       );
       return;
     }
 
-    if (phone.length != 10 || !RegExp(r'^[0-9]+$').hasMatch(phone)) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text("Phone number must be exactly 10 digits."),
-          backgroundColor: Colors.red,
-        ),
-      );
-      return;
-    }
-
-    setState(() {
-      _isOtpSent = true;
-    });
-
+    // Navigate to the OTP screen with smooth animation
     Navigator.push(
       context,
-      MaterialPageRoute(
-        builder: (context) => OtpVerificationView(
-          phoneNumber: phone,
-        ),
+      PageRouteBuilder(
+        pageBuilder: (context, animation, secondaryAnimation) =>
+            OtpVerificationView(phoneNumber: phone),
+        transitionsBuilder: (context, animation, secondaryAnimation, child) {
+          const begin = Offset(1.0, 0.0);
+          const end = Offset.zero;
+          const curve = Curves.ease;
+
+          var tween = Tween(begin: begin, end: end).chain(CurveTween(curve: curve));
+          var offsetAnimation = animation.drive(tween);
+
+          return SlideTransition(
+            position: offsetAnimation,
+            child: child,
+          );
+        },
       ),
-    );
+    ).then((_) {
+      setState(() {
+        _isOtpSent = true;
+      });
+    });
   }
 
   @override
@@ -144,7 +147,8 @@ class _ForgotPasswordViewState extends State<ForgotPasswordView> {
                         style: TextStyle(fontSize: 16, color: Colors.white),
                       ),
                     ),
-                  if (_isOtpSent) ...[
+
+                  if (_isOtpSent)
                     ElevatedButton(
                       onPressed: () {
                         ScaffoldMessenger.of(context).showSnackBar(
@@ -166,31 +170,6 @@ class _ForgotPasswordViewState extends State<ForgotPasswordView> {
                         style: TextStyle(fontSize: 16, color: Colors.white),
                       ),
                     ),
-                    const SizedBox(height: 10),
-                    ElevatedButton(
-                      onPressed: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => OtpVerificationView(
-                              phoneNumber: _phoneController.text.trim(),
-                            ),
-                          ),
-                        );
-                      },
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: Colors.green,
-                        padding: const EdgeInsets.symmetric(vertical: 16),
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(10),
-                        ),
-                      ),
-                      child: const Text(
-                        "Go to Set Password",
-                        style: TextStyle(fontSize: 16, color: Colors.white),
-                      ),
-                    ),
-                  ],
                 ],
               ),
             ),
