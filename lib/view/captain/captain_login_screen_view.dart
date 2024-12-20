@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import '../user/login_screen_view.dart';
+import '../user/forgot_password_view.dart'; // Adjusted import for ForgotPasswordView
 import 'captain_signup_screen_view.dart'; // Import captain signup page
 import 'captain_dashboard_screen_view.dart'; // Import captain dashboard screen
 
@@ -11,11 +12,8 @@ class CaptainLoginScreenView extends StatefulWidget {
 }
 
 class _CaptainLoginScreenViewState extends State<CaptainLoginScreenView> {
-  // Controllers for text fields
   final TextEditingController _phoneNumberController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
-
-  // Flag to toggle password visibility
   bool _isPasswordVisible = false;
 
   @override
@@ -96,6 +94,29 @@ class _CaptainLoginScreenViewState extends State<CaptainLoginScreenView> {
                       ),
                     ),
                     SizedBox(height: screenHeight * 0.03),
+
+                    // Forgot Password Link
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.end,
+                      children: [
+                        TextButton(
+                          onPressed: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => ForgotPasswordView(
+                                  initialPhoneNumber: _phoneNumberController.text,
+                                ),
+                              ),
+                            );
+                          },
+                          child: const Text(
+                            "Forgot Password?",
+                            style: TextStyle(color: Colors.blue, fontWeight: FontWeight.w600),
+                          ),
+                        ),
+                      ],
+                    ),
 
                     // Login Button
                     _buildElevatedButton(
