@@ -79,7 +79,7 @@ class HomeScreen extends StatelessWidget {
               children: [
                 const Text(
                   'Find a Trip',
-                  style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold, color:Colors.green),
+                  style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
                 ),
                 const SizedBox(height: 16),
                 TextField(
