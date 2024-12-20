@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import '../captain/captain_login_screen_view.dart';
 import '../user/signup_screen_view.dart';
 import 'dashboard_screen_view.dart'; // Import the DashboardPage
+import 'forgot_password_view.dart'; // Import Forgot Password Page
 
 class LoginScreenView extends StatefulWidget {
   const LoginScreenView({super.key});
@@ -96,6 +97,29 @@ class _LoginScreenViewState extends State<LoginScreenView> {
                       ),
                     ),
                     SizedBox(height: screenHeight * 0.03),
+
+                    // Forgot Password Link
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.end,
+                      children: [
+                        TextButton(
+                          onPressed: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => ForgotPasswordView(
+                                  initialPhoneNumber: _phoneController.text,
+                                ),
+                              ),
+                            );
+                          },
+                          child: const Text(
+                            "Forgot Password?",
+                            style: TextStyle(color: Colors.blue, fontWeight: FontWeight.w600),
+                          ),
+                        ),
+                      ],
+                    ),
 
                     // Login Button
                     _buildElevatedButton(
