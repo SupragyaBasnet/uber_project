@@ -56,8 +56,9 @@ class HomeScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Uber'),
+        title: const Text('EasyGo'),
         backgroundColor: Colors.black,
+        foregroundColor:Colors.white
       ),
       body: Column(
         children: [
@@ -78,14 +79,14 @@ class HomeScreen extends StatelessWidget {
               children: [
                 const Text(
                   'Find a Trip',
-                  style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+                  style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold, color:Colors.green),
                 ),
                 const SizedBox(height: 16),
                 TextField(
                   decoration: InputDecoration(
                     hintText: 'Add a pick-up location',
-                    filled: true,
-                    fillColor: Colors.grey[200],
+                    // filled: true,
+                    fillColor: Colors.grey[600],
                     border: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(10),
                     ),
@@ -95,8 +96,8 @@ class HomeScreen extends StatelessWidget {
                 TextField(
                   decoration: InputDecoration(
                     hintText: 'Enter your destination',
-                    filled: true,
-                    fillColor: Colors.grey[200],
+                    // filled: true,
+                    fillColor: Colors.grey[600],
                     border: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(10),
                     ),
@@ -106,8 +107,9 @@ class HomeScreen extends StatelessWidget {
                 ElevatedButton(
                   onPressed: () {},
                   style: ElevatedButton.styleFrom(
-                    backgroundColor: Colors.black,
+                    backgroundColor: Colors.grey[400],
                     padding: const EdgeInsets.all(16),
+                    foregroundColor:Colors.black,
                   ),
                   child: const Text('Request a Ride'),
                 ),

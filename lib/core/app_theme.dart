@@ -13,7 +13,7 @@ ThemeData getApplicationTheme() {
       elevation: 4,
       // centerTitle: true,
       titleTextStyle: TextStyle(
-        fontFamily: 'Montserrat Bold',
+        fontFamily: 'Montserrat Regular',
         fontSize: 22,
         fontWeight: FontWeight.bold,
       ),
