@@ -13,7 +13,7 @@ class EasyGoApp extends StatelessWidget {
         primaryColor: Colors.black,
         scaffoldBackgroundColor: Colors.black,
         textTheme: const TextTheme(
-          // bodyMedium: TextStyle(color: Colors.white),
+          bodyMedium: TextStyle(color: Colors.white),
           titleLarge: TextStyle(color: Colors.white),
         ),
         inputDecorationTheme: InputDecorationTheme(
