@@ -4,33 +4,30 @@ class DashboardScreenView extends StatefulWidget {
   const DashboardScreenView({super.key});
 
   @override
-  _DashboardScreenViewState createState() => _DashboardScreenViewState();
+  _DashboardScreenState createState() => _DashboardScreenState();
 }
 
-class _DashboardScreenViewState extends State<DashboardScreenView> {
+class _DashboardScreenState extends State<DashboardScreenView> {
   int _selectedIndex = 0;
 
-  // List of pages for the bottom navigation bar
   final List<Widget> _pages = [
-    HomeScreen(),
-    RideHistoryScreen(),
-    ProfileScreen(),
+    const HomeScreen(),
+    const RidesScreen(),
+    const ProfileScreen(),
   ];
+
+  void _onItemTapped(int index) {
+    setState(() {
+      _selectedIndex = index;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: SafeArea(
-        child: _pages[_selectedIndex],
-      ),
+      body: _pages[_selectedIndex],
       bottomNavigationBar: BottomNavigationBar(
-        currentIndex: _selectedIndex,
-        onTap: (index) {
-          setState(() {
-            _selectedIndex = index;
-          });
-        },
-        items: const [
+        items: const <BottomNavigationBarItem>[
           BottomNavigationBarItem(
             icon: Icon(Icons.home),
             label: 'Home',
@@ -44,112 +41,118 @@ class _DashboardScreenViewState extends State<DashboardScreenView> {
             label: 'Profile',
           ),
         ],
+        currentIndex: _selectedIndex,
+        selectedItemColor: Colors.blue,
+        onTap: _onItemTapped,
       ),
     );
   }
 }
 
-/// Home Screen - Ride Booking
 class HomeScreen extends StatelessWidget {
+  const HomeScreen({super.key});
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text("Book a Ride"),
+        title: const Text('Uber'),
         backgroundColor: Colors.black,
       ),
-      body: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: [
-            const Text(
-              "Enter Ride Details",
-              style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+      body: Column(
+        children: [
+          Expanded(
+            child: Image.network(
+              'https://via.placeholder.com/600x400',
+              fit: BoxFit.cover,
+              width: double.infinity,
             ),
-            const SizedBox(height: 20),
-            _buildTextField(labelText: "Pickup Location", icon: Icons.location_on),
-            const SizedBox(height: 16),
-            _buildTextField(labelText: "Drop-off Location", icon: Icons.location_pin),
-            const SizedBox(height: 16),
-            ElevatedButton(
-              onPressed: () {
-                ScaffoldMessenger.of(context).showSnackBar(
-                  const SnackBar(
-                    content: Text("Ride Request Sent!"),
-                    backgroundColor: Colors.green,
+          ),
+          Padding(
+            padding: const EdgeInsets.all(16.0),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                const Text(
+                  'Find a Trip',
+                  style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+                ),
+                const SizedBox(height: 16),
+                TextField(
+                  decoration: InputDecoration(
+                    hintText: 'Add a pick-up location',
+                    filled: true,
+                    fillColor: Colors.grey[200],
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(10),
+                    ),
                   ),
-                );
-              },
-              style: ElevatedButton.styleFrom(
-                padding: const EdgeInsets.all(16),
-                backgroundColor: Colors.black,
-              ),
-              child: const Text(
-                "Request Ride",
-                style: TextStyle(fontSize: 18),
-              ),
+                ),
+                const SizedBox(height: 16),
+                TextField(
+                  decoration: InputDecoration(
+                    hintText: 'Enter your destination',
+                    filled: true,
+                    fillColor: Colors.grey[200],
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(10),
+                    ),
+                  ),
+                ),
+                const SizedBox(height: 16),
+                ElevatedButton(
+                  onPressed: () {},
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: Colors.black,
+                    padding: const EdgeInsets.all(16),
+                  ),
+                  child: const Text('Request a Ride'),
+                ),
+              ],
             ),
-          ],
-        ),
-      ),
-    );
-  }
-
-  Widget _buildTextField({required String labelText, required IconData icon}) {
-    return TextField(
-      decoration: InputDecoration(
-        labelText: labelText,
-        border: OutlineInputBorder(),
-        prefixIcon: Icon(icon),
+          ),
+        ],
       ),
     );
   }
 }
 
-/// Ride History Screen
-class RideHistoryScreen extends StatelessWidget {
-  final List<Map<String, String>> _rideHistory = [
-    {"date": "2024-12-01", "pickup": "Location A", "dropoff": "Location B"},
-    {"date": "2024-12-02", "pickup": "Location C", "dropoff": "Location D"},
-    {"date": "2024-12-05", "pickup": "Location E", "dropoff": "Location F"},
-  ];
+class RidesScreen extends StatelessWidget {
+  const RidesScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text("Ride History"),
+        title: const Text('Rides'),
         backgroundColor: Colors.black,
       ),
-      body: ListView.builder(
+      body: ListView(
         padding: const EdgeInsets.all(16.0),
-        itemCount: _rideHistory.length,
-        itemBuilder: (context, index) {
-          final ride = _rideHistory[index];
-          return Card(
-            elevation: 3,
-            margin: const EdgeInsets.only(bottom: 12),
-            child: ListTile(
-              leading: const Icon(Icons.directions_car, color: Colors.black),
-              title: Text("Pickup: ${ride['pickup']}"),
-              subtitle: Text("Drop-off: ${ride['dropoff']}"),
-              trailing: Text(ride['date'] ?? ""),
-            ),
-          );
-        },
+        children: const [
+          ListTile(
+            leading: Icon(Icons.directions_car),
+            title: Text("Ashish Marga, Nirmala's Kitchen, Dumbarahi"),
+          ),
+          Divider(),
+          ListTile(
+            leading: Icon(Icons.directions_car),
+            title: Text("Ashish Marga, Nirmala's Kitchen, Dumbarahi"),
+          ),
+        ],
       ),
     );
   }
 }
 
-/// Profile Screen
 class ProfileScreen extends StatelessWidget {
+  const ProfileScreen({super.key});
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text("Profile"),
+        title: const Text('Profile'),
         backgroundColor: Colors.black,
       ),
       body: Padding(
@@ -157,45 +160,26 @@ class ProfileScreen extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
+            const CircleAvatar(
+              radius: 50,
+              backgroundImage: NetworkImage(
+                'https://via.placeholder.com/150',
+              ),
+            ),
+            const SizedBox(height: 16),
             const Text(
-              "Your Profile",
+              'John Doe',
+              textAlign: TextAlign.center,
               style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
             ),
-            const SizedBox(height: 20),
-            _buildProfileField(label: "Name", value: "John Doe"),
-            _buildProfileField(label: "Phone", value: "+977-9876543210"),
-            _buildProfileField(label: "Email", value: "john.doe@example.com"),
-            const SizedBox(height: 20),
-            ElevatedButton(
-              onPressed: () {
-                ScaffoldMessenger.of(context).showSnackBar(
-                  const SnackBar(
-                    content: Text("Logged out successfully!"),
-                    backgroundColor: Colors.red,
-                  ),
-                );
-              },
-              style: ElevatedButton.styleFrom(
-                backgroundColor: Colors.red,
-                padding: const EdgeInsets.all(16),
-              ),
-              child: const Text("Logout"),
+            const SizedBox(height: 8),
+            const Text(
+              'john.doe@example.com',
+              textAlign: TextAlign.center,
+              style: TextStyle(fontSize: 16),
             ),
           ],
         ),
-      ),
-    );
-  }
-
-  Widget _buildProfileField({required String label, required String value}) {
-    return Padding(
-      padding: const EdgeInsets.only(bottom: 12.0),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          Text(label, style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w500)),
-          Text(value, style: const TextStyle(fontSize: 16)),
-        ],
       ),
     );
   }
