@@ -61,7 +61,12 @@ class _DashboardScreenViewState extends State<DashboardScreenView> {
         child: _pages[_selectedIndex],
       ),
       bottomNavigationBar: BottomNavigationBar(
-        backgroundColor: Colors.black,
+        currentIndex: _selectedIndex,
+        onTap: (index) {
+          setState(() {
+            _selectedIndex = index;
+          });
+        },
         items: const [
           BottomNavigationBarItem(
             icon: Icon(Icons.home),
@@ -184,49 +189,12 @@ class CustomInputField extends StatelessWidget {
     super.key,
   });
 
-  @override
-  Widget build(BuildContext context) {
-    return Row(
-      children: [
-        Icon(icon, color: Colors.green),
-        const SizedBox(width: 8),
-        Expanded(
-          child: TextField(
-            keyboardType: inputType,
-            decoration: InputDecoration(
-              hintText: hintText,
-            ),
-            style: const TextStyle(color: Colors.white),
-          ),
-        ),
-      ],
-    );
-  }
-}
-
-class RideOption extends StatelessWidget {
-  final IconData icon;
-  final String label;
-
-  const RideOption({required this.icon, required this.label, super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      margin: const EdgeInsets.symmetric(horizontal: 8.0),
-      child: Column(
-        children: [
-          CircleAvatar(
-            radius: 24,
-            backgroundColor: Colors.grey[800],
-            child: Icon(icon, color: Colors.blue),
-          ),
-          const SizedBox(height: 4),
-          Text(
-            label,
-            style: const TextStyle(color: Colors.white, fontSize: 12),
-          ),
-        ],
+  Widget _buildTextField({required String labelText, required IconData icon}) {
+    return TextField(
+      decoration: InputDecoration(
+        labelText: labelText,
+        border: OutlineInputBorder(),
+        prefixIcon: Icon(icon),
       ),
     );
   }
