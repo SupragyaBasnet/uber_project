@@ -107,42 +107,63 @@ class _SignupScreenViewState extends State<SignupScreenView> {
                       textInputAction: TextInputAction.done,
                     ),
                     SizedBox(height: screenHeight * 0.03),
+                    // Inside the "Create Account" button's onPressed method
+_buildElevatedButton(
+  text: "Create Account",
+  backgroundColor: Colors.black,
+  onPressed: () {
+    String phoneNumber = _phoneNumberController.text;
+    String password = _passwordController.text;
 
-                    // Create Account Button
-                    _buildElevatedButton(
-                      text: "Create Account",
-                      backgroundColor: Colors.black,
-                      onPressed: () {
-                        if (_nameController.text.isEmpty ||
-                            _phoneNumberController.text.isEmpty ||
-                            _passwordController.text.isEmpty) {
-                          ScaffoldMessenger.of(context).showSnackBar(
-                            const SnackBar(
-                              content: Text('Please fill in all fields'),
-                              backgroundColor: Colors.red,
-                              duration: Duration(seconds: 2),
-                            ),
-                          );
-                        } else {
-                          ScaffoldMessenger.of(context).showSnackBar(
-                            const SnackBar(
-                              content: Text('Account Created Successfully'),
-                              backgroundColor: Colors.green,
-                              duration: Duration(seconds: 2),
-                            ),
-                          );
-                          Future.delayed(const Duration(seconds: 2), () {
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder: (context) => const LoginScreenView(),
-                              ),
-                            );
-                          });
-                        }
-                      },
-                    ),
-                    SizedBox(height: screenHeight * 0.03),
+    if (_nameController.text.isEmpty ||
+        phoneNumber.isEmpty ||
+        password.isEmpty) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('Please fill in all fields'),
+          backgroundColor: Colors.red,
+          duration: Duration(seconds: 2),
+        ),
+      );
+    } else if (phoneNumber.length != 10 || !RegExp(r'^\d+$').hasMatch(phoneNumber)) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('Phone number must be 10 digits'),
+          backgroundColor: Colors.red,
+          duration: Duration(seconds: 2),
+        ),
+      );
+    } else if (!RegExp(r'^(?=.*[A-Z])(?=.*[a-z])(?=.*\d)(?=.*[!@#\$&*~]).{8,}$').hasMatch(password)) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text(
+              'Password must be at least 8 characters long and include uppercase, lowercase, number, and special character'),
+          backgroundColor: Colors.red,
+          duration: Duration(seconds: 2),
+        ),
+      );
+    } else {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('Account Created Successfully'),
+          backgroundColor: Colors.green,
+          duration: Duration(seconds: 2),
+        ),
+      );
+      Future.delayed(const Duration(seconds: 2), () {
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => const LoginScreenView(),
+          ),
+        );
+      });
+    }
+  },
+),
+
+
+            SizedBox(height: screenHeight * 0.03),
 
                     // Navigate to Login Screen
                     Center(
