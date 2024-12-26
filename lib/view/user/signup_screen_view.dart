@@ -133,7 +133,7 @@ _buildElevatedButton(
           duration: Duration(seconds: 2),
         ),
       );
-    } else if (!RegExp(r'^(?=.*[A-Z])(?=.*[a-z])(?=.*\d)(?=.*[!@#\$&*~]).{8,}$').hasMatch(password)) {
+    } else if (!RegExp(r'^(?=.*[A-Z])(?=.*[a-z])(?=.*\d)(?=.*[!@#\$&*~%]).{8,}$').hasMatch(password)) {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(
           content: Text(

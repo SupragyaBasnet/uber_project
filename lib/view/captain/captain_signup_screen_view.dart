@@ -255,7 +255,7 @@ class _CaptainSignupScreenViewState extends State<CaptainSignupScreenView> {
   // Helper method to check password strength
   bool _isPasswordStrong(String password) {
     // Password must be at least 8 characters, with uppercase, lowercase, digits, and special characters
-    final regex = RegExp(r'^(?=.*[A-Z])(?=.*[a-z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$');
+    final regex = RegExp(r'^(?=.*[A-Z])(?=.*[a-z])(?=.*\d)(?=.*[@$!%*?&%])[A-Za-z\d@$!%*?&]{8,}$');
     return regex.hasMatch(password);
   }
 
