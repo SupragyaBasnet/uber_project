@@ -37,3 +37,4 @@ class RideOptionButton extends StatelessWidget {
     );
   }
 
+}
