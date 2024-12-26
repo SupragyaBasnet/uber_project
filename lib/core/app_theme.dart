@@ -42,34 +42,33 @@ ThemeData getApplicationTheme() {
       ),
     ),
 
-    // Input Decoration Theme
     inputDecorationTheme: InputDecorationTheme(
-      filled: true, // If you don't want a background color, set this to false
-      fillColor: Colors.white, // Ensure this matches your design
-      contentPadding: const EdgeInsets.symmetric(horizontal: 20, vertical: 12), // Adjust padding
-      border: OutlineInputBorder(
-        borderRadius: BorderRadius.circular(10), // Matches the design's border radius
-        borderSide: const BorderSide(color: Colors.grey, width: 1.5), // Adjust color and width
-      ),
-      enabledBorder: OutlineInputBorder(
-        borderRadius: BorderRadius.circular(10),
-        borderSide: const BorderSide(color: Colors.grey, width: 1.5),
-      ),
-      focusedBorder: OutlineInputBorder(
-        borderRadius: BorderRadius.circular(10),
-
-      ),
-      errorBorder: OutlineInputBorder(
-        borderRadius: BorderRadius.circular(10),
-        borderSide: const BorderSide(color: Colors.red, width: 1.5),
-      ),
-      focusedErrorBorder: OutlineInputBorder(
-        borderRadius: BorderRadius.circular(10),
-        borderSide: const BorderSide(color: Colors.red, width: 2),
-      ),
-      labelStyle: const TextStyle(fontSize: 16, fontWeight: FontWeight.w500, color: Colors.black),
-      hintStyle: const TextStyle(fontSize: 14, fontWeight: FontWeight.w400, color: Colors.grey),
-    ),
+  filled: true, 
+  fillColor: Colors.white, 
+  contentPadding: const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
+  border: OutlineInputBorder(
+    borderRadius: BorderRadius.circular(10),
+    borderSide: BorderSide.none,
+  ),
+  enabledBorder: OutlineInputBorder(
+    borderRadius: BorderRadius.circular(10),
+    borderSide: BorderSide.none,
+  ),
+  focusedBorder: OutlineInputBorder(
+    borderRadius: BorderRadius.circular(10),
+    borderSide: BorderSide.none,
+  ),
+  errorBorder: OutlineInputBorder(
+    borderRadius: BorderRadius.circular(10),
+    borderSide: const BorderSide(color: Colors.red, width: 1.5),
+  ),
+  focusedErrorBorder: OutlineInputBorder(
+    borderRadius: BorderRadius.circular(10),
+    borderSide: const BorderSide(color: Colors.red, width: 2),
+  ),
+  labelStyle: const TextStyle(fontSize: 16, fontWeight: FontWeight.w500, color: Colors.black),
+  hintStyle: const TextStyle(fontSize: 14, fontWeight: FontWeight.w500, color: Colors.black),
+),
 
     // Card Theme
     cardTheme: CardTheme(
@@ -96,7 +95,7 @@ ThemeData getApplicationTheme() {
     textButtonTheme: TextButtonThemeData(
       style: TextButton.styleFrom(
         foregroundColor: Colors.blue, // Text color for TextButton
-        textStyle: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: Colors.white), // Same as button textStyle
+        textStyle: const TextStyle(fontSize: 15, fontWeight: FontWeight.bold, color: Colors.white), // Same as button textStyle
       ),
     ),
   );
