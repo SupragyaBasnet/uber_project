@@ -2,13 +2,8 @@ import 'package:flutter/material.dart';
 import '../captain/captain_login_screen_view.dart';
 import '../user/signup_screen_view.dart';
 
-<<<<<<< Updated upstream
-<<<<<<< Updated upstream
 import 'dashboard/dashboard_user_view.dart';
-=======
->>>>>>> Stashed changes
-=======
->>>>>>> Stashed changes
+
 import 'forgot_password_view.dart'; // Import Forgot Password Page
 
 class LoginScreenView extends StatefulWidget {
