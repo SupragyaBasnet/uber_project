@@ -11,6 +11,7 @@ ThemeData getApplicationTheme() {
       backgroundColor: Colors.black,
       foregroundColor: Colors.white,
       elevation: 4,
+      // centerTitle: true,
       titleTextStyle: TextStyle(
         fontFamily: 'Montserrat Regular',
         fontSize: 22,
@@ -31,39 +32,39 @@ ThemeData getApplicationTheme() {
     // Elevated Button Theme
     elevatedButtonTheme: ElevatedButtonThemeData(
       style: ElevatedButton.styleFrom(
-        backgroundColor: Colors.black,
-        foregroundColor: Colors.white,
+        backgroundColor: Colors.black, // Default button color
+        foregroundColor: Colors.white, // Text color
         padding: const EdgeInsets.symmetric(vertical: 16),
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(10),
         ),
-        textStyle: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+        textStyle: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: Colors.white),
       ),
     ),
 
-    // Input Decoration Theme - Rounded corners for TextFields
+    // Input Decoration Theme
     inputDecorationTheme: InputDecorationTheme(
-      filled: true,
-      fillColor: Colors.white, // Background color
-      contentPadding: const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
+      filled: true, // If you don't want a background color, set this to false
+      fillColor: Colors.white, // Ensure this matches your design
+      contentPadding: const EdgeInsets.symmetric(horizontal: 20, vertical: 12), // Adjust padding
       border: OutlineInputBorder(
-        borderRadius: BorderRadius.circular(12), // Slightly rounded corners
-        borderSide: const BorderSide(color: Colors.grey, width: 1.5),
+        borderRadius: BorderRadius.circular(10), // Matches the design's border radius
+        borderSide: const BorderSide(color: Colors.grey, width: 1.5), // Adjust color and width
       ),
       enabledBorder: OutlineInputBorder(
-        borderRadius: BorderRadius.circular(12), // Slightly rounded corners
+        borderRadius: BorderRadius.circular(10),
         borderSide: const BorderSide(color: Colors.grey, width: 1.5),
       ),
       focusedBorder: OutlineInputBorder(
-        borderRadius: BorderRadius.circular(12), // Slightly rounded corners
+        borderRadius: BorderRadius.circular(10),
 
       ),
       errorBorder: OutlineInputBorder(
-        borderRadius: BorderRadius.circular(12), // Slightly rounded corners
+        borderRadius: BorderRadius.circular(10),
         borderSide: const BorderSide(color: Colors.red, width: 1.5),
       ),
       focusedErrorBorder: OutlineInputBorder(
-        borderRadius: BorderRadius.circular(12), // Slightly rounded corners
+        borderRadius: BorderRadius.circular(10),
         borderSide: const BorderSide(color: Colors.red, width: 2),
       ),
       labelStyle: const TextStyle(fontSize: 16, fontWeight: FontWeight.w500, color: Colors.black),
@@ -95,7 +96,7 @@ ThemeData getApplicationTheme() {
     textButtonTheme: TextButtonThemeData(
       style: TextButton.styleFrom(
         foregroundColor: Colors.blue, // Text color for TextButton
-        textStyle: const TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
+        textStyle: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: Colors.white), // Same as button textStyle
       ),
     ),
   );
