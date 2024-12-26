@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:uber_project/view/user/dashboard/ride_history_screen_view.dart';
+import 'package:uber_project/view/user/dashboard/setting_screen_view.dart';
 import 'package:uber_project/view/user/dashboard/settings_screen_view.dart';
 
 import 'home_screen_view.dart';
