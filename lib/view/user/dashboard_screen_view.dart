@@ -1,9 +1,8 @@
 import 'package:flutter/material.dart';
 
-void main() => runApp(const EasyGoApp());
 
-class EasyGoApp extends StatelessWidget {
-  const EasyGoApp({super.key});
+class DashBoardScreenView extends StatelessWidget {
+  const DashBoardScreenView({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -85,18 +84,33 @@ class _DashboardScreenViewState extends State<DashboardScreenView> {
   }
 }
 
-class HomeScreen extends StatelessWidget {
+class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
+
+  @override
+  _HomeScreenState createState() => _HomeScreenState();
+}
+
+class _HomeScreenState extends State<HomeScreen> {
+  String _selectedPaymentMethod = "Cash"; // Default payment method
+  final TextEditingController _fareController = TextEditingController(); // Fare input
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('EasyGo'),
-        backgroundColor: Colors.black,
-      ),
+  title: const Text(
+    'EasyGo',
+    // style: TextStyle(color: Colors.white), // This line explicitly sets the title color to white
+  ),
+  backgroundColor: Colors.black, // Keeps the AppBar background black
+  foregroundColor: Colors.white,
+  elevation: 0, // Removes shadow for a flat design
+),
+
       body: Column(
         children: [
+          // Top Map Section
           Expanded(
             child: Container(
               decoration: const BoxDecoration(
@@ -107,10 +121,26 @@ class HomeScreen extends StatelessWidget {
               ),
             ),
           ),
-          Padding(
-            padding: const EdgeInsets.all(16.0),
+          // Bottom Input Section
+          Container(
+            padding: const EdgeInsets.all(16),
+            decoration: BoxDecoration(
+              color: Colors.grey[900],
+              borderRadius: const BorderRadius.only(
+                topLeft: Radius.circular(20),
+                topRight: Radius.circular(20),
+              ),
+              boxShadow: [
+                BoxShadow(
+                  color: Colors.black.withOpacity(0.2),
+                  blurRadius: 10,
+                  offset: const Offset(0, -4),
+                ),
+              ],
+            ),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.stretch,
+              mainAxisSize: MainAxisSize.min,
               children: [
                 const RideOptionsRow(),
                 const SizedBox(height: 16),
@@ -126,15 +156,64 @@ class HomeScreen extends StatelessWidget {
                   inputType: TextInputType.text,
                 ),
                 const SizedBox(height: 16),
-                const CustomInputField(
-                  icon: Icons.money,
-                  hintText: 'Offer your fare',
-                  inputType: TextInputType.number,
+                // Offer Fare Field
+                Row(
+                  children: [
+                    const Icon(Icons.money, color: Colors.green),
+                    const SizedBox(width: 8),
+                    Expanded(
+                      child: TextField(
+                        controller: _fareController,
+                        keyboardType: TextInputType.number,
+                        decoration: const InputDecoration(
+                          hintText: 'Offer your fare',
+                        ),
+                        style: const TextStyle(color: Colors.white),
+                      ),
+                    ),
+                  ],
+                ),
+                const SizedBox(height: 16),
+                // Payment Method Section
+                GestureDetector(
+                  onTap: () => _showPaymentOptions(context),
+                  child: Container(
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: 16, vertical: 12),
+                    decoration: BoxDecoration(
+                      color: Colors.grey[800],
+                      borderRadius: BorderRadius.circular(10),
+                    ),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Row(
+                          children: [
+                            const Icon(Icons.payment, color: Colors.green),
+                            const SizedBox(width: 10),
+                            Text(
+                              'Payment Method: $_selectedPaymentMethod',
+                              style: const TextStyle(color: Colors.white),
+                            ),
+                          ],
+                        ),
+                        const Icon(Icons.arrow_drop_down, color: Colors.white),
+                      ],
+                    ),
+                  ),
                 ),
                 const SizedBox(height: 16),
                 ElevatedButton(
                   onPressed: () {
-                    // Handle finding driver logic here
+                    final offeredFare =
+                        _fareController.text.isNotEmpty ? _fareController.text : 'N/A';
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      SnackBar(
+                        content: Text(
+                          'Searching for a driver...\nFare: ₹$offeredFare\nPayment: $_selectedPaymentMethod',
+                        ),
+                      ),
+                    );
                   },
                   style: ElevatedButton.styleFrom(
                     backgroundColor: Colors.green,
@@ -152,6 +231,52 @@ class HomeScreen extends StatelessWidget {
       ),
     );
   }
+
+  void _showPaymentOptions(BuildContext context) {
+    showModalBottomSheet(
+      context: context,
+      backgroundColor: Colors.grey[900],
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+      ),
+      builder: (context) {
+        return Container(
+          padding: const EdgeInsets.all(16),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              const Text(
+                'Select Payment Method',
+                style: TextStyle(color: Colors.white, fontSize: 18),
+              ),
+              const SizedBox(height: 16),
+              ListTile(
+                leading: const Icon(Icons.money, color: Colors.green),
+                title: const Text('Cash', style: TextStyle(color: Colors.white)),
+                onTap: () {
+                  setState(() {
+                    _selectedPaymentMethod = "Cash";
+                  });
+                  Navigator.pop(context);
+                },
+              ),
+              ListTile(
+                leading: const Icon(Icons.credit_card, color: Colors.blue),
+                title:
+                    const Text('Online', style: TextStyle(color: Colors.white)),
+                onTap: () {
+                  setState(() {
+                    _selectedPaymentMethod = "Online";
+                  });
+                  Navigator.pop(context);
+                },
+              ),
+            ],
+          ),
+        );
+      },
+    );
+  }
 }
 
 class RideOptionsRow extends StatelessWidget {
@@ -165,7 +290,8 @@ class RideOptionsRow extends StatelessWidget {
         children: const [
           RideOption(icon: Icons.motorcycle, label: 'Bike'),
           RideOption(icon: Icons.directions_car, label: 'Car'),
-          RideOption(icon: Icons.auto_awesome, label: 'Autorickshaw'),
+          RideOption(icon: Icons.electric_car, label: 'EV Car'),
+
         ],
       ),
     );
@@ -212,21 +338,28 @@ class RideOption extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      margin: const EdgeInsets.symmetric(horizontal: 8.0),
-      child: Column(
-        children: [
-          CircleAvatar(
-            radius: 24,
-            backgroundColor: Colors.grey[800],
-            child: Icon(icon, color: Colors.blue),
-          ),
-          const SizedBox(height: 4),
-          Text(
-            label,
-            style: const TextStyle(color: Colors.white, fontSize: 12),
-          ),
-        ],
+    return GestureDetector(
+      onTap: () {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('$label selected')),
+        );
+      },
+      child: Container(
+        margin: const EdgeInsets.symmetric(horizontal: 8.0),
+        child: Column(
+          children: [
+            CircleAvatar(
+              radius: 24,
+              backgroundColor: Colors.grey[800],
+              child: Icon(icon, color: Colors.blue),
+            ),
+            const SizedBox(height: 4),
+            Text(
+              label,
+              style: const TextStyle(color: Colors.white, fontSize: 12),
+            ),
+          ],
+        ),
       ),
     );
   }
@@ -241,6 +374,7 @@ class RideHistoryScreen extends StatelessWidget {
       appBar: AppBar(
         title: const Text('Ride History'),
         backgroundColor: Colors.black,
+        foregroundColor: Colors.white,
       ),
       body: ListView(
         padding: const EdgeInsets.all(16.0),
@@ -259,7 +393,7 @@ class RideHistoryScreen extends StatelessWidget {
           Divider(),
           ListTile(
             leading: Icon(Icons.auto_awesome, color: Colors.blue),
-            title: Text('Autorickshaw Ride - Kalanki to New Road'),
+            title: Text('EV Car Ride - Kalanki to New Road'),
             subtitle: Text('Completed on 8 Dec, 2024'),
           ),
         ],
@@ -277,6 +411,7 @@ class SettingsScreen extends StatelessWidget {
       appBar: AppBar(
         title: const Text('Settings'),
         backgroundColor: Colors.black,
+        foregroundColor: Colors.white,
       ),
       body: ListView(
         padding: const EdgeInsets.all(16.0),
@@ -284,19 +419,31 @@ class SettingsScreen extends StatelessWidget {
           ListTile(
             leading: const Icon(Icons.person, color: Colors.blue),
             title: const Text('Profile'),
-            onTap: () {},
+            onTap: () {
+              ScaffoldMessenger.of(context).showSnackBar(
+                const SnackBar(content: Text('Profile clicked')),
+              );
+            },
           ),
           const Divider(),
           ListTile(
             leading: const Icon(Icons.lock, color: Colors.blue),
             title: const Text('Change Password'),
-            onTap: () {},
+            onTap: () {
+              ScaffoldMessenger.of(context).showSnackBar(
+                const SnackBar(content: Text('Change Password clicked')),
+              );
+            },
           ),
           const Divider(),
           ListTile(
             leading: const Icon(Icons.logout, color: Colors.blue),
             title: const Text('Logout'),
-            onTap: () {},
+            onTap: () {
+              ScaffoldMessenger.of(context).showSnackBar(
+                const SnackBar(content: Text('Logged out')),
+              );
+            },
           ),
         ],
       ),
