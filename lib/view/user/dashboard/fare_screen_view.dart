@@ -74,8 +74,4 @@ class FareScreenView extends StatelessWidget {
       ),
     );
   }
-<<<<<<< HEAD
-}
-=======
-}
->>>>>>> dashboard
+

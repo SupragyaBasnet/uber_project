@@ -36,8 +36,4 @@ class RideOptionButton extends StatelessWidget {
       ),
     );
   }
-<<<<<<< HEAD
-}
-=======
-}
->>>>>>> dashboard
+
