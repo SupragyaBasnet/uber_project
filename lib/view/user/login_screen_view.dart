@@ -2,7 +2,10 @@ import 'package:flutter/material.dart';
 import '../captain/captain_login_screen_view.dart';
 import '../user/signup_screen_view.dart';
 
+<<<<<<< Updated upstream
 import 'dashboard/dashboard_user_view.dart';
+=======
+>>>>>>> Stashed changes
 import 'forgot_password_view.dart'; // Import Forgot Password Page
 
 class LoginScreenView extends StatefulWidget {
@@ -123,38 +126,59 @@ class _LoginScreenViewState extends State<LoginScreenView> {
                     ),
 
                     // Login Button
-                    _buildElevatedButton(
-                      text: "Login",
-                      backgroundColor: Colors.black,
-                      onPressed: () {
-                        if (_phoneController.text.isEmpty || _passwordController.text.isEmpty) {
-                          ScaffoldMessenger.of(context).showSnackBar(
-                            const SnackBar(
-                              content: Text('Please fill in all fields'),
-                              backgroundColor: Colors.red,
-                              duration: Duration(seconds: 2),
-                            ),
-                          );
-                        } else {
-                          ScaffoldMessenger.of(context).showSnackBar(
-                            const SnackBar(
-                              content: Text('Login Successful'),
-                              backgroundColor: Colors.green,
-                              duration: Duration(seconds: 2),
-                            ),
-                          );
+_buildElevatedButton(
+  text: "Login",
+  backgroundColor: Colors.black,
+  onPressed: () {
+    String phoneNumber = _phoneController.text;
+    String password = _passwordController.text;
 
-                          Future.delayed(const Duration(seconds: 2), () {
-                            Navigator.pushReplacement(
-                              context,
-                              MaterialPageRoute(
-                                builder: (context) => const DashboardScreenView(),
-                              ),
-                            );
-                          });
-                        }
-                      },
-                    ),
+    if (phoneNumber.isEmpty || password.isEmpty) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('Please fill in all fields'),
+          backgroundColor: Colors.red,
+          duration: Duration(seconds: 2),
+        ),
+      );
+    } else if (phoneNumber.length != 10 || !RegExp(r'^\d+$').hasMatch(phoneNumber)) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('Phone number must be 10 digits'),
+          backgroundColor: Colors.red,
+          duration: Duration(seconds: 2),
+        ),
+      );
+    } else if (!RegExp(r'^(?=.*[A-Z])(?=.*[a-z])(?=.*\d)(?=.*[!@#\$&*~]).{8,}$').hasMatch(password)) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text(
+              'Password must be at least 8 characters long and include uppercase, lowercase, number, and special character'),
+          backgroundColor: Colors.red,
+          duration: Duration(seconds: 2),
+        ),
+      );
+    } else {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('Login Successful'),
+          backgroundColor: Colors.green,
+          duration: Duration(seconds: 2),
+        ),
+      );
+
+      Future.delayed(const Duration(seconds: 2), () {
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(
+            builder: (context) => const DashboardScreenView(),
+          ),
+        );
+      });
+    }
+  },
+),
+
                     SizedBox(height: screenHeight * 0.03),
 
                     // Signup Navigation
