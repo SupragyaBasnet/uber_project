@@ -7,8 +7,15 @@ class RideHistoryScreenView extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back), // Back arrow icon
+          onPressed: () {
+            Navigator.pop(context); // Go back to the previous screen
+          },
+        ),
         title: const Text('Ride History'),
         backgroundColor: Colors.black,
+        foregroundColor: Colors.white,
       ),
       body: ListView(
         padding: const EdgeInsets.all(16.0),
