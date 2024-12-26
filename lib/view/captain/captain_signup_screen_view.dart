@@ -145,7 +145,7 @@ class _CaptainSignupScreenViewState extends State<CaptainSignupScreenView> {
                     _buildDropdownField(
                       labelText: "Select Vehicle",
                       value: _selectedVehicle,
-                      items: ["Car", "Bike"],
+                      items: ["Car", "Bike","EV Car"],
                       onChanged: (String? value) {
                         setState(() {
                           _selectedVehicle = value;
@@ -169,6 +169,22 @@ class _CaptainSignupScreenViewState extends State<CaptainSignupScreenView> {
                           ScaffoldMessenger.of(context).showSnackBar(
                             const SnackBar(
                               content: Text('Please fill in all fields'),
+                              backgroundColor: Colors.red,
+                              duration: Duration(seconds: 2),
+                            ),
+                          );
+                        } else if (_phoneNumberController.text.length != 10) {
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            const SnackBar(
+                              content: Text('Phone number must be 10 digits'),
+                              backgroundColor: Colors.red,
+                              duration: Duration(seconds: 2),
+                            ),
+                          );
+                        } else if (!_isPasswordStrong(_passwordController.text)) {
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            const SnackBar(
+                              content: Text('Password must be strong'),
                               backgroundColor: Colors.red,
                               duration: Duration(seconds: 2),
                             ),
@@ -234,6 +250,13 @@ class _CaptainSignupScreenViewState extends State<CaptainSignupScreenView> {
         },
       ),
     );
+  }
+
+  // Helper method to check password strength
+  bool _isPasswordStrong(String password) {
+    // Password must be at least 8 characters, with uppercase, lowercase, digits, and special characters
+    final regex = RegExp(r'^(?=.*[A-Z])(?=.*[a-z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$');
+    return regex.hasMatch(password);
   }
 
   /// Helper method to build TextField

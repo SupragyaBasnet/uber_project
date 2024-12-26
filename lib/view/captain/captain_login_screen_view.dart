@@ -8,13 +8,21 @@ class CaptainLoginScreenView extends StatefulWidget {
   const CaptainLoginScreenView({super.key});
 
   @override
-  _CaptainLoginScreenViewState createState() => _CaptainLoginScreenViewState();
+  _CaptainLoginScreenViewState createState() =>
+      _CaptainLoginScreenViewState();
 }
 
 class _CaptainLoginScreenViewState extends State<CaptainLoginScreenView> {
   final TextEditingController _phoneNumberController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
   bool _isPasswordVisible = false;
+
+  // Helper method to check if password is strong
+  bool _isPasswordStrong(String password) {
+    // Password must be at least 8 characters, with uppercase, lowercase, digits, and special characters
+    final regex = RegExp(r'^(?=.*[A-Z])(?=.*[a-z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$');
+    return regex.hasMatch(password);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -123,11 +131,30 @@ class _CaptainLoginScreenViewState extends State<CaptainLoginScreenView> {
                       text: "Login",
                       backgroundColor: Colors.black,
                       onPressed: () {
+                        // Phone number validation (must be 10 digits)
                         if (_phoneNumberController.text.isEmpty ||
                             _passwordController.text.isEmpty) {
                           ScaffoldMessenger.of(context).showSnackBar(
                             const SnackBar(
                               content: Text('Please fill in all fields'),
+                              backgroundColor: Colors.red,
+                              duration: Duration(seconds: 2),
+                            ),
+                          );
+                        } 
+                        else if (_phoneNumberController.text.length != 10) {  // *** Phone Number Validation ***
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            const SnackBar(
+                              content: Text('Phone number must be 10 digits'),
+                              backgroundColor: Colors.red,
+                              duration: Duration(seconds: 2),
+                            ),
+                          );
+                        }
+                        else if (!_isPasswordStrong(_passwordController.text)) {  // *** Password Strength Validation ***
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            const SnackBar(
+                              content: Text('Password must be strong'),
                               backgroundColor: Colors.red,
                               duration: Duration(seconds: 2),
                             ),
