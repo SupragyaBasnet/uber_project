@@ -9,10 +9,10 @@ class DashboardScreenView extends StatefulWidget {
   const DashboardScreenView({super.key});
 
   @override
-  _DashboardUserViewState createState() => _DashboardUserViewState();
+  _DashboardScreenViewState createState() => _DashboardScreenViewState();
 }
 
-class _DashboardUserViewState extends State<DashboardScreenView> {
+class _DashboardScreenViewState extends State<DashboardScreenView> {
   int _selectedIndex = 0;
 
   final List<Widget> _pages = [
