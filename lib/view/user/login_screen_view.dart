@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import '../captain/captain_login_screen_view.dart';
 import '../user/signup_screen_view.dart';
-import 'dashboard_screen_view.dart'; // Import the DashboardPage
+import 'dashboard/dashboard_user_view.dart';
 
 class LoginScreenView extends StatefulWidget {
   const LoginScreenView({super.key});
