@@ -1,6 +1,12 @@
-import 'package:flutter/material.dart';
-import 'package:uber_project/app.dart';
+import 'package:flutter/cupertino.dart';
+import 'package:uber_mobile_app_project/app/app.dart';
+import 'package:uber_mobile_app_project/app/di/di.dart';
 
-void main() {
-  runApp(const MyApp());
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+
+  await initDependencies();
+  runApp(
+    App(),
+  );
 }
