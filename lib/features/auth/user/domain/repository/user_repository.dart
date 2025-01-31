@@ -1,22 +1,21 @@
+import 'dart:io';
+import 'package:dartz/dartz.dart';
+import '../../../../../core/error/failure.dart';
+import '../../data/model/user_api_model.dart';
 
-import '../../data/hive/user_hive_helper.dart';
-import '../../data/model/user_model.dart';
-import '../entity/user.dart';
+abstract class UserRepository {
+  Future<Either<Failure, UserApiModel>> login(String phonenumber, String password);
 
-class UserRepository {
-  final UserHiveHelper hiveHelper;
+  Future<Either<Failure, UserApiModel>> signup({
+    required String firstname,
+    required String lastname,
+    required String phonenumber,
+    required String email,
+    required String password,
+    File? image,
+  });
 
-  UserRepository(this.hiveHelper);
+  Future<Either<Failure, UserApiModel>> getUserProfile();
 
-  Future<User?> login(String phoneNumber, String password) async {
-    final user = await hiveHelper.getUser(phoneNumber);
-    if (user != null && user.password == password) {
-      return User(phoneNumber: user.phoneNumber);
-    }
-    return null;
-  }
-
-  Future<void> register(UserModel user) async {
-    await hiveHelper.addUser(user);
-  }
+  Future<Either<Failure, String>> uploadImage(File image);
 }

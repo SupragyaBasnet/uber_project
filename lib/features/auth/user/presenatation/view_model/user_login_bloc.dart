@@ -1,32 +1,38 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
-import '../../domain/use_case/LoginUserUseCase.dart';
+import 'package:uber_mobile_app_project/core/network/api_service.dart';
+import 'package:uber_mobile_app_project/features/auth/user/domain/repository/user_repository.dart';
 import 'user_login_event.dart';
 import 'user_login_state.dart';
 
 class UserLoginBloc extends Bloc<UserLoginEvent, UserLoginState> {
-  final LoginUserUseCase loginUserUseCase;
+  final ApiService apiService;
 
-  UserLoginBloc(this.loginUserUseCase) : super(UserLoginInitial()) {
-    // Register event handler for UserLoginSubmit
-    on<UserLoginSubmit>((event, emit) async {
-      emit(UserLoginLoading());
+  UserLoginBloc({required this.apiService, required UserRepository userRepository}) : super(UserLoginInitial()) {
+    on<UserLoginSubmitted>(_onLoginSubmitted);
+  }
 
-      try {
-        final success = await loginUserUseCase(
-          LoginParams(
-            phoneNumber: event.phoneNumber,
-            password: event.password,
-          ),
-        );
+  Future<void> _onLoginSubmitted(
+    UserLoginSubmitted event,
+    Emitter<UserLoginState> emit,
+  ) async {
+    emit(UserLoginLoading());
 
-        if (success) {
-          emit(UserLoginSuccess());
-        } else {
-          emit(UserLoginError("Invalid credentials"));
-        }
-      } catch (e) {
-        emit(UserLoginError("An error occurred. Please try again."));
+    try {
+      final response = await apiService.userLogin(
+        event.phonenumber,
+        event.password,
+      );
+
+      if (response.containsKey("token")) {
+        emit(UserLoginSuccess(
+          token: response["token"],
+          userId: response["user"]["_id"],
+        ));
+      } else {
+        emit(UserLoginFailure(message: "Login failed. Please try again."));
       }
-    });
+    } catch (e) {
+      emit(UserLoginFailure(message: "Network error. Please check your connection."));
+    }
   }
 }

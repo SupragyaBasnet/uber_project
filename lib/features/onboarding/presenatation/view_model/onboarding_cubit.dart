@@ -1,10 +1,11 @@
 import 'package:bloc/bloc.dart';
 
 class OnboardingCubit extends Cubit<int> {
-  OnboardingCubit() : super(0);  // Initial state is 0 (the first page)
+  OnboardingCubit() : super(0);  // Initial page is 0
 
-  // This method is used to update the page
   void updatePage(int page) {
-    emit(page);  // Emit the new page index as the state
+    if (page >= 0 && page <= 3) {
+      emit(page);
+    }
   }
 }

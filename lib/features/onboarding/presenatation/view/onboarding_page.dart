@@ -16,7 +16,6 @@ class OnboardingPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Column(
       children: [
-        // Image Section
         Expanded(
           flex: 6,
           child: Container(
@@ -29,7 +28,6 @@ class OnboardingPage extends StatelessWidget {
             ),
           ),
         ),
-        // Text Section
         Expanded(
           flex: 4,
           child: Container(

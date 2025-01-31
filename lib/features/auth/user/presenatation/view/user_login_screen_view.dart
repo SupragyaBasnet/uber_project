@@ -1,31 +1,46 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import '../../../../../app/widgets/custom_button.dart';
+
+import '../../../../../app/widgets/custom_elevated_button.dart';
+import '../../../../../app/widgets/custom_text_field.dart';
 import '../view_model/user_login_bloc.dart';
 import '../view_model/user_login_event.dart';
 import '../view_model/user_login_state.dart';
-import '../../../../../app/di/di.dart'; // Import your DI setup
 
-class UserLoginScreenView extends StatelessWidget {
-  final TextEditingController phoneController = TextEditingController();
-  final TextEditingController passwordController = TextEditingController();
+class UserLoginScreenView extends StatefulWidget {
+  @override
+  _UserLoginScreenViewState createState() => _UserLoginScreenViewState();
+}
+
+class _UserLoginScreenViewState extends State<UserLoginScreenView> {
+  final TextEditingController _phoneController = TextEditingController();
+  final TextEditingController _passwordController = TextEditingController();
+  bool _obscureText = true;
 
   @override
   Widget build(BuildContext context) {
-    return BlocProvider(
-      create: (_) => serviceLocator<UserLoginBloc>(), // Provide the UserLoginBloc
-      child: Scaffold(
-        appBar: AppBar(
-          title: const Text('EasyGo'),
-          centerTitle: true,
-        ),
-        body: Center(
+    return Scaffold(
+      backgroundColor: Colors.white,
+      body: Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: BlocListener<UserLoginBloc, UserLoginState>(
+          listener: (context, state) {
+            if (state is UserLoginSuccess) {
+              Navigator.pushReplacementNamed(context, "/home");
+            } else if (state is UserLoginFailure) {
+              ScaffoldMessenger.of(context).showSnackBar(
+                SnackBar(
+                  content: Text(state.message),
+                  backgroundColor: Colors.red,
+                ),
+              );
+            }
+          },
           child: SingleChildScrollView(
-            padding: const EdgeInsets.all(16.0),
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                // Logo
+                /// **App Logo**
                 const CircleAvatar(
                   radius: 50,
                   backgroundImage: AssetImage('assets/images/logo.png'),
@@ -33,156 +48,84 @@ class UserLoginScreenView extends StatelessWidget {
                 ),
                 const SizedBox(height: 20),
 
-                const Text(
-                  "Login as a Passenger",
-                  style: TextStyle(
-                    fontSize: 24.0,
-                    fontWeight: FontWeight.bold,
+                /// **Phone Number Input (✅ Fixed Prefix Text)**
+                CustomTextField(
+                  controller: _phoneController,
+                  label: "Phone Number",
+                  keyboardType: TextInputType.phone,
+                  prefixText: "+977 ", // ✅ Corrected: Using `prefixText` in `CustomTextField`
+                  validator: (value) =>
+                  (value!.length == 10) ? null : "Enter a valid 10-digit number",
+                ),
+                const SizedBox(height: 15),
+
+                /// **Password Input**
+                CustomTextField(
+                  controller: _passwordController,
+                  label: "Password",
+                  isPassword: true, // ✅ Fixed: Directly pass `true` for a password field
+                  suffixIcon: IconButton(
+                    icon: Icon(_obscureText ? Icons.visibility_off : Icons.visibility),
+                    onPressed: () {
+                      setState(() {
+                        _obscureText = !_obscureText;
+                      });
+                    },
                   ),
+                  validator: (value) =>
+                  (value!.length >= 6) ? null : "Password must be at least 6 characters",
                 ),
                 const SizedBox(height: 20),
 
-                // BlocConsumer for Login Logic
-                BlocConsumer<UserLoginBloc, UserLoginState>(
-                  listener: (context, state) {
-                    if (state is UserLoginSuccess) {
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        const SnackBar(
-                          content: Text(
-                            'Login successful!',
-                            style: TextStyle(color: Colors.green),
-                          ),
-                          backgroundColor: Colors.white,
-                        ),
-                      );
-                    } else if (state is UserLoginError) {
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        SnackBar(content: Text(state.errorMessage)),
-                      );
-                    }
-                  },
+                /// **Login Button**
+                BlocBuilder<UserLoginBloc, UserLoginState>(
                   builder: (context, state) {
-                    if (state is UserLoginLoading) {
-                      return const Center(child: CircularProgressIndicator());
-                    }
-
-                    return Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        // Phone Number Input
-                        TextField(
-                          controller: phoneController,
-                          keyboardType: TextInputType.phone,
-                          decoration: const InputDecoration(
-                            labelText: 'Phone Number (+977XXXXXXXXXX)',
-                            border: OutlineInputBorder(),
-                            hintText: 'Enter your phone number',
-                          ),
-                        ),
-                        const SizedBox(height: 16),
-
-                        // Password Input
-                        TextField(
-                          controller: passwordController,
-                          obscureText: true,
-                          decoration: const InputDecoration(
-                            labelText: 'Password',
-                            border: OutlineInputBorder(),
-                            hintText: 'Enter your password',
-                          ),
-                        ),
-                        const SizedBox(height: 16),
-
-                        // Don't have an account? Sign up text
-                        TextButton(
-                          onPressed: () {
-                            Navigator.pushNamed(context, '/signup');
-                          },
-                          child: const Text(
-                            'Don\'t have an account? Sign up',
-                            style: TextStyle(color: Colors.blue),
-                          ),
-                        ),
-
-                        // Login Button
-                        const SizedBox(height: 16),
-                        CustomButton(
-                          text: 'Login',
-                          onPressed: () {
-                            String phone = phoneController.text.trim();
-                            final password = passwordController.text.trim();
-
-                            // Prepend +977 if not already included
-                            if (!phone.startsWith('+977')) {
-                              phone = '+977$phone';
-                            }
-
-                            // Validation
-                            if (phone.isEmpty) {
-                              _showErrorSnackBar(
-                                  context, 'Phone number is required.');
-                              return;
-                            }
-
-                            if (!RegExp(r'^\+977\d{10}$').hasMatch(phone)) {
-                              _showErrorSnackBar(
-                                  context,
-                                  'Phone number must start with +977 and contain exactly 10 digits.');
-                              return;
-                            }
-
-
-                            if (password.isEmpty) {
-                              _showErrorSnackBar(
-                                  context, 'Password is required.');
-                              return;
-                            }
-
-                            if (password.length < 8 ||
-                                !RegExp(r'[A-Z]').hasMatch(password) ||
-                                !RegExp(r'[a-z]').hasMatch(password) ||
-                                !RegExp(r'[0-9]').hasMatch(password) ||
-                                !RegExp(r'[!@#\\$%^&*(),.?":{}|<>]').hasMatch(password)) {
-                              _showErrorSnackBar(
-                                  context,
-                                  'Password must be at least 8 characters long, include uppercase, lowercase, a number, and a special character.');
-                              return;
-                            }
-
-                            // Trigger login event
-                            context.read<UserLoginBloc>().add(
-                              UserLoginSubmit(
-                                  phoneNumber: phone, password: password),
-                            );
-                          },
-                        ),
-                        const SizedBox(height: 10),
-
-                        // Login as Captain Button in green
-                        CustomButton(
-                          text: 'Login as Captain',
-                          onPressed: () {
-                            Navigator.pushNamed(context, '/captain-login');
-                          },
-                          color: Colors.green,
-                        ),
-                      ],
+                    return CustomElevatedButton(
+                      text: "Login",
+                      isLoading: state is UserLoginLoading,
+                      onPressed: () {
+                        if (_phoneController.text.length == 10 &&
+                            _passwordController.text.length >= 6) {
+                          context.read<UserLoginBloc>().add(
+                            UserLoginSubmitted(
+                              phonenumber: _phoneController.text.trim(),
+                              password: _passwordController.text.trim(),
+                            ),
+                          );
+                        } else {
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            const SnackBar(
+                              content: Text("Please enter valid credentials"),
+                              backgroundColor: Colors.red,
+                            ),
+                          );
+                        }
+                      },
                     );
                   },
+                ),
+                const SizedBox(height: 10),
+
+                /// **Forgot Password Link**
+                TextButton(
+                  onPressed: () {
+                    Navigator.pushNamed(context, "/forgot-password");
+                  },
+                  child: const Text("Forgot Password?"),
+                ),
+                const SizedBox(height: 10),
+
+                /// **Signup Navigation**
+                TextButton(
+                  onPressed: () {
+                    Navigator.pushNamed(context, "/signup");
+                  },
+                  child: const Text("New here? Create a new account"),
                 ),
               ],
             ),
           ),
         ),
-      ),
-    );
-  }
-
-  void _showErrorSnackBar(BuildContext context, String message) {
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
-        content: Text(message),
-        backgroundColor: Colors.red,
       ),
     );
   }

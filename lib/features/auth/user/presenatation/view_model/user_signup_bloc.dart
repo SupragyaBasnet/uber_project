@@ -1,30 +1,41 @@
+import 'dart:io';
 import 'package:flutter_bloc/flutter_bloc.dart';
-
-import '../../domain/use_case/RegisterUserUseCase.dart';
-import 'user_signup_event.dart';
-import 'user_signup_state.dart';
+import 'package:dartz/dartz.dart';
+import 'package:uber_mobile_app_project/core/error/failure.dart';
+import 'package:uber_mobile_app_project/features/auth/user/presenatation/view_model/user_signup_event.dart';
+import 'package:uber_mobile_app_project/features/auth/user/presenatation/view_model/user_signup_state.dart';
+import '../../data/model/user_api_model.dart';
+import '../../domain/repository/user_repository.dart';
 
 class UserSignupBloc extends Bloc<UserSignupEvent, UserSignupState> {
-  final RegisterUserUseCase registerUserUseCase;
+  final UserRepository userRepository;
 
-  UserSignupBloc(this.registerUserUseCase) : super(UserSignupInitial());
+  UserSignupBloc({required this.userRepository}) : super(UserSignupInitial()) {
+    on<UserSignupRequestEvent>(_onSignup);
+  }
 
-  @override
-  Stream<UserSignupState> mapEventToState(UserSignupEvent event) async* {
-    if (event is UserSignupSubmit) {
-      yield UserSignupLoading();
+  Future<void> _onSignup(
+      UserSignupRequestEvent event,
+      Emitter<UserSignupState> emit,
+      ) async {
+    emit(UserSignupLoading());
 
-      try {
-        await registerUserUseCase(
-          RegisterParams(
-            phoneNumber: event.phoneNumber,
-            password: event.password,
-          ),
-        );
-        yield UserSignupSuccess();
-      } catch (e) {
-        yield UserSignupError("Failed to create an account. Please try again.");
-      }
+    try {
+      Either<Failure, UserApiModel> result = await userRepository.signup(
+        firstname: event.firstname,  // ✅ Ensure correct parameters
+        lastname: event.lastname,
+        phonenumber: event.phonenumber,
+        email: event.email,
+        password: event.password,
+        image: event.image,
+      );
+
+      result.fold(
+            (failure) => emit(UserSignupFailure(failure.message)),
+            (_) => emit(UserSignupSuccess()),
+      );
+    } catch (e) {
+      emit(UserSignupFailure("Unexpected error occurred"));
     }
   }
 }

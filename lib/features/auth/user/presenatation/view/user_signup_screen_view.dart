@@ -1,202 +1,183 @@
+import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import '../../../../../app/widgets/custom_button.dart';
+import 'package:image_picker/image_picker.dart';
+import 'package:uber_mobile_app_project/app/di/di.dart';
+
+import '../../../../../app/widgets/custom_elevated_button.dart';
 import '../../../../../app/widgets/custom_text_field.dart';
-import '../../../../../app/di/di.dart'; // Import your DI setup
 import '../view_model/user_signup_bloc.dart';
 import '../view_model/user_signup_event.dart';
 import '../view_model/user_signup_state.dart';
 
-class UserSignupScreenView extends StatelessWidget {
-  final TextEditingController firstNameController = TextEditingController();
-  final TextEditingController lastNameController = TextEditingController();
-  final TextEditingController phoneController = TextEditingController();
-  final TextEditingController passwordController = TextEditingController();
+class UserSignupScreenView extends StatefulWidget {
+  const UserSignupScreenView({Key? key}) : super(key: key);
+
+  @override
+  _UserSignupScreenViewState createState() => _UserSignupScreenViewState();
+}
+
+class _UserSignupScreenViewState extends State<UserSignupScreenView> {
+  final _formKey = GlobalKey<FormState>();
+  final TextEditingController _firstnameController = TextEditingController();
+  final TextEditingController _lastnameController = TextEditingController();
+  final TextEditingController _phonenumberController = TextEditingController();
+  final TextEditingController _emailController = TextEditingController();
+  final TextEditingController _passwordController = TextEditingController();
+  bool _showPassword = false;
+  File? _selectedImage;
+
+  /// ✅ Function to Pick Image from Camera or Gallery
+  Future<void> _pickImage(ImageSource source) async {
+    final pickedFile = await ImagePicker().pickImage(source: source);
+    if (pickedFile != null) {
+      setState(() {
+        _selectedImage = File(pickedFile.path);
+      });
+    }
+  }
+
+  /// ✅ Function to Show SnackBar
+  void showSnackBar(BuildContext context, String message, {bool isError = false}) {
+    final snackBar = SnackBar(
+      content: Text(message),
+      backgroundColor: isError ? Colors.red : Colors.green,
+      duration: const Duration(seconds: 3),
+    );
+    ScaffoldMessenger.of(context).showSnackBar(snackBar);
+  }
 
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (_) => serviceLocator<UserSignupBloc>(), // Use DI to provide UserSignupBloc
+      create: (_) => serviceLocator<UserSignupBloc>(),
       child: Scaffold(
-        appBar: AppBar(
-          title: const Text('EasyGo - Signup'),
-          centerTitle: true,
-        ),
-        body: Center(
-          child: SingleChildScrollView(
+        body: BlocListener<UserSignupBloc, UserSignupState>(
+          listener: (context, state) {
+            if (state is UserSignupSuccess) {
+              Navigator.pushReplacementNamed(context, "/home");
+            } else if (state is UserSignupFailure) {
+              showSnackBar(context, state.message, isError: true);
+            }
+          },
+          child: Padding(
             padding: const EdgeInsets.all(16.0),
-            child: BlocConsumer<UserSignupBloc, UserSignupState>(
-              listener: (context, state) {
-                if (state is UserSignupSuccess) {
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    const SnackBar(
-                      content: Text(
-                        'Signup successful!',
-                        style: TextStyle(color: Colors.green),
-                      ),
-                      backgroundColor: Colors.white,
-                    ),
-                  );
-                } else if (state is UserSignupError) {
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    SnackBar(content: Text(state.errorMessage)),
-                  );
-                }
-              },
-              builder: (context, state) {
-                if (state is UserSignupLoading) {
-                  return const Center(child: CircularProgressIndicator());
-                }
+            child: Form(
+              key: _formKey,
+              child: Column(
+                children: [
+                  const SizedBox(height: 50),
 
-                return Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    const CircleAvatar(
+                  /// ✅ Profile Picture Selection
+                  GestureDetector(
+                    onTap: () => _pickImage(ImageSource.gallery),
+                    child: CircleAvatar(
                       radius: 50,
-                      backgroundImage: AssetImage('assets/images/logo.png'),
-                      backgroundColor: Colors.transparent,
+                      backgroundImage: _selectedImage != null
+                          ? FileImage(_selectedImage!)
+                          : const AssetImage('assets/images/profile_placeholder.png') as ImageProvider,
                     ),
-                    const SizedBox(height: 20.0),
-
-                    const Text(
-                      "Create Your Account as a Passenger",
-                      style: TextStyle(
-                        fontSize: 24.0,
-                        fontWeight: FontWeight.bold,
+                  ),
+                  const SizedBox(height: 10),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      IconButton(
+                        icon: const Icon(Icons.camera),
+                        onPressed: () => _pickImage(ImageSource.camera),
                       ),
-                      textAlign: TextAlign.center,
-                    ),
-                    const SizedBox(height: 20.0),
+                      IconButton(
+                        icon: const Icon(Icons.photo_library),
+                        onPressed: () => _pickImage(ImageSource.gallery),
+                      ),
+                    ],
+                  ),
+                  const SizedBox(height: 20),
 
-                    // First Name Input
-                    const SizedBox(height: 10.0),
-                    CustomTextField(
-                      controller: firstNameController,
-                      hintText: "First Name",
-                    ),
+                  /// ✅ First Name & Last Name Fields
+                  Row(
+                    children: [
+                      Expanded(
+                        child: CustomTextField(
+                          controller: _firstnameController,
+                          label: "First Name",
+                          validator: (value) => value!.isNotEmpty ? null : "Enter first name",
+                        ),
+                      ),
+                      const SizedBox(width: 10),
+                      Expanded(
+                        child: CustomTextField(
+                          controller: _lastnameController,
+                          label: "Last Name",
+                          validator: (value) => value!.isNotEmpty ? null : "Enter last name",
+                        ),
+                      ),
+                    ],
+                  ),
+                  const SizedBox(height: 10),
 
-                    // Last Name Input
-                    const SizedBox(height: 10.0),
-                    CustomTextField(
-                      controller: lastNameController,
-                      hintText: "Last Name",
-                    ),
+                  /// ✅ Email Field
+                  CustomTextField(
+                    controller: _emailController,
+                    label: "Email",
+                    keyboardType: TextInputType.emailAddress,
+                    validator: (value) => value!.contains("@") ? null : "Enter a valid email",
+                  ),
+                  const SizedBox(height: 10),
 
-                    // Phone Number Input
-                    const SizedBox(height: 10.0),
-                    CustomTextField(
-                      controller: phoneController,
-                      hintText: "Phone Number (+977XXXXXXXXXX)",
-                      keyboardType: TextInputType.phone,
-                    ),
+                  /// ✅ Phone Number Field
+                  CustomTextField(
+                    controller: _phonenumberController,
+                    label: "Phone Number",
+                    keyboardType: TextInputType.phone,
+                    validator: (value) => value!.length == 10 ? null : "Enter a valid 10-digit number",
+                  ),
+                  const SizedBox(height: 10),
 
-                    // Password Input
-                    const SizedBox(height: 10.0),
-                    CustomTextField(
-                      controller: passwordController,
-                      hintText: "Password",
-                      obscureText: true,
-                    ),
-
-                    const SizedBox(height: 20.0),
-
-                    // Navigate to Login Page
-                    TextButton(
+                  /// ✅ Password Field
+                  CustomTextField(
+                    controller: _passwordController,
+                    label: "Password",
+                    isPassword: true,
+                    suffixIcon: IconButton(
+                      icon: Icon(_showPassword ? Icons.visibility : Icons.visibility_off),
                       onPressed: () {
-                        Navigator.pushNamed(context, '/login');
+                        setState(() => _showPassword = !_showPassword);
                       },
-                      child: const Text(
-                        "Already have an account? Login",
-                        style: TextStyle(color: Colors.blue),
-                      ),
                     ),
+                    validator: (value) => value!.length >= 6 ? null : "Password must be at least 6 characters",
+                  ),
+                  const SizedBox(height: 20),
 
-                    // Create Account Button
-                    CustomButton(
-                      text: "Create Account",
-                      onPressed: () {
-                        final firstName = firstNameController.text.trim();
-                        final lastName = lastNameController.text.trim();
-                        String phone = phoneController.text.trim();
-                        final password = passwordController.text.trim();
-
-                        // Prepend +977 if not already included
-                        if (!phone.startsWith('+977')) {
-                          phone = '+977$phone';
-                        }
-
-                        // Input Validation
-                        if (firstName.isEmpty) {
-                          _showErrorSnackBar(context, 'First Name is required.');
-                          return;
-                        }
-                        if (lastName.isEmpty) {
-                          _showErrorSnackBar(context, 'Last Name is required.');
-                          return;
-                        }
-                        if (phone.isEmpty) {
-                          _showErrorSnackBar(
-                              context, 'Phone number is required.');
-                          return;
-                        }
-                        if (!RegExp(r'^\+977\d{10}\$').hasMatch(phone)) {
-                          _showErrorSnackBar(
-                              context,
-                              'Phone number must start with +977 and contain exactly 10 digits.');
-                          return;
-                        }
-                        if (password.isEmpty) {
-                          _showErrorSnackBar(context, 'Password is required.');
-                          return;
-                        }
-                        if (password.length < 8 ||
-                            !RegExp(r'[A-Z]').hasMatch(password) ||
-                            !RegExp(r'[a-z]').hasMatch(password) ||
-                            !RegExp(r'[0-9]').hasMatch(password) ||
-                            !RegExp(r'[!@#\$%^&*(),.?":{}|<>]').hasMatch(password)) {
-                          _showErrorSnackBar(
-                              context,
-                              'Password must be at least 8 characters long, include uppercase, lowercase, a number, and a special character.');
-                          return;
-                        }
-
-                        // Trigger signup event
+                  /// ✅ Signup Button
+                  CustomElevatedButton(
+                    text: "Create Account",
+                    onPressed: () {
+                      if (_formKey.currentState!.validate()) {
                         context.read<UserSignupBloc>().add(
-                          UserSignupSubmit(
-                            firstName: firstName,
-                            lastName: lastName,
-                            phoneNumber: phone,
-                            password: password,
+                          UserSignupRequestEvent(
+                            firstname: _firstnameController.text.trim(),
+                            lastname: _lastnameController.text.trim(),
+                            phonenumber: _phonenumberController.text.trim(),
+                            email: _emailController.text.trim(),
+                            password: _passwordController.text.trim(),
+                            image: _selectedImage, // ✅ Passing image file
                           ),
                         );
-                      },
-                    ),
+                      }
+                    },
+                  ),
 
-                    const SizedBox(height: 10.0),
-
-                    // Sign up as Captain in Green
-                    CustomButton(
-                      text: "Sign up as Captain",
-                      onPressed: () {
-                        Navigator.pushNamed(context, '/captain-signup');
-                      },
-                      color: Colors.green,
-                    ),
-                  ],
-                );
-              },
+                  /// ✅ Login Redirection
+                  TextButton(
+                    onPressed: () => Navigator.pushNamed(context, "/login"),
+                    child: const Text("Already have an account? Login"),
+                  ),
+                ],
+              ),
             ),
           ),
         ),
-      ),
-    );
-  }
-
-  void _showErrorSnackBar(BuildContext context, String message) {
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
-        content: Text(message),
-        backgroundColor: Colors.red,
       ),
     );
   }

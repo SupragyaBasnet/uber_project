@@ -1,76 +1,84 @@
 import 'package:flutter/material.dart';
 
 class MySnackbar {
-  MySnackbar._(); // Private constructor to prevent instantiation
-
-  /// Shows a custom Snackbar with the provided message and style.
-  static void show({
-    required BuildContext context,
+  static void show(
+    BuildContext context, {
     required String message,
-    Color backgroundColor = Colors.black,
+    Color backgroundColor = Colors.black87,
     Color textColor = Colors.white,
-    Duration duration = const Duration(seconds: 3),
+    int durationInSeconds = 3,
+    SnackBarAction? action,
   }) {
-    ScaffoldMessenger.of(context).hideCurrentSnackBar(); // Hide existing Snackbar
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
-        content: Text(
-          message,
-          style: TextStyle(color: textColor),
-        ),
-        backgroundColor: backgroundColor,
-        duration: duration,
-        behavior: SnackBarBehavior.floating,
-        margin: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(8.0),
-        ),
+    final snackBar = SnackBar(
+      content: Text(
+        message,
+        style: TextStyle(color: textColor),
+      ),
+      backgroundColor: backgroundColor,
+      duration: Duration(seconds: durationInSeconds),
+      action: action,
+      behavior: SnackBarBehavior.floating, // Floating snackbar style
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(10), // Rounded corners
       ),
     );
+
+    ScaffoldMessenger.of(context).showSnackBar(snackBar);
   }
 
-  /// Shows a success Snackbar with a default green background.
-  static void showSuccess({
-    required BuildContext context,
+  static void showSuccess(
+    BuildContext context, {
     required String message,
-    Duration duration = const Duration(seconds: 3),
+    int durationInSeconds = 3,
   }) {
     show(
-      context: context,
+      context,
       message: message,
       backgroundColor: Colors.green,
       textColor: Colors.white,
-      duration: duration,
+      durationInSeconds: durationInSeconds,
     );
   }
 
-  /// Shows an error Snackbar with a default red background.
-  static void showError({
-    required BuildContext context,
+  static void showError(
+    BuildContext context, {
     required String message,
-    Duration duration = const Duration(seconds: 3),
+    int durationInSeconds = 3,
   }) {
     show(
-      context: context,
+      context,
       message: message,
       backgroundColor: Colors.red,
       textColor: Colors.white,
-      duration: duration,
+      durationInSeconds: durationInSeconds,
     );
   }
 
-  /// Shows an info Snackbar with a default blue background.
-  static void showInfo({
-    required BuildContext context,
+  static void showWarning(
+    BuildContext context, {
     required String message,
-    Duration duration = const Duration(seconds: 3),
+    int durationInSeconds = 3,
   }) {
     show(
-      context: context,
+      context,
+      message: message,
+      backgroundColor: Colors.orange,
+      textColor: Colors.white,
+      durationInSeconds: durationInSeconds,
+    );
+  }
+
+  static void showInfo(
+    BuildContext context, {
+    required String message,
+    int durationInSeconds = 3,
+  }) {
+    show(
+      context,
       message: message,
       backgroundColor: Colors.blue,
       textColor: Colors.white,
-      duration: duration,
+      durationInSeconds: durationInSeconds,
     );
   }
 }
