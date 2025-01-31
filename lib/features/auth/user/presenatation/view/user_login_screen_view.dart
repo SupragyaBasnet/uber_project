@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
+import '../../../../../app/di/di.dart';
 import '../../../../../app/widgets/custom_elevated_button.dart';
 import '../../../../../app/widgets/custom_text_field.dart';
 import '../view_model/user_login_bloc.dart';
@@ -19,23 +20,25 @@ class _UserLoginScreenViewState extends State<UserLoginScreenView> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: Colors.white,
-      body: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: BlocListener<UserLoginBloc, UserLoginState>(
-          listener: (context, state) {
-            if (state is UserLoginSuccess) {
-              Navigator.pushReplacementNamed(context, "/home");
-            } else if (state is UserLoginFailure) {
-              ScaffoldMessenger.of(context).showSnackBar(
-                SnackBar(
-                  content: Text(state.message),
-                  backgroundColor: Colors.red,
-                ),
-              );
-            }
-          },
+    return BlocProvider(
+        create: (_) => serviceLocator<UserLoginBloc>(), // ✅ Inject Bloc here
+    child: Scaffold(
+    backgroundColor: Colors.white,
+    body: Padding(
+    padding: const EdgeInsets.all(16.0),
+    child: BlocListener<UserLoginBloc, UserLoginState>(
+    listener: (context, state) {
+    if (state is UserLoginSuccess) {
+    Navigator.pushReplacementNamed(context, "/home");
+    } else if (state is UserLoginFailure) {
+    ScaffoldMessenger.of(context).showSnackBar(
+    SnackBar(
+    content: Text(state.message),
+    backgroundColor: Colors.red,
+    ),
+    );
+    }
+    },
           child: SingleChildScrollView(
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
@@ -118,15 +121,21 @@ class _UserLoginScreenViewState extends State<UserLoginScreenView> {
                 /// **Signup Navigation**
                 TextButton(
                   onPressed: () {
-                    Navigator.pushNamed(context, "/signup");
+                    if (Navigator.canPop(context)) {
+                      Navigator.popAndPushNamed(context, "/signup"); // ✅ Ensures smooth transition
+                    } else {
+                      Navigator.pushNamed(context, "/signup"); // ✅ If no screen to pop, just push
+                    }
                   },
                   child: const Text("New here? Create a new account"),
                 ),
+
               ],
             ),
           ),
         ),
       ),
+    ),
     );
   }
 }

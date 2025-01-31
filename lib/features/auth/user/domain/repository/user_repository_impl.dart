@@ -1,5 +1,6 @@
 import 'dart:io';
 import 'package:dartz/dartz.dart';
+import 'package:hive/hive.dart';
 import 'package:uber_mobile_app_project/core/error/failure.dart';
 import 'package:uber_mobile_app_project/core/network/api_service.dart';
 import '../../data/model/user_api_model.dart';
@@ -8,7 +9,7 @@ import '../repository/user_repository.dart';
 class UserRepositoryImpl implements UserRepository {
   final ApiService apiService;
 
-  UserRepositoryImpl({required this.apiService});
+  UserRepositoryImpl({required this.apiService, required Box userBox});
 
   @override
   Future<Either<Failure, UserApiModel>> login(String phonenumber,

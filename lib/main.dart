@@ -16,7 +16,9 @@ import 'features/auth/user/presenatation/view/user_login_screen_view.dart';
 import 'features/auth/user/presenatation/view_model/user_login_bloc.dart';
 import 'features/auth/user/presenatation/view_model/user_signup_bloc.dart';
 import 'features/captain_home/presenatation/view/splash_view.dart';
-import 'features/onboarding/presenatation/view/onboarding_screen_view.dart';
+import 'package:uber_mobile_app_project/features/auth/user/presenatation/view/user_signup_screen_view.dart';
+
+// import 'features/onboarding/presenatation/view/onboarding_screen_view.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -51,9 +53,10 @@ class MyApp extends StatelessWidget {
         themeMode: ThemeMode.system, // Adapts based on system settings
         home: const SplashView(),
         routes: {
-          '/onboarding': (context) => const OnboardingScreenView(),
+          // '/onboarding': (context) => const OnboardingScreenView(),
           '/user-login': (context) => UserLoginScreenView(),
           '/captain-login': (context) => const CaptainLoginScreenView(),
+          '/signup': (context) => const UserSignupScreenView(),
         },
       ),
     );

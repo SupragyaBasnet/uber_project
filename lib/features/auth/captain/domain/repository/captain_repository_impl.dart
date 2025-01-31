@@ -1,5 +1,6 @@
 import 'dart:io';
 import 'package:dartz/dartz.dart';
+import 'package:hive/hive.dart';
 import 'package:uber_mobile_app_project/core/error/failure.dart';
 import 'package:uber_mobile_app_project/core/network/api_service.dart';
 import '../../data/model/captain_api_model.dart';
@@ -8,7 +9,7 @@ import '../repository/captain_repository.dart';
 class CaptainRepositoryImpl implements CaptainRepository {
   final ApiService apiService;
 
-  CaptainRepositoryImpl({required this.apiService});
+  CaptainRepositoryImpl({required this.apiService, required Box captainBox});
 
   @override
   Future<Either<Failure, CaptainApiModel>> login({required String phonenumber, required String password}) async {

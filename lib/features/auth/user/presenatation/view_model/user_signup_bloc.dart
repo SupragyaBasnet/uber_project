@@ -2,6 +2,7 @@ import 'dart:io';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:dartz/dartz.dart';
 import 'package:uber_mobile_app_project/core/error/failure.dart';
+import 'package:uber_mobile_app_project/core/network/api_service.dart';
 import 'package:uber_mobile_app_project/features/auth/user/presenatation/view_model/user_signup_event.dart';
 import 'package:uber_mobile_app_project/features/auth/user/presenatation/view_model/user_signup_state.dart';
 import '../../data/model/user_api_model.dart';
@@ -10,7 +11,7 @@ import '../../domain/repository/user_repository.dart';
 class UserSignupBloc extends Bloc<UserSignupEvent, UserSignupState> {
   final UserRepository userRepository;
 
-  UserSignupBloc({required this.userRepository}) : super(UserSignupInitial()) {
+  UserSignupBloc({required this.userRepository, required ApiService apiService}) : super(UserSignupInitial()) {
     on<UserSignupRequestEvent>(_onSignup);
   }
 

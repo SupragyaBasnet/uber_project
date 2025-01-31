@@ -1,12 +1,13 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:uber_mobile_app_project/core/network/api_service.dart';
+import 'package:uber_mobile_app_project/features/auth/captain/domain/repository/captain_repository.dart';
 import 'captain_login_event.dart';
 import 'captain_login_state.dart';
 
 class CaptainLoginBloc extends Bloc<CaptainLoginEvent, CaptainLoginState> {
   final ApiService apiService;
 
-  CaptainLoginBloc({required this.apiService}) : super(CaptainLoginInitial()) {
+  CaptainLoginBloc({required this.apiService, required CaptainRepository captainRepository}) : super(CaptainLoginInitial()) {
     on<CaptainLoginRequestEvent>(_onLoginSubmitted);
   }
 

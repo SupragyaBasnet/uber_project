@@ -2,6 +2,7 @@ import 'dart:io';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:dartz/dartz.dart';
 import 'package:uber_mobile_app_project/core/error/failure.dart';
+import 'package:uber_mobile_app_project/core/network/api_service.dart';
 import '../../data/model/captain_api_model.dart';
 import '../../domain/repository/captain_repository.dart';
 import 'captain_signup_event.dart';
@@ -10,7 +11,7 @@ import 'captain_signup_state.dart';
 class CaptainSignupBloc extends Bloc<CaptainSignupEvent, CaptainSignupState> {
   final CaptainRepository captainRepository;
 
-  CaptainSignupBloc({required this.captainRepository}) : super(CaptainSignupInitial()) {
+  CaptainSignupBloc({required this.captainRepository, required ApiService apiService}) : super(CaptainSignupInitial()) {
     on<CaptainSignupRequestEvent>(_onSignup);
   }
 

@@ -1,12 +1,13 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:uber_mobile_app_project/core/network/api_service.dart';
+import 'package:uber_mobile_app_project/features/auth/user/domain/repository/user_repository.dart';
 import 'forgot_password_event.dart';
 import 'forgot_password_state.dart';
 
 class ForgotPasswordBloc extends Bloc<ForgotPasswordEvent, ForgotPasswordState> {
   final ApiService apiService;
 
-  ForgotPasswordBloc({required this.apiService}) : super(ForgotPasswordInitial()) {
+  ForgotPasswordBloc({required this.apiService, required UserRepository userRepository}) : super(ForgotPasswordInitial()) {
     on<SendOtpEvent>(_sendOtp);
     on<VerifyOtpEvent>(_verifyOtp);
     on<ResetPasswordEvent>(_resetPassword);
