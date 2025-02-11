@@ -1,4 +1,5 @@
 import 'package:dio/dio.dart';
+import '../../../../../../core/network/api_service.dart';
 import '../../model/user_api_model.dart';
 
 
@@ -8,19 +9,27 @@ abstract class UserRemoteDataSource {
 }
 
 class UserRemoteDataSourceImpl implements UserRemoteDataSource {
-  final Dio dio;
+  final ApiService apiService;
 
-  UserRemoteDataSourceImpl(this.dio);
+  UserRemoteDataSourceImpl(this.apiService); // ✅ Use `ApiService` instead of `Dio`
 
   @override
   Future<UserApiModel> loginUser(Map<String, dynamic> credentials) async {
-    final response = await dio.post('/users/login', data: credentials);
-    return UserApiModel.fromJson(response.data);
+    try {
+      final response = await apiService.postRequest('/users/login', data: credentials);
+      return UserApiModel.fromJson(response.data);
+    } catch (e) {
+      throw Exception("Login failed: $e");
+    }
   }
 
   @override
   Future<UserApiModel> signupUser(Map<String, dynamic> userData) async {
-    final response = await dio.post('/users/register', data: userData);
-    return UserApiModel.fromJson(response.data);
+    try {
+      final response = await apiService.postRequest('/users/register', data: userData);
+      return UserApiModel.fromJson(response.data);
+    } catch (e) {
+      throw Exception("Signup failed: $e");
+    }
   }
 }

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:uber_mobile_app_project/app/di/di.dart'; // ✅ Import DI for CaptainLoginBloc
 
 
 import '../view_model/captain_login.bloc.dart';
@@ -18,17 +19,18 @@ class _CaptainLoginScreenState extends State<CaptainLoginScreen> {
 
   void _loginCaptain() {
     final data = {
-      "phonenumber": phoneController.text,
-      "password": passwordController.text,
+      "phonenumber": phoneController.text.trim(),
+      "password": passwordController.text.trim(),
     };
 
-    BlocProvider.of<CaptainLoginBloc>(context).add(CaptainLoginRequested(data)); // ✅ Fixed event name
+    context.read<CaptainLoginBloc>().add(CaptainLoginRequested(data));
   }
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: BlocListener<CaptainLoginBloc, CaptainLoginState>(
+    return BlocProvider(
+      create: (_) => getIt<CaptainLoginBloc>(), // ✅ Inject CaptainLoginBloc from DI
+      child: BlocListener<CaptainLoginBloc, CaptainLoginState>(
         listener: (context, state) {
           if (state is CaptainLoginSuccess) {
             Navigator.pushNamed(context, "/captain-home");
@@ -38,33 +40,57 @@ class _CaptainLoginScreenState extends State<CaptainLoginScreen> {
             );
           }
         },
-        child: SingleChildScrollView(
-          padding: EdgeInsets.all(20),
-          child: Column(
-            children: [
-              SizedBox(height: 50),
-              Image.asset("assets/EasyGo.png", height: 100), // Logo
-              SizedBox(height: 20),
-              Text("Captain Login", style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
+        child: Scaffold(
+          body: SingleChildScrollView(
+            padding: EdgeInsets.all(20),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                SizedBox(height: 50),
+                Image.asset("assets/EasyGo.png", height: 100), // Logo
+                SizedBox(height: 20),
+                Text(
+                  "Captain Login",
+                  style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
+                ),
+                SizedBox(height: 20),
 
-              _buildTextField("Phone Number", phoneController, prefix: "+977"),
-              _buildPasswordField(),
+                _buildTextField("Phone Number", phoneController, prefix: "+977"),
+                SizedBox(height: 15),
+                _buildPasswordField(),
 
-              SizedBox(height: 20),
-              ElevatedButton(
-                onPressed: _loginCaptain,
-                child: Text("Login"),
-              ),
-              TextButton(
-                onPressed: () => Navigator.pushNamed(context, "/captain-signup"),
-                child: Text("Create new account"),
-              ),
-              ElevatedButton(
-                onPressed: () => Navigator.pushNamed(context, "/user-login"),
-                style: ElevatedButton.styleFrom(backgroundColor: Colors.orange),
-                child: Text("Sign in as Passenger"),
-              ),
-            ],
+                SizedBox(height: 25),
+
+                ElevatedButton(
+                  onPressed: _loginCaptain,
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: Theme.of(context).primaryColor,
+                    padding: EdgeInsets.symmetric(horizontal: 50, vertical: 15),
+                    textStyle: TextStyle(fontSize: 16),
+                  ),
+                  child: Text("Login"),
+                ),
+
+                SizedBox(height: 15),
+
+                TextButton(
+                  onPressed: () => Navigator.pushNamed(context, "/captain-signup"),
+                  child: Text("Create new account", style: TextStyle(fontSize: 14)),
+                ),
+
+                SizedBox(height: 10),
+
+                ElevatedButton(
+                  onPressed: () => Navigator.pushNamed(context, "/user-login"),
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: Colors.orange,
+                    padding: EdgeInsets.symmetric(horizontal: 50, vertical: 15),
+                    textStyle: TextStyle(fontSize: 16),
+                  ),
+                  child: Text("Sign in as Passenger"),
+                ),
+              ],
+            ),
           ),
         ),
       ),
@@ -74,6 +100,7 @@ class _CaptainLoginScreenState extends State<CaptainLoginScreen> {
   Widget _buildTextField(String label, TextEditingController controller, {String? prefix}) {
     return TextField(
       controller: controller,
+      keyboardType: label == "Phone Number" ? TextInputType.phone : TextInputType.text,
       decoration: InputDecoration(
         labelText: label,
         prefixText: prefix,

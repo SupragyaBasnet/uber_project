@@ -69,7 +69,7 @@ Future<void> _initSharedPreferences() async {
 // ✅ User Authentication Dependencies
 void _initUserAuthDependencies() {
   getIt.registerLazySingleton<UserRemoteDataSource>(
-        () => UserRemoteDataSourceImpl(getIt<Dio>()), // ✅ FIXED: Pass `Dio` instead of `ApiService`
+        () => UserRemoteDataSourceImpl(getIt<ApiService>()), // ✅ FIXED: Pass `ApiService` instead of `Dio`
   );
 
   getIt.registerLazySingleton<UserRepository>(
@@ -96,7 +96,7 @@ void _initUserAuthDependencies() {
 // ✅ Captain Authentication Dependencies
 void _initCaptainAuthDependencies() {
   getIt.registerLazySingleton<CaptainRemoteDataSource>(
-        () => CaptainRemoteDataSourceImpl(getIt<Dio>()), // ✅ FIXED: Pass `Dio`
+        () => CaptainRemoteDataSourceImpl(getIt<ApiService>()), // ✅ FIXED: Pass `ApiService` instead of `Dio`
   );
 
   getIt.registerLazySingleton<CaptainRepository>(

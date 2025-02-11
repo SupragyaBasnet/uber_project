@@ -14,7 +14,7 @@ class ApiService {
     );
 
     dio.interceptors.addAll([
-      AuthInterceptor(prefs), // ✅ Fix: Pass SharedPreferences
+      AuthInterceptor(prefs), // ✅ Pass SharedPreferences for Authentication
       LogInterceptor(
         request: true,
         requestBody: true,
@@ -60,7 +60,7 @@ class ApiService {
   }
 }
 
-// ✅ Fix: Make AuthInterceptor use dependency injection
+// ✅ Authentication Interceptor for adding JWT Token
 class AuthInterceptor extends Interceptor {
   final SharedPreferences prefs;
 
@@ -80,8 +80,8 @@ class AuthInterceptor extends Interceptor {
   @override
   void onError(DioException err, ErrorInterceptorHandler handler) {
     if (err.response?.statusCode == 401) {
-      print("Unauthorized request - Redirect to login");
-      // You can trigger logout logic here
+      print("Unauthorized request - Redirecting to login");
+      // TODO: Handle logout or token refresh logic here if needed
     }
     super.onError(err, handler);
   }

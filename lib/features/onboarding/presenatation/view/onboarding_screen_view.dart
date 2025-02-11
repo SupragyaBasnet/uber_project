@@ -126,7 +126,7 @@ class _OnboardingScreenViewState extends State<OnboardingScreenView> {
                   ),
                 ],
               );
-            },
+           },
           ),
         ),
       ),

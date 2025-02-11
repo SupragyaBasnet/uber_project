@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:uber_mobile_app_project/app/di/di.dart'; // Import Dependency Injection
 
 import '../view_model/user_signup_bloc.dart';
 import '../view_model/user_signup_event.dart';
@@ -29,13 +30,14 @@ class _UserSignupScreenState extends State<UserSignupScreen> {
       "password": passwordController.text,
     };
 
-    BlocProvider.of<UserSignupBloc>(context).add(UserSignupRequested(userData));
+    context.read<UserSignupBloc>().add(UserSignupRequested(userData));
   }
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: BlocListener<UserSignupBloc, UserSignupState>(
+    return BlocProvider(
+      create: (_) => getIt<UserSignupBloc>(), // ✅ FIX: Use Dependency Injection to get UserSignupBloc
+      child: BlocListener<UserSignupBloc, UserSignupState>(
         listener: (context, state) {
           if (state is UserSignupSuccess) {
             Navigator.pushNamed(context, "/home");
@@ -45,50 +47,52 @@ class _UserSignupScreenState extends State<UserSignupScreen> {
             );
           }
         },
-        child: SingleChildScrollView(
-          padding: EdgeInsets.all(20),
-          child: Column(
-            children: [
-              SizedBox(height: 50),
-              Image.asset("assets/EasyGo.png", height: 100), // Logo
-              SizedBox(height: 20),
-              Text("Create Your Account", style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
+        child: Scaffold(
+          body: SingleChildScrollView(
+            padding: EdgeInsets.all(20),
+            child: Column(
+              children: [
+                SizedBox(height: 50),
+                Image.asset("assets/EasyGo.png", height: 100), // Logo
+                SizedBox(height: 20),
+                Text("Create Your Account", style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
 
-              Row(
-                children: [
-                  Expanded(child: _buildTextField("First Name", firstNameController)),
-                  SizedBox(width: 10),
-                  Expanded(child: _buildTextField("Last Name", lastNameController)),
-                ],
-              ),
+                Row(
+                  children: [
+                    Expanded(child: _buildTextField("First Name", firstNameController)),
+                    SizedBox(width: 10),
+                    Expanded(child: _buildTextField("Last Name", lastNameController)),
+                  ],
+                ),
 
-              _buildTextField("Email", emailController),
-              _buildTextField("Phone Number", phoneController, prefix: "+977"),
-              _buildPasswordField(),
+                _buildTextField("Email", emailController),
+                _buildTextField("Phone Number", phoneController, prefix: "+977"),
+                _buildPasswordField(),
 
-              SizedBox(height: 20),
+                SizedBox(height: 20),
 
-              // ✅ Register Button
-              ElevatedButton(
-                onPressed: _registerUser,
-                child: Text("Sign Up"),
-              ),
+                // ✅ Register Button
+                ElevatedButton(
+                  onPressed: _registerUser,
+                  child: Text("Sign Up"),
+                ),
 
-              SizedBox(height: 10),
+                SizedBox(height: 10),
 
-              // ✅ Login Button
-              TextButton(
-                onPressed: () => Navigator.pushNamed(context, "/login"),
-                child: Text("Already have an account? Login"),
-              ),
+                // ✅ Login Button
+                TextButton(
+                  onPressed: () => Navigator.pushNamed(context, "/login"),
+                  child: Text("Already have an account? Login"),
+                ),
 
-              // ✅ Signup as Captain Button
-              ElevatedButton(
-                onPressed: () => Navigator.pushNamed(context, "/captain-signup"),
-                style: ElevatedButton.styleFrom(backgroundColor: Colors.green),
-                child: Text("Sign up as Captain"),
-              ),
-            ],
+                // ✅ Signup as Captain Button
+                ElevatedButton(
+                  onPressed: () => Navigator.pushNamed(context, "/captain-signup"),
+                  style: ElevatedButton.styleFrom(backgroundColor: Colors.green),
+                  child: Text("Sign up as Captain"),
+                ),
+              ],
+            ),
           ),
         ),
       ),
