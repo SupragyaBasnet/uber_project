@@ -1,17 +1,16 @@
 import 'package:dartz/dartz.dart';
+import '../../../../../app/usecase/usecase.dart';
 import '../../../../../core/error/failure.dart';
+import '../entity/captain_entity.dart';
+import '../repository/captain_repository.dart';
 
-import '../../data/model/captain_api_model.dart';
-import '../repository/captain_repository_impl.dart';
-
-import 'captain_upload_image_usecase.dart';
-
-class CapatainLoginUseCase {
+class CaptainLoginUseCase implements UsecaseWithParams<CaptainEntity, Map<String, dynamic>> {
   final CaptainRepository repository;
 
-  CapatainLoginUseCase(this.repository);
+  CaptainLoginUseCase({required this.repository});
 
-  Future<Either<Failure, CaptainApiModel>> call(String phonenumber, String password) async {
-    return await repository.login(phonenumber, password);
+  @override
+  Future<Either<Failure, CaptainEntity>> call(Map<String, dynamic> credentials) {
+    return repository.loginCaptain(credentials);
   }
 }

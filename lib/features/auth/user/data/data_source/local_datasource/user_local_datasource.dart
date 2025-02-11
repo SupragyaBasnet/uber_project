@@ -1,31 +1,30 @@
 import 'package:hive/hive.dart';
-import 'package:uber_mobile_app_project/features/auth/user/data/model/user_hive_model.dart';
+import '../../model/user_hive_model.dart';
 
-import '../../../../../../app/constants/hive_table_constant.dart';
 
-abstract class UserLocalDatasource {
-  Future<void> cacheUserData(UserHiveModel user);
+abstract class UserLocalDataSource {
+  Future<void> cacheUser(UserHiveModel user);
   Future<UserHiveModel?> getCachedUser();
-  Future<void> clearUserData();
+  Future<void> clearCache();
 }
 
-class UserLocalDatasourceImpl implements UserLocalDatasource {
-  final Box<UserHiveModel> _userBox;
+class UserLocalDataSourceImpl implements UserLocalDataSource {
+  final Box<UserHiveModel> userBox;
 
-  UserLocalDatasourceImpl(this._userBox);
+  UserLocalDataSourceImpl(this.userBox);
 
   @override
-  Future<void> cacheUserData(UserHiveModel user) async {
-    await _userBox.put(HiveTableConstants.userBox, user); // ✅ Fixed
+  Future<void> cacheUser(UserHiveModel user) async {
+    await userBox.put('user', user);
   }
 
   @override
   Future<UserHiveModel?> getCachedUser() async {
-    return _userBox.get(HiveTableConstants.userBox); // ✅ Fixed
+    return userBox.get('user');
   }
 
   @override
-  Future<void> clearUserData() async {
-    await _userBox.delete(HiveTableConstants.userBox); // ✅ Fixed
+  Future<void> clearCache() async {
+    await userBox.delete('user');
   }
 }

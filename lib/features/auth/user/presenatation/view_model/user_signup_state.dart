@@ -9,13 +9,20 @@ class UserSignupInitial extends UserSignupState {}
 
 class UserSignupLoading extends UserSignupState {}
 
-class UserSignupSuccess extends UserSignupState {}
+class UserSignupSuccess extends UserSignupState {
+  final Map<String, dynamic> userData;
 
-class UserSignupFailure extends UserSignupState {
-  final String message;
-
-  UserSignupFailure(this.message);
+  UserSignupSuccess(this.userData);
 
   @override
-  List<Object?> get props => [message];
+  List<Object?> get props => [userData];
+}
+
+class UserSignupFailure extends UserSignupState {
+  final String error;
+
+  UserSignupFailure(this.error);
+
+  @override
+  List<Object?> get props => [error];
 }

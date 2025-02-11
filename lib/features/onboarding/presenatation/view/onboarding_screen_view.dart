@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:uber_mobile_app_project/app/di/di.dart';
-import '../../../auth/user/presenatation/view/user_login_screen_view.dart';
+import 'package:smooth_page_indicator/smooth_page_indicator.dart'; //
+
+
+
+import '../../../../app/di/di.dart';
 import 'onboarding_page.dart';
 import '../view_model/onboarding_cubit.dart';
 
@@ -18,15 +21,11 @@ class _OnboardingScreenViewState extends State<OnboardingScreenView> {
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (_) => serviceLocator<OnboardingCubit>(),
+      create: (_) => getIt<OnboardingCubit>(), // ✅ Fix serviceLocator error
       child: BlocListener<OnboardingCubit, int>(
         listener: (context, currentPage) {
           if (currentPage == 3) {
-            // Navigate to UserLoginScreenView when onboarding is done
-            Navigator.pushReplacement(
-              context,
-              MaterialPageRoute(builder: (context) => UserLoginScreenView()),
-            );
+            Navigator.pushReplacementNamed(context, "/user-login");
           }
         },
         child: Scaffold(
@@ -52,23 +51,40 @@ class _OnboardingScreenViewState extends State<OnboardingScreenView> {
                           imagePath: 'assets/images/image1.webp',
                           title: 'Your Ride, Your Comfort',
                           description:
-                              'Get where you need to be with style and ease. Our premium vehicles ensure every journey feels like a first-class experience.',
+                          'Get where you need to be with style and ease. Our premium vehicles ensure every journey feels like a first-class experience.',
                         ),
                         OnboardingPage(
                           imagePath: 'assets/images/image2.png',
                           title: 'Track Your Ride in Real-Time',
                           description:
-                              'Stay in control with our GPS tracking system. Know exactly where your ride is and plan your timeline efficiently.',
+                          'Stay in control with our GPS tracking system. Know exactly where your ride is and plan your timeline efficiently.',
                         ),
                         OnboardingPage(
                           imagePath: 'assets/images/image3.jpg',
                           title: 'Reliable Drivers, Safe Journey',
                           description:
-                              'Our drivers are professionally trained to ensure every trip is secure. Enjoy peace of mind, one ride at a time.',
+                          'Our drivers are professionally trained to ensure every trip is secure. Enjoy peace of mind, one ride at a time.',
                         ),
                       ],
                     ),
                   ),
+
+                  // ✅ Page Indicator (Fixed)
+                  Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 10),
+                    child: SmoothPageIndicator(
+                      controller: _pageController,
+                      count: 3,
+                      effect: ExpandingDotsEffect( // ✅ Fixed import
+                        activeDotColor: Theme.of(context).primaryColor,
+                        dotColor: Colors.grey.shade400,
+                        dotHeight: 10,
+                        dotWidth: 10,
+                      ),
+                    ),
+                  ),
+
+                  // ✅ Navigation Buttons (Fixed)
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
@@ -79,22 +95,12 @@ class _OnboardingScreenViewState extends State<OnboardingScreenView> {
                         onPressed: currentPage == 0
                             ? null
                             : () {
-                                _pageController.previousPage(
-                                  duration: const Duration(milliseconds: 300),
-                                  curve: Curves.ease,
-                                );
-                                context.read<OnboardingCubit>().updatePage(currentPage - 1);
-                              },
-                      ),
-
-                      // Page Indicator
-                      Expanded(
-                        child: Center(
-                          child: Text(
-                            '${currentPage + 1} of 3',
-                            style: Theme.of(context).textTheme.bodyMedium,
-                          ),
-                        ),
+                          _pageController.previousPage(
+                            duration: const Duration(milliseconds: 300),
+                            curve: Curves.ease,
+                          );
+                          context.read<OnboardingCubit>().updatePage(currentPage - 1);
+                        },
                       ),
 
                       // Forward Button
@@ -111,7 +117,7 @@ class _OnboardingScreenViewState extends State<OnboardingScreenView> {
                             );
                             context.read<OnboardingCubit>().updatePage(currentPage + 1);
                           } else {
-                            // When onboarding is completed, update state to 3
+                            // ✅ Ensure onboarding completes and triggers navigation
                             context.read<OnboardingCubit>().updatePage(3);
                           }
                         },

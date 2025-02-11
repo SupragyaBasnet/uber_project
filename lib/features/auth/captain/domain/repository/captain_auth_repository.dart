@@ -4,10 +4,10 @@ import '../../data/data_source/remote_datasource/captain_remote_datasource.dart'
 import '../../domain/entity/captain_entity.dart';
 import '../../domain/repository/captain_repository.dart';
 
-class CaptainRemoteRepository implements CaptainRepository {
+class CaptainAuthRepository implements CaptainRepository {
   final CaptainRemoteDataSource remoteDataSource;
 
-  CaptainRemoteRepository({required this.remoteDataSource});
+  CaptainAuthRepository({required this.remoteDataSource});
 
   @override
   Future<Either<Failure, CaptainEntity>> loginCaptain(Map<String, dynamic> credentials) async {

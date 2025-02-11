@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-import '../../../auth/user/presenatation/view/user_login_screen_view.dart';
+import '../../../auth/user/presenatation/view/user_login_screen.dart';
+
+
 
 class SplashCubit extends Cubit<void> {
   SplashCubit() : super(null);
@@ -16,7 +18,7 @@ class SplashCubit extends Cubit<void> {
         Navigator.pushReplacement(
           context,
           MaterialPageRoute(
-            builder: (context) => UserLoginScreenView(),
+            builder: (context) => UserLoginScreen(),
           ),
         );
       }

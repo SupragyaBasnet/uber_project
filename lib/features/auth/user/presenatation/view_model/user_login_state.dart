@@ -10,20 +10,19 @@ class UserLoginInitial extends UserLoginState {}
 class UserLoginLoading extends UserLoginState {}
 
 class UserLoginSuccess extends UserLoginState {
-  final String token;
-  final String userId;
+  final Map<String, dynamic> userData;
 
-  UserLoginSuccess({required this.token, required this.userId});
+  UserLoginSuccess(this.userData);
 
   @override
-  List<Object?> get props => [token, userId];
+  List<Object?> get props => [userData];
 }
 
 class UserLoginFailure extends UserLoginState {
-  final String message;
+  final String error;
 
-  UserLoginFailure({required this.message});
+  UserLoginFailure(this.error);
 
   @override
-  List<Object?> get props => [message];
+  List<Object?> get props => [error];
 }

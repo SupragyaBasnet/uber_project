@@ -1,29 +1,22 @@
-import 'package:hive/hive.dart';
+import '../../domain/entity/captain_entity.dart';
+import '../data_source/local_datasource/captain_local_datasource.dart';
 import '../model/captain_hive_model.dart';
 
-
 class CaptainLocalRepository {
-  final Box<CaptainHiveModel> captainBox;
+  final CaptainLocalDataSource localDataSource;
 
-  CaptainLocalRepository(this.captainBox);
+  CaptainLocalRepository(this.localDataSource);
 
-  /// Save captain data to Hive
-  Future<void> saveCaptain(CaptainHiveModel captain) async {
-    await captainBox.put('captain', captain);
+  Future<void> cacheCaptain(CaptainEntity captain) async {
+    await localDataSource.cacheCaptainData(CaptainHiveModel.fromEntity(captain));
   }
 
-  /// Get captain data from Hive
-  CaptainHiveModel? getCaptain() {
-    return captainBox.get('captain');
+  Future<CaptainEntity?> getCachedCaptain() async {
+    final data = await localDataSource.getCachedCaptainData();
+    return data?.toEntity(); // ✅ Convert Hive model to entity
   }
 
-  /// Delete captain from local storage
-  Future<void> deleteCaptain() async {
-    await captainBox.delete('captain');
-  }
-
-  /// Check if captain exists locally
-  bool isCaptainLoggedIn() {
-    return captainBox.containsKey('captain');
+  Future<void> clearCachedData() async {
+    await localDataSource.clearCachedData();
   }
 }

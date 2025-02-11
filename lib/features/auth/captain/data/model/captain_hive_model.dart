@@ -1,56 +1,76 @@
 import 'package:hive/hive.dart';
-import 'captain_api_model.dart';
+import '../../domain/entity/captain_entity.dart';
 
-part 'captain_hive_model.g.dart';
+part 'captain_hive_model.g.dart'; // ✅ This must match your generated file
 
-@HiveType(typeId: 1) // Assign a unique Type ID for Hive
-class CaptainHiveModel extends HiveObject {
+@HiveType(typeId: 1)
+class CaptainHiveModel {
   @HiveField(0)
   final String id;
 
   @HiveField(1)
-  final String email;
+  final String firstName;
 
   @HiveField(2)
-  final String phonenumber;
+  final String lastName;
 
   @HiveField(3)
-  final String firstname;
+  final String email;
 
   @HiveField(4)
-  final String lastname;
+  final String phoneNumber;
 
   @HiveField(5)
-  final String password;  // ✅ Added password
+  final String vehicleType;
 
   @HiveField(6)
-  final String token;
+  final String vehiclePlate;
 
   @HiveField(7)
-  final VehicleModel vehicle;  // ✅ Use the proper model instead of Map
+  final String vehicleName;
+
+  @HiveField(8)
+  final String vehicleCapacity;
 
   CaptainHiveModel({
     required this.id,
+    required this.firstName,
+    required this.lastName,
     required this.email,
-    required this.phonenumber,
-    required this.firstname,
-    required this.lastname,
-    required this.password,  // ✅ Added password
-    required this.token,
-    required this.vehicle,
+    required this.phoneNumber,
+    required this.vehicleType,
+    required this.vehiclePlate,
+    required this.vehicleName,
+    required this.vehicleCapacity,
   });
 
-  /// Convert `CaptainApiModel` to `CaptainHiveModel` for local storage
-  factory CaptainHiveModel.fromApiModel(CaptainApiModel apiModel) {
+  /// ✅ Convert Hive Model to Entity
+  CaptainEntity toEntity() {
+    return CaptainEntity(
+      id: id,
+      firstName: firstName,
+      lastName: lastName,
+      email: email,
+      phoneNumber: phoneNumber,
+      vehicleType: vehicleType,
+      vehiclePlate: vehiclePlate,
+      vehicleName: vehicleName,
+      vehicleCapacity: vehicleCapacity,
+    );
+  }
+
+  /// ✅ Convert Entity to Hive Model
+  factory CaptainHiveModel.fromEntity(CaptainEntity entity) {
     return CaptainHiveModel(
-      id: apiModel.id,
-      email: apiModel.email,
-      phonenumber: apiModel.phonenumber,
-      firstname: apiModel.firstname,
-      lastname: apiModel.lastname,
-      password: apiModel.password,  // ✅ Added password
-      token: apiModel.token,
-      vehicle: apiModel.vehicle,
+      id: entity.id,
+      firstName: entity.firstName,
+      lastName: entity.lastName,
+      email: entity.email,
+      phoneNumber: entity.phoneNumber,
+      vehicleType: entity.vehicleType,
+      vehiclePlate: entity.vehiclePlate,
+      vehicleName: entity.vehicleName,
+      vehicleCapacity: entity.vehicleCapacity,
     );
   }
 }

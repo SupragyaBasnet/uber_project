@@ -4,10 +4,10 @@ import '../../data/data_source/remote_datasource/user_remote_datasource.dart';
 import '../../domain/entity/user_entity.dart';
 import '../../domain/repository/user_repository.dart';
 
-class UserRemoteRepository implements UserRepository {
+class UserAuthRepository implements UserRepository {
   final UserRemoteDataSource remoteDataSource;
 
-  UserRemoteRepository({required this.remoteDataSource});
+  UserAuthRepository({required this.remoteDataSource});
 
   @override
   Future<Either<Failure, UserEntity>> loginUser(Map<String, dynamic> credentials) async {

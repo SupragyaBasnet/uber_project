@@ -1,64 +1,26 @@
 import 'package:dio/dio.dart';
-import '../../../../../../app/constants/api_endpoints.dart';
-import '../../../../../../core/error/exception.dart';
 import '../../model/user_api_model.dart';
 
-abstract class UserRemoteDatasource {
-  Future<UserApiModel> loginUser(String phonenumber, String password);
-  Future<UserApiModel> registerUser(UserApiModel user);
-  Future<void> logoutUser();
+
+abstract class UserRemoteDataSource {
+  Future<UserApiModel> loginUser(Map<String, dynamic> credentials);
+  Future<UserApiModel> signupUser(Map<String, dynamic> userData);
 }
 
-class UserRemoteDatasourceImpl implements UserRemoteDatasource {
+class UserRemoteDataSourceImpl implements UserRemoteDataSource {
   final Dio dio;
 
-  UserRemoteDatasourceImpl(this.dio);
+  UserRemoteDataSourceImpl(this.dio);
 
   @override
-  Future<UserApiModel> loginUser(String phonenumber, String password) async {
-    try {
-      final response = await dio.post(
-        ApiEndpoints.userLogin,
-        data: {
-          "phonenumber": phonenumber, // ✅ Ensure correct parameter names
-          "password": password,
-        },
-      );
-
-      if (response.statusCode == 200) {
-        return UserApiModel.fromJson(response.data["user"]);
-      } else {
-        throw ServerException(response.data["message"] ?? "Login failed");
-      }
-    } catch (e) {
-      throw ServerException(e.toString());
-    }
+  Future<UserApiModel> loginUser(Map<String, dynamic> credentials) async {
+    final response = await dio.post('/users/login', data: credentials);
+    return UserApiModel.fromJson(response.data);
   }
 
   @override
-  Future<UserApiModel> registerUser(UserApiModel user) async {
-    try {
-      final response = await dio.post(
-        ApiEndpoints.userRegister,
-        data: user.toJson(), // ✅ Serialize UserModel correctly
-      );
-
-      if (response.statusCode == 201) {
-        return UserApiModel.fromJson(response.data["user"]);
-      } else {
-        throw ServerException(response.data["message"] ?? "Registration failed");
-      }
-    } catch (e) {
-      throw ServerException(e.toString());
-    }
-  }
-
-  @override
-  Future<void> logoutUser() async {
-    try {
-      await dio.get(ApiEndpoints.userLogout);
-    } catch (e) {
-      throw ServerException(e.toString());
-    }
+  Future<UserApiModel> signupUser(Map<String, dynamic> userData) async {
+    final response = await dio.post('/users/register', data: userData);
+    return UserApiModel.fromJson(response.data);
   }
 }

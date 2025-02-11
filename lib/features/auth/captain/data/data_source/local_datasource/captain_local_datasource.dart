@@ -1,31 +1,29 @@
 import 'package:hive/hive.dart';
-import '../../../../../../app/constants/hive_table_constant.dart';
-
 import '../../model/captain_hive_model.dart';
 
-abstract class CaptainLocalDatasource {
+abstract class CaptainLocalDataSource {
   Future<void> cacheCaptainData(CaptainHiveModel captain);
-  Future<CaptainHiveModel?> getCachedCaptain();
-  Future<void> clearCaptainData();
+  Future<CaptainHiveModel?> getCachedCaptainData();
+  Future<void> clearCachedData();
 }
 
-class CaptainLocalDatasourceImpl implements CaptainLocalDatasource {
-  final Box _captainBox;
+class CaptainLocalDataSourceImpl implements CaptainLocalDataSource {
+  final Box<CaptainHiveModel> captainBox;
 
-  CaptainLocalDatasourceImpl(this._captainBox);
+  CaptainLocalDataSourceImpl(this.captainBox);
 
   @override
   Future<void> cacheCaptainData(CaptainHiveModel captain) async {
-    await _captainBox.put(HiveTableConstants.captainBox, captain);
+    await captainBox.put('captain', captain);
   }
 
   @override
-  Future<CaptainHiveModel?> getCachedCaptain() async {
-    return _captainBox.get(HiveTableConstants.captainBox);
+  Future<CaptainHiveModel?> getCachedCaptainData() async {
+    return captainBox.get('captain');
   }
 
   @override
-  Future<void> clearCaptainData() async {
-    await _captainBox.delete(HiveTableConstants.captainBox);
+  Future<void> clearCachedData() async {
+    await captainBox.delete('captain');
   }
 }

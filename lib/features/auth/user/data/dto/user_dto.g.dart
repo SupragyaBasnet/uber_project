@@ -1,12 +1,13 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'user_api_model.dart';
+part of 'user_dto.dart';
 
 // **************************************************************************
 // JsonSerializableGenerator
 // **************************************************************************
 
-UserApiModel _$UserApiModelFromJson(Map<String, dynamic> json) => UserApiModel(
+_$UserDTOImpl _$$UserDTOImplFromJson(Map<String, dynamic> json) =>
+    _$UserDTOImpl(
       id: json['id'] as String,
       firstName: json['firstName'] as String,
       lastName: json['lastName'] as String,
@@ -15,7 +16,7 @@ UserApiModel _$UserApiModelFromJson(Map<String, dynamic> json) => UserApiModel(
       token: json['token'] as String,
     );
 
-Map<String, dynamic> _$UserApiModelToJson(UserApiModel instance) =>
+Map<String, dynamic> _$$UserDTOImplToJson(_$UserDTOImpl instance) =>
     <String, dynamic>{
       'id': instance.id,
       'firstName': instance.firstName,

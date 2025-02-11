@@ -18,36 +18,39 @@ class CaptainHiveModelAdapter extends TypeAdapter<CaptainHiveModel> {
     };
     return CaptainHiveModel(
       id: fields[0] as String,
-      email: fields[1] as String,
-      phonenumber: fields[2] as String,
-      firstname: fields[3] as String,
-      lastname: fields[4] as String,
-      password: fields[5] as String,
-      token: fields[6] as String,
-      vehicle: fields[7] as VehicleModel,
+      firstName: fields[1] as String,
+      lastName: fields[2] as String,
+      email: fields[3] as String,
+      phoneNumber: fields[4] as String,
+      vehicleType: fields[5] as String,
+      vehiclePlate: fields[6] as String,
+      vehicleName: fields[7] as String,
+      vehicleCapacity: fields[8] as String,
     );
   }
 
   @override
   void write(BinaryWriter writer, CaptainHiveModel obj) {
     writer
-      ..writeByte(8)
+      ..writeByte(9)
       ..writeByte(0)
       ..write(obj.id)
       ..writeByte(1)
-      ..write(obj.email)
+      ..write(obj.firstName)
       ..writeByte(2)
-      ..write(obj.phonenumber)
+      ..write(obj.lastName)
       ..writeByte(3)
-      ..write(obj.firstname)
+      ..write(obj.email)
       ..writeByte(4)
-      ..write(obj.lastname)
+      ..write(obj.phoneNumber)
       ..writeByte(5)
-      ..write(obj.password)
+      ..write(obj.vehicleType)
       ..writeByte(6)
-      ..write(obj.token)
+      ..write(obj.vehiclePlate)
       ..writeByte(7)
-      ..write(obj.vehicle);
+      ..write(obj.vehicleName)
+      ..writeByte(8)
+      ..write(obj.vehicleCapacity);
   }
 
   @override

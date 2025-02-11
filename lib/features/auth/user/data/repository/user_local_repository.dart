@@ -1,29 +1,23 @@
-import 'package:hive/hive.dart';
-import '../model/user_hive_model.dart';
-
+import '../../domain/entity/user_entity.dart';
+import '../data_source/local_datasource/user_local_datasource.dart';
 
 class UserLocalRepository {
-  final Box<UserHiveModel> userBox;
+  final UserLocalDataSource localDataSource;
 
-  UserLocalRepository(this.userBox);
+  UserLocalRepository(this.localDataSource);
 
-  /// Save user data to Hive
-  Future<void> saveUser(UserHiveModel user) async {
-    await userBox.put('user', user);
-  }
-
-  /// Get user data from Hive
-  UserHiveModel? getUser() {
-    return userBox.get('user');
-  }
-
-  /// Delete user from local storage
-  Future<void> deleteUser() async {
-    await userBox.delete('user');
-  }
-
-  /// Check if user exists locally
-  bool isUserLoggedIn() {
-    return userBox.containsKey('user');
+  Future<UserEntity?> getCachedUser() async {
+    final data = await localDataSource.getCachedUser();
+    if (data != null) {
+      return UserEntity(
+        id: data.id,
+        firstName: data.firstName,
+        lastName: data.lastName,
+        email: data.email,
+        phoneNumber: data.phoneNumber,
+        token: data.token,
+      );
+    }
+    return null;
   }
 }

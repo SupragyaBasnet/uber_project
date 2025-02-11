@@ -9,38 +9,25 @@ part of 'captain_api_model.dart';
 CaptainApiModel _$CaptainApiModelFromJson(Map<String, dynamic> json) =>
     CaptainApiModel(
       id: json['id'] as String,
+      firstName: json['firstName'] as String,
+      lastName: json['lastName'] as String,
       email: json['email'] as String,
-      phonenumber: json['phonenumber'] as String,
-      firstname: json['firstname'] as String,
-      lastname: json['lastname'] as String,
-      password: json['password'] as String,
-      token: json['token'] as String,
-      vehicle: VehicleModel.fromJson(json['vehicle'] as Map<String, dynamic>),
+      phoneNumber: json['phoneNumber'] as String,
+      vehicleType: json['vehicleType'] as String,
+      vehiclePlate: json['vehiclePlate'] as String,
+      vehicleName: json['vehicleName'] as String,
+      vehicleCapacity: json['vehicleCapacity'] as String,
     );
 
 Map<String, dynamic> _$CaptainApiModelToJson(CaptainApiModel instance) =>
     <String, dynamic>{
       'id': instance.id,
+      'firstName': instance.firstName,
+      'lastName': instance.lastName,
       'email': instance.email,
-      'phonenumber': instance.phonenumber,
-      'firstname': instance.firstname,
-      'lastname': instance.lastname,
-      'password': instance.password,
-      'token': instance.token,
-      'vehicle': instance.vehicle,
-    };
-
-VehicleModel _$VehicleModelFromJson(Map<String, dynamic> json) => VehicleModel(
-      color: json['color'] as String,
-      plate: json['plate'] as String,
-      capacity: (json['capacity'] as num).toInt(),
-      vehicleType: json['vehicleType'] as String,
-    );
-
-Map<String, dynamic> _$VehicleModelToJson(VehicleModel instance) =>
-    <String, dynamic>{
-      'color': instance.color,
-      'plate': instance.plate,
-      'capacity': instance.capacity,
+      'phoneNumber': instance.phoneNumber,
       'vehicleType': instance.vehicleType,
+      'vehiclePlate': instance.vehiclePlate,
+      'vehicleName': instance.vehicleName,
+      'vehicleCapacity': instance.vehicleCapacity,
     };

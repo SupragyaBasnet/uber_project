@@ -6,43 +6,28 @@ part of 'captain_dto.dart';
 // JsonSerializableGenerator
 // **************************************************************************
 
-CaptainDTO _$CaptainDTOFromJson(Map<String, dynamic> json) => CaptainDTO(
-      phonenumber: json['phonenumber'] as String,
+_$CaptainDTOImpl _$$CaptainDTOImplFromJson(Map<String, dynamic> json) =>
+    _$CaptainDTOImpl(
+      id: json['id'] as String,
+      firstName: json['firstName'] as String,
+      lastName: json['lastName'] as String,
       email: json['email'] as String,
-      password: json['password'] as String,
-      fullname: FullName.fromJson(json['fullname'] as Map<String, dynamic>),
-      vehicle: Vehicle.fromJson(json['vehicle'] as Map<String, dynamic>),
-    );
-
-Map<String, dynamic> _$CaptainDTOToJson(CaptainDTO instance) =>
-    <String, dynamic>{
-      'phonenumber': instance.phonenumber,
-      'email': instance.email,
-      'password': instance.password,
-      'fullname': instance.fullname,
-      'vehicle': instance.vehicle,
-    };
-
-FullName _$FullNameFromJson(Map<String, dynamic> json) => FullName(
-      firstname: json['firstname'] as String,
-      lastname: json['lastname'] as String,
-    );
-
-Map<String, dynamic> _$FullNameToJson(FullName instance) => <String, dynamic>{
-      'firstname': instance.firstname,
-      'lastname': instance.lastname,
-    };
-
-Vehicle _$VehicleFromJson(Map<String, dynamic> json) => Vehicle(
-      color: json['color'] as String,
-      plate: json['plate'] as String,
-      capacity: (json['capacity'] as num).toInt(),
+      phoneNumber: json['phoneNumber'] as String,
       vehicleType: json['vehicleType'] as String,
+      vehiclePlate: json['vehiclePlate'] as String,
+      vehicleName: json['vehicleName'] as String,
+      vehicleCapacity: json['vehicleCapacity'] as String,
     );
 
-Map<String, dynamic> _$VehicleToJson(Vehicle instance) => <String, dynamic>{
-      'color': instance.color,
-      'plate': instance.plate,
-      'capacity': instance.capacity,
+Map<String, dynamic> _$$CaptainDTOImplToJson(_$CaptainDTOImpl instance) =>
+    <String, dynamic>{
+      'id': instance.id,
+      'firstName': instance.firstName,
+      'lastName': instance.lastName,
+      'email': instance.email,
+      'phoneNumber': instance.phoneNumber,
       'vehicleType': instance.vehicleType,
+      'vehiclePlate': instance.vehiclePlate,
+      'vehicleName': instance.vehicleName,
+      'vehicleCapacity': instance.vehicleCapacity,
     };

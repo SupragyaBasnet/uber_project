@@ -1,38 +1,37 @@
-import 'package:hive/hive.dart';
 import 'package:json_annotation/json_annotation.dart';
+import '../../domain/entity/user_entity.dart';
 
 part 'user_api_model.g.dart';
 
-@HiveType(typeId: 0)
 @JsonSerializable()
-class UserApiModel extends HiveObject {
-  @HiveField(0)
+class UserApiModel {
   final String id;
-
-  @HiveField(1)
+  final String firstName;
+  final String lastName;
   final String email;
-
-  @HiveField(2)
-  final String phonenumber;
-
-  @HiveField(3)
-  final String fullname;
-
-  @HiveField(4)
+  final String phoneNumber;
   final String token;
 
   UserApiModel({
     required this.id,
+    required this.firstName,
+    required this.lastName,
     required this.email,
-    required this.phonenumber,
-    required this.fullname,
+    required this.phoneNumber,
     required this.token,
   });
 
-  /// Convert JSON to `UserApiModel`
-  factory UserApiModel.fromJson(Map<String, dynamic> json) =>
-      _$UserApiModelFromJson(json);
-
-  /// Convert `UserApiModel` to JSON
+  factory UserApiModel.fromJson(Map<String, dynamic> json) => _$UserApiModelFromJson(json);
   Map<String, dynamic> toJson() => _$UserApiModelToJson(this);
+
+  UserEntity toEntity() {
+    return UserEntity(
+      id: id,
+      firstName: firstName,
+      lastName: lastName,
+      email: email,
+      phoneNumber: phoneNumber,
+      token: token,
+    );
+  }
 }

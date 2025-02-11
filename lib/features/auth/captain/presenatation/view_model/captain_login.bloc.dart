@@ -1,38 +1,27 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:uber_mobile_app_project/core/network/api_service.dart';
-import 'package:uber_mobile_app_project/features/auth/captain/domain/repository/captain_repository.dart';
+import 'package:dartz/dartz.dart';
+import '../../../../../core/error/failure.dart';
+import '../../domain/entity/captain_entity.dart';
+import '../../domain/use_case/captain_login_usecase.dart';
 import 'captain_login_event.dart';
 import 'captain_login_state.dart';
 
 class CaptainLoginBloc extends Bloc<CaptainLoginEvent, CaptainLoginState> {
-  final ApiService apiService;
+  final CaptainLoginUseCase loginUseCase;
 
-  CaptainLoginBloc({required this.apiService, required CaptainRepository captainRepository}) : super(CaptainLoginInitial()) {
-    on<CaptainLoginRequestEvent>(_onLoginSubmitted);
+  CaptainLoginBloc({required this.loginUseCase}) : super(CaptainLoginInitial()) {
+    on<CaptainLoginRequested>(_onLoginRequested);
   }
 
-  Future<void> _onLoginSubmitted(
-      CaptainLoginRequestEvent event,
-      Emitter<CaptainLoginState> emit,
-      ) async {
+  Future<void> _onLoginRequested(
+      CaptainLoginRequested event, Emitter<CaptainLoginState> emit) async {
     emit(CaptainLoginLoading());
 
-    try {
-      final response = await apiService.captainLogin(
-        event.phonenumber,
-        event.password,
-      );
+    final Either<Failure, CaptainEntity> result = await loginUseCase(event.credentials);
 
-      if (response.containsKey("token") && response.containsKey("captain")) {
-        emit(CaptainLoginSuccess(
-          token: response["token"],
-          captainId: response["captain"]["_id"],
-        ));
-      } else {
-        emit(CaptainLoginFailure(message: "Invalid credentials. Please try again."));
-      }
-    } catch (e) {
-      emit(CaptainLoginFailure(message: "Network error. Please check your connection."));
-    }
+    result.fold(
+          (failure) => emit(CaptainLoginFailure(failure.message)),
+          (captain) => emit(CaptainLoginSuccess(captain)), // ✅ Now using CaptainEntity
+    );
   }
 }

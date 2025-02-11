@@ -1,64 +1,24 @@
 import 'package:dio/dio.dart';
-import '../../../../../../app/constants/api_endpoints.dart';
-import '../../../../../../core/error/exception.dart';
 import '../../model/captain_api_model.dart';
 
-abstract class CaptainRemoteDatasource {
-  Future<CaptainApiModel> loginCaptain(String phonenumber, String password);
-  Future<CaptainApiModel> registerCaptain(CaptainApiModel captain);
-  Future<void> logoutCaptain();
+abstract class CaptainRemoteDataSource {
+  Future<CaptainApiModel> loginCaptain(Map<String, dynamic> credentials);
+  Future<CaptainApiModel> registerCaptain(Map<String, dynamic> captainData); // ✅ Ensure this exists
 }
-
-class CaptainRemoteDatasourceImpl implements CaptainRemoteDatasource {
+class CaptainRemoteDataSourceImpl implements CaptainRemoteDataSource {
   final Dio dio;
 
-  CaptainRemoteDatasourceImpl(this.dio);
+  CaptainRemoteDataSourceImpl(this.dio);
 
   @override
-  Future<CaptainApiModel> loginCaptain(String phonenumber, String password) async {
-    try {
-      final response = await dio.post(
-        ApiEndpoints.captainLogin,
-        data: {
-          "phonenumber": phonenumber,
-          "password": password,
-        },
-      );
-
-      if (response.statusCode == 200) {
-        return CaptainApiModel.fromJson(response.data["captain"]);
-      } else {
-        throw ServerException(response.data["message"]);
-      }
-    } catch (e) {
-      throw ServerException(e.toString());
-    }
+  Future<CaptainApiModel> loginCaptain(Map<String, dynamic> credentials) async {
+    final response = await dio.post('/captain/login', data: credentials);
+    return CaptainApiModel.fromJson(response.data);
   }
 
   @override
-  Future<CaptainApiModel> registerCaptain(CaptainApiModel captain) async {
-    try {
-      final response = await dio.post(
-        ApiEndpoints.captainRegister,
-        data: captain.toJson(),
-      );
-
-      if (response.statusCode == 201) {
-        return CaptainApiModel.fromJson(response.data["captain"]);
-      } else {
-        throw ServerException(response.data["message"]);
-      }
-    } catch (e) {
-      throw ServerException(e.toString());
-    }
-  }
-
-  @override
-  Future<void> logoutCaptain() async {
-    try {
-      await dio.get(ApiEndpoints.captainLogout);
-    } catch (e) {
-      throw ServerException(e.toString());
-    }
+  Future<CaptainApiModel> registerCaptain(Map<String, dynamic> captainData) async { // ✅ Fixed
+    final response = await dio.post('/captain/signup', data: captainData);
+    return CaptainApiModel.fromJson(response.data);
   }
 }

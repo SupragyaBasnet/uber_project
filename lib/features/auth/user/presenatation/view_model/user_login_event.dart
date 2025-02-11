@@ -5,12 +5,11 @@ abstract class UserLoginEvent extends Equatable {
   List<Object?> get props => [];
 }
 
-class UserLoginSubmitted extends UserLoginEvent {
-  final String phonenumber;
-  final String password;
+class UserLoginRequested extends UserLoginEvent {
+  final Map<String, dynamic> credentials;
 
-  UserLoginSubmitted({required this.phonenumber, required this.password});
+  UserLoginRequested(this.credentials);
 
   @override
-  List<Object?> get props => [phonenumber, password];
+  List<Object?> get props => [credentials];
 }

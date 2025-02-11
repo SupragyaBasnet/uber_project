@@ -1,38 +1,29 @@
 import 'package:equatable/equatable.dart';
+import '../../domain/entity/captain_entity.dart';
 
 abstract class CaptainLoginState extends Equatable {
-  const CaptainLoginState();
-
   @override
   List<Object?> get props => [];
 }
 
-// Initial State
 class CaptainLoginInitial extends CaptainLoginState {}
 
-// Loading State (Show Progress Indicator)
 class CaptainLoginLoading extends CaptainLoginState {}
 
-// Success State (Captain Logged In Successfully)
-class CaptainLoginSuccess extends CaptainLoginState {
-  final String token;
-  final String captainId;
+class CaptainLoginSuccess extends CaptainLoginState { // ✅ Accept CaptainEntity
+  final CaptainEntity captain;
 
-  const CaptainLoginSuccess({
-    required this.token,
-    required this.captainId,
-  });
+  CaptainLoginSuccess(this.captain);
 
   @override
-  List<Object?> get props => [token, captainId];
+  List<Object?> get props => [captain];
 }
 
-// Failure State (API Error, Validation Error)
 class CaptainLoginFailure extends CaptainLoginState {
-  final String message;
+  final String error;
 
-  const CaptainLoginFailure({required this.message});
+  CaptainLoginFailure(this.error);
 
   @override
-  List<Object?> get props => [message];
+  List<Object?> get props => [error];
 }

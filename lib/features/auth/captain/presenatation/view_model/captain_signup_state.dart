@@ -1,27 +1,29 @@
 import 'package:equatable/equatable.dart';
+import '../../domain/entity/captain_entity.dart';
 
 abstract class CaptainSignupState extends Equatable {
-  const CaptainSignupState();
-
   @override
   List<Object?> get props => [];
 }
 
-// Initial State
 class CaptainSignupInitial extends CaptainSignupState {}
 
-// Loading State (Show Progress Indicator)
 class CaptainSignupLoading extends CaptainSignupState {}
 
-// Success State (Captain Signed Up Successfully)
-class CaptainSignupSuccess extends CaptainSignupState {}
+class CaptainSignupSuccess extends CaptainSignupState { // ✅ Accept CaptainEntity
+  final CaptainEntity captain;
 
-// Failure State (API Error, Validation Error)
-class CaptainSignupFailure extends CaptainSignupState {
-  final String message;
-
-  const CaptainSignupFailure(this.message);
+  CaptainSignupSuccess(this.captain);
 
   @override
-  List<Object?> get props => [message];
+  List<Object?> get props => [captain];
+}
+
+class CaptainSignupFailure extends CaptainSignupState {
+  final String error;
+
+  CaptainSignupFailure(this.error);
+
+  @override
+  List<Object?> get props => [error];
 }

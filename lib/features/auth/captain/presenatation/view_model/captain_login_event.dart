@@ -1,22 +1,15 @@
 import 'package:equatable/equatable.dart';
 
 abstract class CaptainLoginEvent extends Equatable {
-  const CaptainLoginEvent();
-
   @override
   List<Object?> get props => [];
 }
 
-// Event for Captain Login
-class CaptainLoginRequestEvent extends CaptainLoginEvent {
-  final String phonenumber;
-  final String password;
+class CaptainLoginRequested extends CaptainLoginEvent {
+  final Map<String, dynamic> credentials;
 
-  const CaptainLoginRequestEvent({
-    required this.phonenumber,
-    required this.password,
-  });
+  CaptainLoginRequested(this.credentials);
 
   @override
-  List<Object?> get props => [phonenumber, password];
+  List<Object?> get props => [credentials];
 }

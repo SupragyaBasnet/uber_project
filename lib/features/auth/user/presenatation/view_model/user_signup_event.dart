@@ -1,4 +1,3 @@
-import 'dart:io';
 import 'package:equatable/equatable.dart';
 
 abstract class UserSignupEvent extends Equatable {
@@ -6,23 +5,11 @@ abstract class UserSignupEvent extends Equatable {
   List<Object?> get props => [];
 }
 
-class UserSignupRequestEvent extends UserSignupEvent {
-  final String firstname;
-  final String lastname;
-  final String phonenumber;
-  final String email;
-  final String password;
-  final File? image; // New Optional Image Field
+class UserSignupRequested extends UserSignupEvent {
+  final Map<String, dynamic> userData;
 
-  UserSignupRequestEvent({
-    required this.firstname,
-    required this.lastname,
-    required this.phonenumber,
-    required this.email,
-    required this.password,
-    this.image, // Optional Image Parameter
-  });
+  UserSignupRequested(this.userData);
 
   @override
-  List<Object?> get props => [firstname, lastname, phonenumber, email, password, image];
+  List<Object?> get props => [userData];
 }

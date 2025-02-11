@@ -1,41 +1,56 @@
 import 'package:hive/hive.dart';
-import 'user_api_model.dart';
+import '../../domain/entity/user_entity.dart';
 
 part 'user_hive_model.g.dart';
 
-@HiveType(typeId: 1)
-class UserHiveModel extends HiveObject {
+@HiveType(typeId: 2)
+class UserHiveModel {
   @HiveField(0)
   final String id;
 
   @HiveField(1)
-  final String email;
+  final String firstName;
 
   @HiveField(2)
-  final String phonenumber;
+  final String lastName;
 
   @HiveField(3)
-  final String fullname;
+  final String email;
 
   @HiveField(4)
+  final String phoneNumber;
+
+  @HiveField(5)
   final String token;
 
   UserHiveModel({
     required this.id,
+    required this.firstName,
+    required this.lastName,
     required this.email,
-    required this.phonenumber,
-    required this.fullname,
+    required this.phoneNumber,
     required this.token,
   });
 
-  /// Convert `UserApiModel` to `UserHiveModel`
-  factory UserHiveModel.fromApiModel(UserApiModel apiModel) {
+  factory UserHiveModel.fromEntity(UserEntity user) {
     return UserHiveModel(
-      id: apiModel.id,
-      email: apiModel.email,
-      phonenumber: apiModel.phonenumber,
-      fullname: apiModel.fullname,
-      token: apiModel.token,
+      id: user.id,
+      firstName: user.firstName,
+      lastName: user.lastName,
+      email: user.email,
+      phoneNumber: user.phoneNumber,
+      token: user.token,
+    );
+  }
+
+  UserEntity toEntity() {
+    return UserEntity(
+      id: id,
+      firstName: firstName,
+      lastName: lastName,
+      email: email,
+      phoneNumber: phoneNumber,
+      token: token,
     );
   }
 }

@@ -1,54 +1,48 @@
 import 'package:json_annotation/json_annotation.dart';
+import '../../domain/entity/captain_entity.dart';
 
 part 'captain_api_model.g.dart';
 
 @JsonSerializable()
 class CaptainApiModel {
   final String id;
+  final String firstName;
+  final String lastName;
   final String email;
-  final String phonenumber;
-  final String firstname;
-  final String lastname;
-  final String password;  // ✅ Added password
-  final String token;
-  final VehicleModel vehicle;  // ✅ Replaced Map with a model
+  final String phoneNumber;
+  final String vehicleType;
+  final String vehiclePlate;
+  final String vehicleName;
+  final String vehicleCapacity;
 
   CaptainApiModel({
     required this.id,
+    required this.firstName,
+    required this.lastName,
     required this.email,
-    required this.phonenumber,
-    required this.firstname,
-    required this.lastname,
-    required this.password,  // ✅ Added password
-    required this.token,
-    required this.vehicle,
+    required this.phoneNumber,
+    required this.vehicleType,
+    required this.vehiclePlate,
+    required this.vehicleName,
+    required this.vehicleCapacity,
   });
 
-  /// Convert JSON to `CaptainApiModel`
   factory CaptainApiModel.fromJson(Map<String, dynamic> json) =>
       _$CaptainApiModelFromJson(json);
 
-  /// Convert `CaptainApiModel` to JSON
   Map<String, dynamic> toJson() => _$CaptainApiModelToJson(this);
-}
 
-/// ✅ Vehicle Model
-@JsonSerializable()
-class VehicleModel {
-  final String color;
-  final String plate;
-  final int capacity;
-  final String vehicleType;
-
-  VehicleModel({
-    required this.color,
-    required this.plate,
-    required this.capacity,
-    required this.vehicleType,
-  });
-
-  factory VehicleModel.fromJson(Map<String, dynamic> json) =>
-      _$VehicleModelFromJson(json);
-
-  Map<String, dynamic> toJson() => _$VehicleModelToJson(this);
+  CaptainEntity toEntity() {
+    return CaptainEntity(
+      id: id,
+      firstName: firstName,
+      lastName: lastName,
+      email: email,
+      phoneNumber: phoneNumber,
+      vehicleType: vehicleType,
+      vehiclePlate: vehiclePlate,
+      vehicleName: vehicleName,
+      vehicleCapacity: vehicleCapacity,
+    );
+  }
 }
