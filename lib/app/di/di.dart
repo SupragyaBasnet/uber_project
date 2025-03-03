@@ -7,7 +7,18 @@ import '../../core/network/hive_service.dart';
 
 // ✅ Onboarding & Splash Dependencies
 import '../../features/auth/captain/presenatation/view_model/captain_login.bloc.dart';
-import '../../features/captain_home/presenatation/view_model/splash_cubit.dart';
+import '../../features/auth/forgot_password/domain/repository/forgot_password_repository_impl.dart';
+import '../../features/auth/forgot_password/presenatation/view_model/forgot_password_bloc.dart';
+
+import '../../features/captain_home/data/data_source/local_data_source/captain_home_local_data_source.dart';
+import '../../features/captain_home/data/data_source/remote_data_source/captain_home_remote_data_source.dart';
+import '../../features/captain_home/data/repository/captain_home_local_repository.dart';
+import '../../features/captain_home/data/repository/captain_home_remote_repository.dart';
+import '../../features/captain_home/domain/repository/captain_home_repository.dart';
+import '../../features/captain_home/domain/repository/captain_home_repository_impl.dart';
+import '../../features/captain_home/domain/use_case/get_captain_profile_usease.dart';
+import '../../features/captain_home/presenatation/view_model/captain_home_bloc.dart';
+import '../../features/home/presenatation/view_model/splash_cubit.dart';
 import '../../features/onboarding/presenatation/view_model/onboarding_cubit.dart';
 
 // ✅ User Authentication Dependencies
@@ -27,6 +38,12 @@ import '../../features/auth/captain/domain/use_case/captain_login_usecase.dart';
 import '../../features/auth/captain/domain/use_case/captain_signup_usecase.dart';
 import '../../features/auth/captain/presenatation/view_model/captain_signup_bloc.dart';
 
+//forgot-password
+import '../../features/auth/forgot_password/data/data_source/local_datasource/forgot_password_local_datasource.dart';
+import '../../features/auth/forgot_password/data/data_source/remote_datasource/forgot_password_remote_datasource.dart';
+import '../../features/auth/forgot_password/domain/repository/forgot_password_repository.dart';
+import '../../features/auth/forgot_password/domain/use_case/forgot_password_usecase.dart';
+
 // ✅ Dependency Injection Container
 final GetIt getIt = GetIt.instance;
 
@@ -37,6 +54,8 @@ Future<void> initDependencies() async {
   _initUserAuthDependencies();
   _initCaptainAuthDependencies();
   _initSplashOnboardingDependencies();
+  _initForgotPasswordDependencies();
+  _initCaptainHomeDependencies();
 }
 
 // ✅ Hive Database Service
@@ -48,7 +67,7 @@ Future<void> _initHiveService() async {
 void _initApiService() {
   getIt.registerLazySingleton<Dio>(() {
     Dio dio = Dio();
-    dio.options.baseUrl = "http://10.0.2.2:3000/api/v1/";
+    dio.options.baseUrl = "http://192.168.68.115:3000/api/v1/";
     dio.options.connectTimeout = const Duration(seconds: 100);
     dio.options.receiveTimeout = const Duration(seconds: 100);
     dio.options.headers = {'Content-Type': 'application/json'};
@@ -120,12 +139,98 @@ void _initCaptainAuthDependencies() {
   );
 }
 
-// ✅ Onboarding & Splash Dependencies
+//  Onboarding & Splash Dependencies
 void _initSplashOnboardingDependencies() {
   getIt.registerFactory<SplashCubit>(() => SplashCubit());
   getIt.registerFactory<OnboardingCubit>(() => OnboardingCubit());
 }
 
+//  Forgot Password Initialization
+void _initForgotPasswordDependencies() {
+  getIt.registerLazySingleton<ForgotPasswordLocalDataSource>(
+        () => ForgotPasswordLocalDataSource(),
+  );
+
+  getIt.registerLazySingleton<ForgotPasswordRemoteDataSource>(
+        () => ForgotPasswordRemoteDataSource(dio: getIt<Dio>()),
+  );
+
+  getIt.registerLazySingleton<ForgotPasswordRepository>(
+        () => ForgotPasswordRepositoryImpl(
+      localDataSource: getIt<ForgotPasswordLocalDataSource>(),
+      remoteDataSource: getIt<ForgotPasswordRemoteDataSource>(),
+    ),
+  );
+
+  getIt.registerLazySingleton<ForgotPasswordUseCase>(
+        () => ForgotPasswordUseCase(repository: getIt<ForgotPasswordRepository>()),
+  );
+
+  getIt.registerFactory<ForgotPasswordBloc>(
+        () => ForgotPasswordBloc(useCase: getIt<ForgotPasswordUseCase>()),
+  );
+}
+
+// ✅ Captain Home Dependencies (FIXED)
+void _initCaptainHomeDependencies() {
+  getIt.registerLazySingleton<CaptainHomeRemoteDataSource>(
+        () => CaptainHomeRemoteDataSource(dio: getIt<Dio>()),
+  );
+
+  getIt.registerLazySingleton<CaptainHomeLocalDataSource>(
+        () => CaptainHomeLocalDataSource(sharedPreferences: getIt<SharedPreferences>()),
+  );
+
+  getIt.registerLazySingleton<CaptainHomeRemoteRepository>(
+        () => CaptainHomeRemoteRepository(remoteDataSource: getIt<CaptainHomeRemoteDataSource>()),
+  );
+
+  getIt.registerLazySingleton<CaptainHomeLocalRepository>(
+        () => CaptainHomeLocalRepository(localDataSource: getIt<CaptainHomeLocalDataSource>()),
+  );
+
+  getIt.registerLazySingleton<CaptainHomeRepository>(
+        () => CaptainHomeRepositoryImpl(
+      remoteRepo: getIt<CaptainHomeRemoteRepository>(), // ✅ Corrected
+      localRepo: getIt<CaptainHomeLocalRepository>(),   // ✅ Corrected
+    ),
+  );
+
+  getIt.registerLazySingleton<GetCaptainProfileUseCase>(
+        () => GetCaptainProfileUseCase(repository: getIt<CaptainHomeRepository>()),
+  );
+
+  getIt.registerFactory<CaptainHomeBloc>(
+        () => CaptainHomeBloc(getCaptainProfileUseCase: getIt<GetCaptainProfileUseCase>()),
+  );
+}
+
+// ✅ Captain Authentication Dependencies (FIXED)
+void _initCaptainAuthDependencies() {
+  getIt.registerLazySingleton<CaptainRemoteDataSource>(
+        () => CaptainRemoteDataSourceImpl(getIt<ApiService>()),
+  );
+
+  getIt.registerLazySingleton<CaptainRepository>(
+        () => CaptainRemoteRepository(remoteDataSource: getIt<CaptainRemoteDataSource>()),
+  );
+
+  getIt.registerLazySingleton<CaptainLoginUseCase>(
+        () => CaptainLoginUseCase(repository: getIt<CaptainRepository>()),
+  );
+
+  getIt.registerLazySingleton<CaptainSignupUseCase>(
+        () => CaptainSignupUseCase(repository: getIt<CaptainRepository>()),
+  );
+
+  getIt.registerFactory<CaptainLoginBloc>(
+        () => CaptainLoginBloc(loginUseCase: getIt<CaptainLoginUseCase>()),
+  );
+
+  getIt.registerFactory<CaptainSignupBloc>(
+        () => CaptainSignupBloc(signupUseCase: getIt<CaptainSignupUseCase>()),
+  );
+}
 
 // 🚀 Future Dependencies (Commented Out)
 /*

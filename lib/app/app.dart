@@ -5,13 +5,18 @@ import 'package:uber_mobile_app_project/app/shared_prefs/token_shared_prefs.dart
 import 'package:uber_mobile_app_project/features/auth/captain/presenatation/view/captain_login_screen.dart';
 import 'package:uber_mobile_app_project/features/auth/captain/presenatation/view/captain_signup_screen.dart';
 import 'package:uber_mobile_app_project/features/auth/captain/presenatation/view_model/captain_signup_bloc.dart';
-import 'package:uber_mobile_app_project/features/captain_home/presenatation/view/splash_view.dart';
+
 
 import '../core/theme/app_theme.dart';
 import '../features/auth/captain/presenatation/view_model/captain_login.bloc.dart';
+import '../features/auth/forgot_password/presenatation/view/forgot_password__screen.dart';
 import '../features/auth/user/presenatation/view/user_login_screen.dart';
 import '../features/auth/user/presenatation/view/user_signup_screen.dart';
-import '../features/captain_home/presenatation/view_model/splash_cubit.dart';
+
+import '../features/captain_home/presenatation/view/captain_home.dart';
+import '../features/captain_home/presenatation/view_model/captain_home_bloc.dart';
+import '../features/home/presenatation/view/splash_view.dart';
+import '../features/home/presenatation/view_model/splash_cubit.dart';
 import '../features/onboarding/presenatation/view/onboarding_screen_view.dart';
 import '../features/onboarding/presenatation/view_model/onboarding_cubit.dart';
 import 'di/di.dart';
@@ -34,7 +39,7 @@ class MyApp extends StatelessWidget {
         BlocProvider(create: (context) => getIt<CaptainLoginBloc>()),
         BlocProvider(create: (context) => getIt<CaptainSignupBloc>()),
         // BlocProvider(create: (context) => getIt<HomeBloc>()),
-        // BlocProvider(create: (context) => getIt<CaptainHomeBloc>()),
+        BlocProvider(create: (context) => getIt<CaptainHomeBloc>()),
         // BlocProvider(create: (context) => getIt<RideBloc>()),
       ],
       child: MaterialApp(
@@ -46,13 +51,13 @@ class MyApp extends StatelessWidget {
         routes: {
           '/': (context) => SplashView(),
           '/onboarding': (context) => OnboardingScreenView(),
-          '/user-login': (context) => UserLoginScreen(),
-          '/user-register': (context) => UserSignupScreen(),
+          '/login': (context) => UserLoginScreen(),
+          '/signup': (context) => UserSignupScreen(),
           '/captain-login': (context) => CaptainLoginScreen(),
-          '/captain-register': (context) => CaptainSignupScreen(),
-          // '/forgot-password': (context) => ForgotPasswordScreen(),
+          '/captain-signup': (context) => CaptainSignupScreen(),
+          '/forgot-password': (context) => ForgotPasswordScreen(),
           // '/home': (context) => HomeScren(),
-          // '/captain-home': (context) => CaptainHomeScreen(),
+          '/captain-home': (context) => CaptainHome(),
         },
       ),
     );

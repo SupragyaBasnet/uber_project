@@ -1,3 +1,5 @@
+// emulator -avd Pixel_7_Pro_API_30
+
 class ApiEndpoints {
   ApiEndpoints._(); // Private constructor to prevent instantiation
 

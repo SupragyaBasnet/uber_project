@@ -40,47 +40,79 @@ class _UserLoginScreenState extends State<UserLoginScreen> {
           }
         },
         child: Scaffold(
-          body: SingleChildScrollView(
-            padding: EdgeInsets.all(20),
-            child: Column(
-              children: [
-                SizedBox(height: 50),
-                Image.asset("assets/EasyGo.png", height: 100), // Logo
-                SizedBox(height: 20),
-                Text("User Login", style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
+          body: Center(
+            child: SingleChildScrollView(
+              padding: EdgeInsets.symmetric(horizontal: 30, vertical: 50),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  // ✅ Circular Logo
+                  CircleAvatar(
+                    radius: 50,
+                    backgroundImage: AssetImage("assets/images/EasyGo.png"),
+                  ),
+                  SizedBox(height: 20),
 
-                _buildTextField("Phone Number", phoneController, prefix: "+977"),
-                _buildPasswordField(),
+                  // ✅ Title
+                  Text(
+                    "User Login",
+                    style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+                  ),
+                  SizedBox(height: 30),
 
-                SizedBox(height: 20),
+                  // ✅ Phone Number Field
+                  _buildTextField("Phone Number", phoneController, prefix: "+977"),
+                  SizedBox(height: 20),
 
-                // ✅ Forgot Password Link
-                TextButton(
-                  onPressed: () => Navigator.pushNamed(context, "/forgot-password"),
-                  child: Text("Forgot Password?", style: TextStyle(color: Colors.blue)),
-                ),
+                  // ✅ Password Field
+                  _buildPasswordField(),
+                  SizedBox(height: 20),
 
-                // ✅ Login Button
-                ElevatedButton(
-                  onPressed: _loginUser,
-                  child: Text("Login"),
-                ),
+                  // ✅ Forgot Password Link
+                  Align(
+                    alignment: Alignment.centerRight,
+                    child: TextButton(
+                      onPressed: () => Navigator.pushNamed(context, "/forgot-password"),
+                      child: Text("Forgot Password?", style: TextStyle(color: Colors.blue)),
+                    ),
+                  ),
 
-                SizedBox(height: 10),
+                  // ✅ Login Button
+                  SizedBox(
+                    width: double.infinity,
+                    child: ElevatedButton(
+                      onPressed: _loginUser,
+                      style: ElevatedButton.styleFrom(
+                        padding: EdgeInsets.symmetric(vertical: 12),
+                        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+                      ),
+                      child: Text("Login", style: TextStyle(fontSize: 18)),
+                    ),
+                  ),
+                  SizedBox(height: 10),
 
-                // ✅ Signup Button
-                TextButton(
-                  onPressed: () => Navigator.pushNamed(context, "/signup"),
-                  child: Text("New here? Create an account"),
-                ),
+                  // ✅ Signup Link
+                  TextButton(
+                    onPressed: () => Navigator.pushNamed(context, "/signup"),
+                    child: Text("New here? Create an account"),
+                  ),
+                  SizedBox(height: 10),
 
-                // ✅ Sign in as Captain Button
-                ElevatedButton(
-                  onPressed: () => Navigator.pushNamed(context, "/captain-login"),
-                  style: ElevatedButton.styleFrom(backgroundColor: Colors.green),
-                  child: Text("Sign in as Captain"),
-                ),
-              ],
+                  // ✅ Sign in as Captain Button
+                  SizedBox(
+                    width: double.infinity,
+                    child: ElevatedButton(
+                      onPressed: () => Navigator.pushNamed(context, "/captain-login"),
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: Colors.green,
+                        padding: EdgeInsets.symmetric(vertical: 12),
+                        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+                      ),
+                      child: Text("Sign in as Captain", style: TextStyle(fontSize: 18)),
+                    ),
+                  ),
+                ],
+              ),
             ),
           ),
         ),
@@ -91,10 +123,12 @@ class _UserLoginScreenState extends State<UserLoginScreen> {
   Widget _buildTextField(String label, TextEditingController controller, {String? prefix}) {
     return TextField(
       controller: controller,
+      keyboardType: TextInputType.phone,
       decoration: InputDecoration(
         labelText: label,
         prefixText: prefix,
-        border: OutlineInputBorder(),
+        border: OutlineInputBorder(borderRadius: BorderRadius.circular(10)),
+        contentPadding: EdgeInsets.symmetric(horizontal: 15, vertical: 15),
       ),
     );
   }
@@ -105,11 +139,12 @@ class _UserLoginScreenState extends State<UserLoginScreen> {
       obscureText: !showPassword,
       decoration: InputDecoration(
         labelText: "Password",
+        border: OutlineInputBorder(borderRadius: BorderRadius.circular(10)),
+        contentPadding: EdgeInsets.symmetric(horizontal: 15, vertical: 15),
         suffixIcon: IconButton(
-          icon: Icon(showPassword ? Icons.visibility : Icons.visibility_off), // ✅ Material Icons Used
+          icon: Icon(showPassword ? Icons.visibility : Icons.visibility_off),
           onPressed: () => setState(() => showPassword = !showPassword),
         ),
-        border: OutlineInputBorder(),
       ),
     );
   }

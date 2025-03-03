@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:smooth_page_indicator/smooth_page_indicator.dart'; //
-
-
+import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 
 import '../../../../app/di/di.dart';
 import 'onboarding_page.dart';
@@ -21,11 +19,14 @@ class _OnboardingScreenViewState extends State<OnboardingScreenView> {
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (_) => getIt<OnboardingCubit>(), // ✅ Fix serviceLocator error
+      create: (_) => getIt<OnboardingCubit>(),
       child: BlocListener<OnboardingCubit, int>(
         listener: (context, currentPage) {
-          if (currentPage == 3) {
-            Navigator.pushReplacementNamed(context, "/user-login");
+          // ✅ Navigate to login when reaching the last page (index 2)
+          if (currentPage == 2) {
+            Future.delayed(const Duration(milliseconds: 500), () {
+              Navigator.pushReplacementNamed(context, "/user-login");
+            });
           }
         },
         child: Scaffold(
@@ -69,13 +70,12 @@ class _OnboardingScreenViewState extends State<OnboardingScreenView> {
                     ),
                   ),
 
-                  // ✅ Page Indicator (Fixed)
                   Padding(
                     padding: const EdgeInsets.symmetric(vertical: 10),
                     child: SmoothPageIndicator(
                       controller: _pageController,
                       count: 3,
-                      effect: ExpandingDotsEffect( // ✅ Fixed import
+                      effect: ExpandingDotsEffect(
                         activeDotColor: Theme.of(context).primaryColor,
                         dotColor: Colors.grey.shade400,
                         dotHeight: 10,
@@ -84,49 +84,21 @@ class _OnboardingScreenViewState extends State<OnboardingScreenView> {
                     ),
                   ),
 
-                  // ✅ Navigation Buttons (Fixed)
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      // Back Button
-                      IconButton(
-                        icon: const Icon(Icons.arrow_back),
-                        color: currentPage == 0 ? Colors.grey : Colors.black,
-                        onPressed: currentPage == 0
-                            ? null
-                            : () {
-                          _pageController.previousPage(
-                            duration: const Duration(milliseconds: 300),
-                            curve: Curves.ease,
-                          );
-                          context.read<OnboardingCubit>().updatePage(currentPage - 1);
-                        },
-                      ),
-
-                      // Forward Button
-                      IconButton(
-                        icon: Icon(
-                          currentPage == 2 ? Icons.check : Icons.arrow_forward,
-                          color: Colors.black,
-                        ),
+                  // Show "Next" arrow ONLY on the last page
+                  if (currentPage == 2)
+                    Padding(
+                      padding: const EdgeInsets.only(bottom: 20),
+                      child: IconButton(
+                        icon: const Icon(Icons.arrow_forward, size: 32),
+                        color: Theme.of(context).primaryColor,
                         onPressed: () {
-                          if (currentPage < 2) {
-                            _pageController.nextPage(
-                              duration: const Duration(milliseconds: 300),
-                              curve: Curves.ease,
-                            );
-                            context.read<OnboardingCubit>().updatePage(currentPage + 1);
-                          } else {
-                            // ✅ Ensure onboarding completes and triggers navigation
-                            context.read<OnboardingCubit>().updatePage(3);
-                          }
+                          Navigator.pushReplacementNamed(context, "/login");
                         },
                       ),
-                    ],
-                  ),
+                    ),
                 ],
               );
-           },
+            },
           ),
         ),
       ),

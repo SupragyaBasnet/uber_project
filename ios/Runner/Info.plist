@@ -45,5 +45,12 @@
 	<true/>
 	<key>UIApplicationSupportsIndirectInputEvents</key>
 	<true/>
+	<!-- ✅ LOCATION PERMISSIONS -->
+	<key>NSLocationWhenInUseUsageDescription</key>
+	<string>We need your location to show live tracking.</string>
+	<key>NSLocationAlwaysUsageDescription</key>
+	<string>We need your location to track your ride.</string>
+	<key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
+	<string>We need your location for continuous tracking.</string>
 </dict>
 </plist>

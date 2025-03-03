@@ -36,7 +36,7 @@ class _UserSignupScreenState extends State<UserSignupScreen> {
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (_) => getIt<UserSignupBloc>(), // ✅ FIX: Use Dependency Injection to get UserSignupBloc
+      create: (_) => getIt<UserSignupBloc>(), // ✅ Use Dependency Injection
       child: BlocListener<UserSignupBloc, UserSignupState>(
         listener: (context, state) {
           if (state is UserSignupSuccess) {
@@ -48,50 +48,84 @@ class _UserSignupScreenState extends State<UserSignupScreen> {
           }
         },
         child: Scaffold(
-          body: SingleChildScrollView(
-            padding: EdgeInsets.all(20),
-            child: Column(
-              children: [
-                SizedBox(height: 50),
-                Image.asset("assets/EasyGo.png", height: 100), // Logo
-                SizedBox(height: 20),
-                Text("Create Your Account", style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
+          body: Center(
+            child: SingleChildScrollView(
+              padding: EdgeInsets.symmetric(horizontal: 30, vertical: 50),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  // ✅ Circular Logo
+                  CircleAvatar(
+                    radius: 50,
+                    backgroundImage: AssetImage("assets/images/EasyGo.png"),
+                  ),
+                  SizedBox(height: 20),
 
-                Row(
-                  children: [
-                    Expanded(child: _buildTextField("First Name", firstNameController)),
-                    SizedBox(width: 10),
-                    Expanded(child: _buildTextField("Last Name", lastNameController)),
-                  ],
-                ),
+                  // ✅ Title
+                  Text(
+                    "Create Your Account as a User",
+                    style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+                  ),
+                  SizedBox(height: 30),
 
-                _buildTextField("Email", emailController),
-                _buildTextField("Phone Number", phoneController, prefix: "+977"),
-                _buildPasswordField(),
+                  // ✅ First Name & Last Name Fields
+                  Row(
+                    children: [
+                      Expanded(child: _buildTextField("First Name", firstNameController)),
+                      SizedBox(width: 10),
+                      Expanded(child: _buildTextField("Last Name", lastNameController)),
+                    ],
+                  ),
+                  SizedBox(height: 20),
 
-                SizedBox(height: 20),
+                  // ✅ Email Field
+                  _buildTextField("Email", emailController),
+                  SizedBox(height: 20),
 
-                // ✅ Register Button
-                ElevatedButton(
-                  onPressed: _registerUser,
-                  child: Text("Sign Up"),
-                ),
+                  // ✅ Phone Number Field
+                  _buildTextField("Phone Number", phoneController, prefix: "+977"),
+                  SizedBox(height: 20),
 
-                SizedBox(height: 10),
+                  // ✅ Password Field
+                  _buildPasswordField(),
+                  SizedBox(height: 30),
 
-                // ✅ Login Button
-                TextButton(
-                  onPressed: () => Navigator.pushNamed(context, "/login"),
-                  child: Text("Already have an account? Login"),
-                ),
+                  // ✅ Sign Up Button
+                  SizedBox(
+                    width: double.infinity,
+                    child: ElevatedButton(
+                      onPressed: _registerUser,
+                      style: ElevatedButton.styleFrom(
+                        padding: EdgeInsets.symmetric(vertical: 12),
+                        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+                      ),
+                      child: Text("Sign Up", style: TextStyle(fontSize: 18)),
+                    ),
+                  ),
+                  SizedBox(height: 10),
 
-                // ✅ Signup as Captain Button
-                ElevatedButton(
-                  onPressed: () => Navigator.pushNamed(context, "/captain-signup"),
-                  style: ElevatedButton.styleFrom(backgroundColor: Colors.green),
-                  child: Text("Sign up as Captain"),
-                ),
-              ],
+                  // ✅ Already Have an Account? Login
+                  TextButton(
+                    onPressed: () => Navigator.pushNamed(context, "/login"),
+                    child: Text("Already have an account? Login"),
+                  ),
+                  SizedBox(height: 10),
+
+                  // ✅ Sign up as Captain Button
+                  SizedBox(
+                    width: double.infinity,
+                    child: ElevatedButton(
+                      onPressed: () => Navigator.pushNamed(context, "/captain-signup"),
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: Colors.green,
+                        padding: EdgeInsets.symmetric(vertical: 12),
+                        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+                      ),
+                      child: Text("Sign up as Captain", style: TextStyle(fontSize: 18)),
+                    ),
+                  ),
+                ],
+              ),
             ),
           ),
         ),
@@ -102,10 +136,12 @@ class _UserSignupScreenState extends State<UserSignupScreen> {
   Widget _buildTextField(String label, TextEditingController controller, {String? prefix}) {
     return TextField(
       controller: controller,
+      keyboardType: label == "Phone Number" ? TextInputType.phone : TextInputType.text,
       decoration: InputDecoration(
         labelText: label,
         prefixText: prefix,
-        border: OutlineInputBorder(),
+        border: OutlineInputBorder(borderRadius: BorderRadius.circular(10)),
+        contentPadding: EdgeInsets.symmetric(horizontal: 15, vertical: 15),
       ),
     );
   }
@@ -116,11 +152,12 @@ class _UserSignupScreenState extends State<UserSignupScreen> {
       obscureText: !showPassword,
       decoration: InputDecoration(
         labelText: "Password",
+        border: OutlineInputBorder(borderRadius: BorderRadius.circular(10)),
+        contentPadding: EdgeInsets.symmetric(horizontal: 15, vertical: 15),
         suffixIcon: IconButton(
           icon: Icon(showPassword ? Icons.visibility : Icons.visibility_off),
           onPressed: () => setState(() => showPassword = !showPassword),
         ),
-        border: OutlineInputBorder(),
       ),
     );
   }

@@ -15,12 +15,8 @@ class SplashCubit extends Cubit<void> {
 
       // Navigate to User Login Page if mounted
       if (context.mounted) {
-        Navigator.pushReplacement(
-          context,
-          MaterialPageRoute(
-            builder: (context) => UserLoginScreen(),
-          ),
-        );
+        Navigator.pushReplacementNamed(context, '/onboarding');
+
       }
     } catch (e) {
       debugPrint('Error during splash initialization: $e');

@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:uber_mobile_app_project/app/di/di.dart'; // ✅ Import DI for CaptainLoginBloc
 
-
 import '../view_model/captain_login.bloc.dart';
+
 import '../view_model/captain_login_event.dart';
 import '../view_model/captain_login_state.dart';
 
@@ -41,55 +41,64 @@ class _CaptainLoginScreenState extends State<CaptainLoginScreen> {
           }
         },
         child: Scaffold(
-          body: SingleChildScrollView(
-            padding: EdgeInsets.all(20),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                SizedBox(height: 50),
-                Image.asset("assets/EasyGo.png", height: 100), // Logo
-                SizedBox(height: 20),
-                Text(
-                  "Captain Login",
-                  style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
-                ),
-                SizedBox(height: 20),
-
-                _buildTextField("Phone Number", phoneController, prefix: "+977"),
-                SizedBox(height: 15),
-                _buildPasswordField(),
-
-                SizedBox(height: 25),
-
-                ElevatedButton(
-                  onPressed: _loginCaptain,
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: Theme.of(context).primaryColor,
-                    padding: EdgeInsets.symmetric(horizontal: 50, vertical: 15),
-                    textStyle: TextStyle(fontSize: 16),
+          body: Center(
+            child: SingleChildScrollView(
+              padding: EdgeInsets.symmetric(horizontal: 30, vertical: 50),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  CircleAvatar(
+                    radius: 50,
+                    backgroundImage: AssetImage("assets/images/EasyGo.png"),
                   ),
-                  child: Text("Login"),
-                ),
-
-                SizedBox(height: 15),
-
-                TextButton(
-                  onPressed: () => Navigator.pushNamed(context, "/captain-signup"),
-                  child: Text("Create new account", style: TextStyle(fontSize: 14)),
-                ),
-
-                SizedBox(height: 10),
-
-                ElevatedButton(
-                  onPressed: () => Navigator.pushNamed(context, "/user-login"),
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: Colors.orange,
-                    padding: EdgeInsets.symmetric(horizontal: 50, vertical: 15),
-                    textStyle: TextStyle(fontSize: 16),
+                  SizedBox(height: 20),
+                  Text(
+                    "Captain Login",
+                    style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
                   ),
-                  child: Text("Sign in as Passenger"),
-                ),
-              ],
+                  SizedBox(height: 30),
+                  _buildTextField("Phone Number", phoneController, prefix: "+977"),
+                  SizedBox(height: 20),
+                  _buildPasswordField(),
+                  Align(
+                    alignment: Alignment.centerRight,
+                    child: TextButton(
+                      onPressed: () => Navigator.pushNamed(context, "/forgot-password"),
+                      child: Text("Forgot Password?", style: TextStyle(color: Colors.blue)),
+                    ),
+                  ),
+                  SizedBox(height: 10),
+                  SizedBox(
+                    width: double.infinity,
+                    child: ElevatedButton(
+                      onPressed: _loginCaptain,
+                      style: ElevatedButton.styleFrom(
+                        padding: EdgeInsets.symmetric(vertical: 12),
+                        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+                      ),
+                      child: Text("Login", style: TextStyle(fontSize: 18)),
+                    ),
+                  ),
+                  SizedBox(height: 10),
+                  TextButton(
+                    onPressed: () => Navigator.pushNamed(context, "/captain-signup"),
+                    child: Text("New here? Create new account"),
+                  ),
+                  SizedBox(height: 10),
+                  SizedBox(
+                    width: double.infinity,
+                    child: ElevatedButton(
+                      onPressed: () => Navigator.pushNamed(context, "/login"),
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: Colors.orangeAccent,
+                        padding: EdgeInsets.symmetric(vertical: 12),
+                        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+                      ),
+                      child: Text("Sign in as Passenger", style: TextStyle(fontSize: 18)),
+                    ),
+                  ),
+                ],
+              ),
             ),
           ),
         ),
@@ -100,11 +109,12 @@ class _CaptainLoginScreenState extends State<CaptainLoginScreen> {
   Widget _buildTextField(String label, TextEditingController controller, {String? prefix}) {
     return TextField(
       controller: controller,
-      keyboardType: label == "Phone Number" ? TextInputType.phone : TextInputType.text,
+      keyboardType: TextInputType.phone,
       decoration: InputDecoration(
         labelText: label,
         prefixText: prefix,
-        border: OutlineInputBorder(),
+        border: OutlineInputBorder(borderRadius: BorderRadius.circular(10)),
+        contentPadding: EdgeInsets.symmetric(horizontal: 15, vertical: 15),
       ),
     );
   }
@@ -115,11 +125,12 @@ class _CaptainLoginScreenState extends State<CaptainLoginScreen> {
       obscureText: !showPassword,
       decoration: InputDecoration(
         labelText: "Password",
+        border: OutlineInputBorder(borderRadius: BorderRadius.circular(10)),
+        contentPadding: EdgeInsets.symmetric(horizontal: 15, vertical: 15),
         suffixIcon: IconButton(
           icon: Icon(showPassword ? Icons.visibility : Icons.visibility_off),
           onPressed: () => setState(() => showPassword = !showPassword),
         ),
-        border: OutlineInputBorder(),
       ),
     );
   }

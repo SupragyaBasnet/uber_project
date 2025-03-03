@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 class LightDarkTheme {
-  /// ✅ Light Theme
+  ///  Light Theme
   static final ThemeData lightTheme = ThemeData(
     brightness: Brightness.light,
     primaryColor: Colors.blue,
