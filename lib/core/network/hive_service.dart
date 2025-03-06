@@ -1,55 +1,47 @@
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:path_provider/path_provider.dart';
 
+import '../../app/constants/hive_table_constant.dart';
+import '../../features/auth/data/model/user_hive_model.dart';
+
 class HiveService {
-  static const String userBoxName = 'userBox';
-  static const String captainBoxName = 'captainBox';
-
   Future<void> init() async {
-    // ✅ Initialize Hive Database
+    //Initialize the Database
     var directory = await getApplicationDocumentsDirectory();
-    await Hive.initFlutter(directory.path);
+    var path = '${directory.path}linkup_db.db';
 
-    // ✅ Open Boxes
-    await Hive.openBox(userBoxName);
-    await Hive.openBox(captainBoxName);
+    //Create Database
+    Hive.init(path);
+
+    //Register Adapters
+    Hive.registerAdapter(UserHiveModelAdapter());
   }
 
-  // =============== User Storage ===============
-  Future<void> saveUserData(Map<String, dynamic> userData) async {
-    var box = await Hive.openBox(userBoxName);
-    await box.put('user', userData);
+// User Queries
+
+  Future<void> addUser(UserHiveModel user) async {
+    var box = await Hive.openBox<UserHiveModel>(HiveTableConstant.userBox);
+    await box.put(user.id, user);
   }
 
-  Future<Map<String, dynamic>?> getUserData() async {
-    var box = await Hive.openBox(userBoxName);
-    return box.get('user');
+  Future<void> deleteUser(String id) async {
+    var box = await Hive.openBox<UserHiveModel>(HiveTableConstant.userBox);
+    await box.delete(id);
   }
 
-  Future<void> deleteUserData() async {
-    var box = await Hive.openBox(userBoxName);
-    await box.delete('user');
+  Future<List<UserHiveModel>> getAllUsers() async {
+    var box = await Hive.openBox<UserHiveModel>(HiveTableConstant.userBox);
+    var users = box.values.toList();
+    return users;
   }
 
-  // =============== Captain Storage ===============
-  Future<void> saveCaptainData(Map<String, dynamic> captainData) async {
-    var box = await Hive.openBox(captainBoxName);
-    await box.put('captain', captainData);
-  }
+  Future<UserHiveModel?> loginUser(String email, String password) async {
+    var box = await Hive.openBox<UserHiveModel>(HiveTableConstant.userBox);
 
-  Future<Map<String, dynamic>?> getCaptainData() async {
-    var box = await Hive.openBox(captainBoxName);
-    return box.get('captain');
-  }
+    var auth = box.values.firstWhere(
+        (element) => element.email == email && element.password == password,
+        orElse: () => UserHiveModel.initial());
 
-  Future<void> deleteCaptainData() async {
-    var box = await Hive.openBox(captainBoxName);
-    await box.delete('captain');
-  }
-
-  // =============== Clear All Data ===============
-  Future<void> clearAllData() async {
-    await Hive.deleteBoxFromDisk(userBoxName);
-    await Hive.deleteBoxFromDisk(captainBoxName);
+    return auth;
   }
 }
