@@ -1,37 +1,38 @@
+import 'package:dartz/dartz.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+import '../../core/error/failure.dart';
+
 class TokenSharedPrefs {
-  static const String _tokenKey = "auth_token";
-  static const String _refreshTokenKey = "refresh_token";
+  final SharedPreferences _sharedPreferences;
 
-  /// ✅ Save Auth Token
-  static Future<void> saveAuthToken(String token) async {
-    final SharedPreferences prefs = await SharedPreferences.getInstance();
-    await prefs.setString(_tokenKey, token);
+  TokenSharedPrefs(this._sharedPreferences);
+
+  Future<Either<Failure, void>> saveToken(String token) async {
+    try {
+      await _sharedPreferences.setString('token', token);
+      return Right(null);
+    } catch (e) {
+      return Left(SharedPrefsFailure(message: e.toString()));
+    }
   }
 
-  /// ✅ Retrieve Auth Token
-  static Future<String?> getAuthToken() async {
-    final SharedPreferences prefs = await SharedPreferences.getInstance();
-    return prefs.getString(_tokenKey);
+  Future<Either<Failure, String>> getToken() async {
+    try {
+      final token = _sharedPreferences.getString('token');
+      return Right(token ?? '');
+    } catch (e) {
+      return Left(SharedPrefsFailure(message: e.toString()));
+    }
   }
 
-  /// ✅ Save Refresh Token (Optional)
-  static Future<void> saveRefreshToken(String refreshToken) async {
-    final SharedPreferences prefs = await SharedPreferences.getInstance();
-    await prefs.setString(_refreshTokenKey, refreshToken);
-  }
-
-  /// ✅ Retrieve Refresh Token (Optional)
-  static Future<String?> getRefreshToken() async {
-    final SharedPreferences prefs = await SharedPreferences.getInstance();
-    return prefs.getString(_refreshTokenKey);
-  }
-
-  /// ✅ Clear Token (Logout)
-  static Future<void> clearToken() async {
-    final SharedPreferences prefs = await SharedPreferences.getInstance();
-    await prefs.remove(_tokenKey);
-    await prefs.remove(_refreshTokenKey);
+  Future<Either<Failure, void>> clearToken() async {
+    try {
+      await _sharedPreferences
+          .remove('token'); // Removes the token from storage
+      return const Right(null);
+    } catch (e) {
+      return Left(SharedPrefsFailure(message: e.toString()));
+    }
   }
 }
