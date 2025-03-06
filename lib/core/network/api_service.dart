@@ -1,88 +1,25 @@
 import 'package:dio/dio.dart';
-import 'package:shared_preferences/shared_preferences.dart';
+import 'package:pretty_dio_logger/pretty_dio_logger.dart';
+
+import '../../app/constants/api_endpoints.dart';
+import 'dio_error_interceptor.dart';
 
 class ApiService {
-  final Dio dio;
-  final SharedPreferences prefs;
+  final Dio _dio;
 
-  ApiService(this.dio, this.prefs) {
-    dio.options = BaseOptions(
-      baseUrl: "http://10.0.2.2:3000/api/v1/",
-      connectTimeout: const Duration(seconds: 30),
-      receiveTimeout: const Duration(seconds: 30),
-      headers: {"Content-Type": "application/json"},
-    );
+  Dio get dio => _dio;
 
-    dio.interceptors.addAll([
-      AuthInterceptor(prefs), // ✅ Pass SharedPreferences for Authentication
-      LogInterceptor(
-        request: true,
-        requestBody: true,
-        responseBody: true,
-        error: true,
-      ),
-    ]);
-  }
-
-  Future<Response> getRequest(String endpoint,
-      {Map<String, dynamic>? queryParams}) async {
-    try {
-      return await dio.get(endpoint, queryParameters: queryParams);
-    } on DioException catch (e) {
-      throw Exception("GET Request failed: ${e.response?.data ?? e.message}");
-    }
-  }
-
-  Future<Response> postRequest(String endpoint,
-      {Map<String, dynamic>? data}) async {
-    try {
-      return await dio.post(endpoint, data: data);
-    } on DioException catch (e) {
-      throw Exception("POST Request failed: ${e.response?.data ?? e.message}");
-    }
-  }
-
-  Future<Response> putRequest(String endpoint,
-      {Map<String, dynamic>? data}) async {
-    try {
-      return await dio.put(endpoint, data: data);
-    } on DioException catch (e) {
-      throw Exception("PUT Request failed: ${e.response?.data ?? e.message}");
-    }
-  }
-
-  Future<Response> deleteRequest(String endpoint) async {
-    try {
-      return await dio.delete(endpoint);
-    } on DioException catch (e) {
-      throw Exception("DELETE Request failed: ${e.response?.data ?? e.message}");
-    }
-  }
-}
-
-// ✅ Authentication Interceptor for adding JWT Token
-class AuthInterceptor extends Interceptor {
-  final SharedPreferences prefs;
-
-  AuthInterceptor(this.prefs);
-
-  @override
-  void onRequest(RequestOptions options, RequestInterceptorHandler handler) {
-    final token = prefs.getString("token");
-
-    if (token != null) {
-      options.headers["Authorization"] = "Bearer $token";
-    }
-
-    super.onRequest(options, handler);
-  }
-
-  @override
-  void onError(DioException err, ErrorInterceptorHandler handler) {
-    if (err.response?.statusCode == 401) {
-      print("Unauthorized request - Redirecting to login");
-      // TODO: Handle logout or token refresh logic here if needed
-    }
-    super.onError(err, handler);
+  ApiService(this._dio) {
+    _dio
+      ..options.baseUrl = ApiEndpoints.baseUrl
+      ..options.connectTimeout = ApiEndpoints.connectionTimeout
+      ..options.receiveTimeout = ApiEndpoints.receiveTimeout
+      ..interceptors.add(DioErrorInterceptor())
+      ..interceptors.add(PrettyDioLogger(
+          requestHeader: true, requestBody: true, responseHeader: true))
+      ..options.headers = {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json'
+      };
   }
 }
